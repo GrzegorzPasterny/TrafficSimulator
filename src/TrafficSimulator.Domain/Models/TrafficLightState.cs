@@ -2,6 +2,7 @@
 {
 	public enum TrafficLightState
 	{
+		Off,
 		Green,
 		Orange,
 		Red,

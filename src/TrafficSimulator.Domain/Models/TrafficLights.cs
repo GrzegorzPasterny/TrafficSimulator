@@ -54,20 +54,21 @@ namespace TrafficSimulator.Domain.Models
 
 		public UnitResult<Error> TurnOff()
 		{
-			if (IsOn)
+			if (!IsOn)
 			{
-				return DomainErrors.TrafficLightsOff(Id);
+				return DomainErrors.TrafficLightsOverallState(Id, IsOn);
 			}
 
 			IsOn = false;
+			TrafficLightState = TrafficLightState.Off;
 			return UnitResult.Success<Error>();
 		}
 
 		public UnitResult<Error> TurnOn()
 		{
-			if (!IsOn)
+			if (IsOn)
 			{
-				return DomainErrors.TrafficLightsOff(Id);
+				return DomainErrors.TrafficLightsOverallState(Id, IsOn);
 			}
 
 			IsOn = true;

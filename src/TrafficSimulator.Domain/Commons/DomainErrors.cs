@@ -13,5 +13,8 @@ namespace TrafficSimulator.Domain.Commons
 			=> Error.Failure("TrafficSimulator.LightsAlreadyInRequestedState",
 				$"Traffic lights already in requested state [TrafficLightsId = {id}, TrafficLightsState = {trafficLightState}]");
 
+		public static Error TrafficLightsOverallState(long id, bool isOn)
+			=> Error.Failure("TrafficSimulator.LightsAlreadyInRequestedOverallState",
+				$"Traffic lights already in requested state [TrafficLightsId = {id}, TrafficLightsState = {isOn}]");
 	}
 }

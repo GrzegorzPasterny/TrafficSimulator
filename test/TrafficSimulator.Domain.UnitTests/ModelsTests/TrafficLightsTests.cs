@@ -7,6 +7,13 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 	public class TrafficLightsTests
 	{
 		private readonly ITestOutputHelper _testOutputHelper;
+		private const int _orangeLightTimespanMs = 5000;
+
+		private readonly TrafficLights _trafficLights = new TrafficLights((options) =>
+		{
+			options.SwitchLightTimespanMs = TimeSpan.FromMilliseconds(_orangeLightTimespanMs);
+			options.InitialState = TrafficLightState.Red;
+		});
 
 		public TrafficLightsTests(ITestOutputHelper testOutputHelper)
 		{
@@ -14,23 +21,12 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 		}
 
 		[Fact]
-		public void ChangeTrafficLights_ShouldChangeLightsProperly()
+		public void ChangeTrafficLightsToGreen_WhenRedLightIsSetInitially_ShouldChangeTheLight()
 		{
-			// Arrange
-			int orangeLightTimespanMs = 5000;
-
-			TrafficLights trafficLights = new TrafficLights((options) =>
-			{
-				options.SwitchLightTimespanMs = TimeSpan.FromMilliseconds(orangeLightTimespanMs);
-				options.InitialState = TrafficLightState.Red;
-			});
-
-			// Act & Assert
-			// Not allowed to change the state when demanded state is already applied
-			trafficLights.SwitchToRed().IsFailure.Should().BeTrue();
+			_trafficLights.IsOn.Should().BeTrue();
 
 			// Normal lights state change request
-			trafficLights.SwitchToGreen().IsSuccess.Should().BeTrue();
+			_trafficLights.SwitchToGreen().IsSuccess.Should().BeTrue();
 
 			// TODO: When changing to orange it implemented
 			// After change request we first get orange light
@@ -40,7 +36,31 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 			//await Task.Delay(orangeLightTimespanMs);
 
 			// Light should finally change the state
-			trafficLights.TrafficLightState.Should().Be(TrafficLightState.Green);
+			_trafficLights.TrafficLightState.Should().Be(TrafficLightState.Green);
+		}
+
+		[Fact]
+		public void ChangeTrafficLightsToRed_WhenRedLightIsSetInitially_ShouldReturnError()
+		{
+			_trafficLights.IsOn.Should().BeTrue();
+
+			// Not allowed to change the state when demanded state is already applied
+			_trafficLights.SwitchToRed().IsFailure.Should().BeTrue();
+
+			// Traffic lights state should be still the same
+			_trafficLights.TrafficLightState.Should().Be(TrafficLightState.Red);
+		}
+
+		[Fact]
+		public void ChangeTrafficLights_WhenTrafficLightsAreTurnedOff_ShouldReturnError()
+		{
+			_trafficLights.TurnOff();
+
+			// Not allowed to change the state when demanded state is already applied
+			_trafficLights.SwitchToRed().IsFailure.Should().BeTrue();
+
+			// Traffic lights state should be still the same
+			_trafficLights.TrafficLightState.Should().Be(TrafficLightState.Off);
 		}
 	}
 }
