@@ -4,13 +4,13 @@ using TrafficSimulator.Domain.Commons;
 
 namespace TrafficSimulator.Domain.Models
 {
-	public class TrafficLight : Entity
+	public class TrafficLights : Entity
 	{
 		public TrafficLightState TrafficLightState { private get; set; }
 		public bool IsOn { private get; set; } = true;
 		public TrafficLightsOptions Options { get; internal set; } = new();
 
-		public TrafficLight(Action<TrafficLightsOptions>? options = null)
+		public TrafficLights(Action<TrafficLightsOptions>? options = null)
 		{
 			options?.Invoke(Options);
 			TrafficLightState = Options.InitialState;
