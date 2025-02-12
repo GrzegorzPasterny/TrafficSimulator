@@ -5,7 +5,7 @@
 		/// <summary>
 		/// Collection of lanes from left to right
 		/// </summary>
-		public List<Lane>? LanesCollection { get; } = null;
+		public List<Lane>? LanesCollection { get; set; } = null;
 
 		public TrafficLights? TrafficLights { get; set; } = null;
 
