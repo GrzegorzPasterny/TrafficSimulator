@@ -1,0 +1,17 @@
+﻿using ErrorOr;
+using TrafficSimulator.Domain.Models;
+
+namespace TrafficSimulator.Domain.Commons
+{
+	public static class Errors
+	{
+		public static Error TrafficLightsOff(long id)
+			=> Error.Failure("TrafficSimulator.LightsOff",
+				$"Not possible to change Traffic Lights state when they are off [TrafficLightsId = {id}]");
+
+		internal static Error TrafficLightsAlreadyInRequestedState(long id, TrafficLightState trafficLightState)
+			=> Error.Failure("TrafficSimulator.LightsAlreadyInRequestedState",
+				$"Traffic lights already in requested state [TrafficLightsId = {id}, TrafficLightsState = {trafficLightState}]");
+
+	}
+}
