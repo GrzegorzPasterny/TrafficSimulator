@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34309.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficSimulator.Presentation.WPF", "src\TrafficSimulator.Presentation.WPF\TrafficSimulator.Presentation.WPF.csproj", "{5138BB7F-CBEA-49B4-A482-84A5802052B6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E22C5F94-9CB3-4841-97C2-34E7BC528115}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6B82577D-BA01-428B-B831-C4AFFA006073}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSimulator.Application", "src\TrafficSimulator.Application\TrafficSimulator.Application.csproj", "{296BD361-BA7C-4DDF-B388-26B9ECB77996}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSimulator.Domain", "src\TrafficSimulator.Domain\TrafficSimulator.Domain.csproj", "{34C339BA-C875-48CB-AEEC-98592B4F4636}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSimulator.Infrastructure", "src\TrafficSimulator.Infrastructure\TrafficSimulator.Infrastructure.csproj", "{A84A8E7F-8B8A-412C-80F9-0F254A281038}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5138BB7F-CBEA-49B4-A482-84A5802052B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5138BB7F-CBEA-49B4-A482-84A5802052B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5138BB7F-CBEA-49B4-A482-84A5802052B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5138BB7F-CBEA-49B4-A482-84A5802052B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{296BD361-BA7C-4DDF-B388-26B9ECB77996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{296BD361-BA7C-4DDF-B388-26B9ECB77996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{296BD361-BA7C-4DDF-B388-26B9ECB77996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{296BD361-BA7C-4DDF-B388-26B9ECB77996}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34C339BA-C875-48CB-AEEC-98592B4F4636}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34C339BA-C875-48CB-AEEC-98592B4F4636}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34C339BA-C875-48CB-AEEC-98592B4F4636}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34C339BA-C875-48CB-AEEC-98592B4F4636}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A84A8E7F-8B8A-412C-80F9-0F254A281038}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A84A8E7F-8B8A-412C-80F9-0F254A281038}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A84A8E7F-8B8A-412C-80F9-0F254A281038}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A84A8E7F-8B8A-412C-80F9-0F254A281038}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5138BB7F-CBEA-49B4-A482-84A5802052B6} = {E22C5F94-9CB3-4841-97C2-34E7BC528115}
+		{296BD361-BA7C-4DDF-B388-26B9ECB77996} = {E22C5F94-9CB3-4841-97C2-34E7BC528115}
+		{34C339BA-C875-48CB-AEEC-98592B4F4636} = {E22C5F94-9CB3-4841-97C2-34E7BC528115}
+		{A84A8E7F-8B8A-412C-80F9-0F254A281038} = {E22C5F94-9CB3-4841-97C2-34E7BC528115}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0745607E-FFE9-49E7-9CAF-011106FE6DBB}
+	EndGlobalSection
+EndGlobal
