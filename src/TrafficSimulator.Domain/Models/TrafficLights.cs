@@ -6,8 +6,8 @@ namespace TrafficSimulator.Domain.Models
 {
 	public class TrafficLights : Entity
 	{
-		public TrafficLightState TrafficLightState { private get; set; }
-		public bool IsOn { private get; set; } = true;
+		public TrafficLightState TrafficLightState { get; private set; }
+		public bool IsOn { get; private set; } = true;
 		public TrafficLightsOptions Options { get; internal set; } = new();
 
 		public TrafficLights(Action<TrafficLightsOptions>? options = null)
