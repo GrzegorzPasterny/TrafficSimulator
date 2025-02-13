@@ -1,6 +1,6 @@
-﻿namespace TrafficSimulator.Application.TrafficLights.ChangeLight
+﻿using TrafficSimulator.Domain.Models;
+
+namespace TrafficSimulator.Application.TrafficLights.ChangeLight
 {
-	public class ChangeLightCommand
-	{
-	}
+	public record ChangeLightCommand(long trafficLightId, TrafficLightState trafficLightStateToBeSet);
 }

@@ -1,6 +1,6 @@
-﻿namespace TrafficSimulator.Application.Cars.StopCar
+﻿using MediatR;
+
+namespace TrafficSimulator.Application.Cars.StopCar
 {
-	public class StopCarCommand
-	{
-	}
+	public record StopCarCommand(long carId, object lane) : INotification;
 }

@@ -1,6 +1,6 @@
-﻿namespace TrafficSimulator.Application.Cars.StartCar
+﻿using MediatR;
+
+namespace TrafficSimulator.Application.Cars.StartCar
 {
-	public class StartCarCommand
-	{
-	}
+	public record StartCarCommand(long carId, object lane) : INotification;
 }
