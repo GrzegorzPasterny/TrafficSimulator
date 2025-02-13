@@ -16,12 +16,20 @@ namespace TrafficSimulator.Application.UnitTests
 					IncommingLanes =
 					[
 						new Lane()
+					],
+					OutcommingLanes =
+					[
+						new Lane()
 					]
 				},
 				WestLanes = new()
 				{
 					Distance = 10,
 					IncommingLanes =
+					[
+						new Lane()
+					],
+					OutcommingLanes =
 					[
 						new Lane()
 					]
