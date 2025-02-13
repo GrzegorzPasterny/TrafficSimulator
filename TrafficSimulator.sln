@@ -9,15 +9,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E22C5F94-9CB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6B82577D-BA01-428B-B831-C4AFFA006073}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSimulator.Application", "src\TrafficSimulator.Application\TrafficSimulator.Application.csproj", "{296BD361-BA7C-4DDF-B388-26B9ECB77996}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficSimulator.Application", "src\TrafficSimulator.Application\TrafficSimulator.Application.csproj", "{296BD361-BA7C-4DDF-B388-26B9ECB77996}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSimulator.Domain", "src\TrafficSimulator.Domain\TrafficSimulator.Domain.csproj", "{34C339BA-C875-48CB-AEEC-98592B4F4636}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficSimulator.Domain", "src\TrafficSimulator.Domain\TrafficSimulator.Domain.csproj", "{34C339BA-C875-48CB-AEEC-98592B4F4636}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSimulator.Infrastructure", "src\TrafficSimulator.Infrastructure\TrafficSimulator.Infrastructure.csproj", "{A84A8E7F-8B8A-412C-80F9-0F254A281038}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficSimulator.Infrastructure", "src\TrafficSimulator.Infrastructure\TrafficSimulator.Infrastructure.csproj", "{A84A8E7F-8B8A-412C-80F9-0F254A281038}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSimulator.Domain.UnitTests", "test\TrafficSimulator.Domain.UnitTests\TrafficSimulator.Domain.UnitTests.csproj", "{9B1111CE-7D0B-47DE-836F-AA29079E2290}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficSimulator.Domain.UnitTests", "test\TrafficSimulator.Domain.UnitTests\TrafficSimulator.Domain.UnitTests.csproj", "{9B1111CE-7D0B-47DE-836F-AA29079E2290}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSimulator.Application.UnitTests", "test\TrafficSimulator.Application.UnitTests\TrafficSimulator.Application.UnitTests.csproj", "{4FA89723-F6E1-472E-A61C-4EA4630EAD18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficSimulator.Application.UnitTests", "test\TrafficSimulator.Application.UnitTests\TrafficSimulator.Application.UnitTests.csproj", "{4FA89723-F6E1-472E-A61C-4EA4630EAD18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
