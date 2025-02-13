@@ -11,6 +11,9 @@ namespace TrafficSimulator.Domain.Models
 		private readonly Intersection _intersection;
 		public SimulationState SimulationState { get; private set; }
 
+		// TODO: Load options through configuration
+		public SimulationOptions Options { get; set; } = new();
+
 		public Simulation(Intersection intersection)
 		{
 			_intersection = intersection;
@@ -34,7 +37,7 @@ namespace TrafficSimulator.Domain.Models
 				return DomainErrors.SimulationStateChange(SimulationState, SimulationState.Finished);
 			}
 
-			_simulationStopwatch.Stop();
+			_simulationStopwatch?.Stop();
 			return UnitResult.Success<Error>();
 		}
 	}

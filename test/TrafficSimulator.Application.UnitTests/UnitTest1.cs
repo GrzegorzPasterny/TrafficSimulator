@@ -13,7 +13,7 @@ namespace TrafficSimulator.Application.UnitTests
 				EastLanes = new()
 				{
 					Distance = 10,
-					LanesCollection =
+					IncommingLanes =
 					[
 						new Lane()
 					]
@@ -21,7 +21,7 @@ namespace TrafficSimulator.Application.UnitTests
 				WestLanes = new()
 				{
 					Distance = 10,
-					LanesCollection =
+					IncommingLanes =
 					[
 						new Lane()
 					]
