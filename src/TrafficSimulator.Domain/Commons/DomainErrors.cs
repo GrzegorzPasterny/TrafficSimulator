@@ -17,7 +17,7 @@ namespace TrafficSimulator.Domain.Commons
 			=> Error.Failure("TrafficSimulator.LightsAlreadyInRequestedOverallState",
 				$"Traffic lights already in requested state [TrafficLightsId = {id}, TrafficLightsState = {isOn}]");
 
-		public static Error SimulationStateChange(SimulationState currentSimulationState, SimulationState requestedSimulationState)
+		public static Error SimulationStateChange(SimulationPhase currentSimulationState, SimulationPhase requestedSimulationState)
 			=> Error.Failure("TrafficSimulator.SimulationStateChange",
 				$"Invalid attempt to change simulation state " +
 				$"[CurrentSimulationState = {currentSimulationState}, RequestedSimulationState = {requestedSimulationState}]");

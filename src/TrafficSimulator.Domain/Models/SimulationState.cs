@@ -1,9 +1,7 @@
 ﻿namespace TrafficSimulator.Domain.Models
 {
-	public enum SimulationState
+	public class SimulationState
 	{
-		NotStarted,
-		InProgress,
-		Finished
+		public bool HasFinished { get; }
 	}
 }

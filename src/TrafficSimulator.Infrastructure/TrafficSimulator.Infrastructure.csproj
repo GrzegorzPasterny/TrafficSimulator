@@ -11,4 +11,8 @@
     <PackageReference Include="ErrorOr" Version="2.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TrafficSimulator.Application\TrafficSimulator.Application.csproj" />
+  </ItemGroup>
+
 </Project>

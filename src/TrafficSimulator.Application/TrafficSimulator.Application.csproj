@@ -16,4 +16,9 @@
     <ProjectReference Include="..\TrafficSimulator.Domain\TrafficSimulator.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Cars\GetCar\" />
+    <Folder Include="Cars\GetCars\" />
+  </ItemGroup>
+
 </Project>

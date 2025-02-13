@@ -5,12 +5,12 @@
 		/// <summary>
 		/// Collection of lanes from left to right that approach the intersection
 		/// </summary>
-		public List<Lane>? IncommingLanes { get; set; } = null;
+		public List<Lane>? InboundLanes { get; set; } = null;
 
 		/// <summary>
 		/// Collection of lanes from left to right that exits the intersection
 		/// </summary>
-		public List<Lane>? OutcommingLanes { get; set; } = null;
+		public List<Lane>? OutboundLanes { get; set; } = null;
 
 		public TrafficLights? TrafficLights { get; set; } = null;
 

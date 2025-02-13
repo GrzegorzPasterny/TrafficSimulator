@@ -26,7 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\TrafficSimulator.Application\TrafficSimulator.Application.csproj" />
     <ProjectReference Include="..\..\src\TrafficSimulator.Domain\TrafficSimulator.Domain.csproj" />
+    <ProjectReference Include="..\..\src\TrafficSimulator.Infrastructure\TrafficSimulator.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

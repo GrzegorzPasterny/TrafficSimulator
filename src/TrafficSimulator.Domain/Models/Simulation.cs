@@ -9,7 +9,7 @@ namespace TrafficSimulator.Domain.Models
 	{
 		private Stopwatch? _simulationStopwatch;
 		private readonly Intersection _intersection;
-		public SimulationState SimulationState { get; private set; }
+		public SimulationPhase SimulationState { get; private set; }
 
 		// TODO: Load options through configuration
 		public SimulationOptions Options { get; set; } = new();
@@ -21,9 +21,9 @@ namespace TrafficSimulator.Domain.Models
 
 		public UnitResult<Error> Start()
 		{
-			if (SimulationState != SimulationState.NotStarted)
+			if (SimulationState != SimulationPhase.NotStarted)
 			{
-				return DomainErrors.SimulationStateChange(SimulationState, SimulationState.InProgress);
+				return DomainErrors.SimulationStateChange(SimulationState, SimulationPhase.InProgress);
 			}
 
 			_simulationStopwatch = Stopwatch.StartNew();
@@ -32,9 +32,9 @@ namespace TrafficSimulator.Domain.Models
 
 		public UnitResult<Error> Abort()
 		{
-			if (SimulationState != SimulationState.InProgress)
+			if (SimulationState != SimulationPhase.InProgress)
 			{
-				return DomainErrors.SimulationStateChange(SimulationState, SimulationState.Finished);
+				return DomainErrors.SimulationStateChange(SimulationState, SimulationPhase.Finished);
 			}
 
 			_simulationStopwatch?.Stop();

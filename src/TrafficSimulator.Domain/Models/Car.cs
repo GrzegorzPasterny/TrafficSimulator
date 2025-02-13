@@ -13,5 +13,7 @@ namespace TrafficSimulator.Domain.Models
 		/// Langth of the car
 		/// </summary>
 		public int Length { get; set; }
+
+		public Location Location { get; private set; }
 	}
 }
