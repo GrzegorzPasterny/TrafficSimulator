@@ -21,5 +21,9 @@ namespace TrafficSimulator.Domain.Commons
 			=> Error.Failure("TrafficSimulator.SimulationStateChange",
 				$"Invalid attempt to change simulation state " +
 				$"[CurrentSimulationState = {currentSimulationState}, RequestedSimulationState = {requestedSimulationState}]");
+
+		public static Error CarHasReachedDestination(long id)
+			=> Error.Failure("TrafficSimulator.CarHasReachedDestination",
+				$"Not possible for car to move when it reached its destination [CarId = {id}]");
 	}
 }

@@ -4,9 +4,12 @@ namespace TrafficSimulator.Domain.Models
 {
 	public class Lane : LocationEntity
 	{
-		public Lane(int distance = 10) : base(distance)
+		public Lane(IntersectionCore intersectionCore, int distance = 10) : base(distance)
 		{
+			IntersectionCore = intersectionCore;
 		}
+
+		public IntersectionCore IntersectionCore { get; }
 
 		//public ICarGenerator CarGenerator { get; private set; }
 

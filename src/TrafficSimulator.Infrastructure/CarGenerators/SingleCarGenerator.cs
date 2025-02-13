@@ -13,12 +13,14 @@ namespace TrafficSimulator.Infrastructure.CarGenerators
 		public SingleCarGeneratorOptions Options { get; } = new();
 		private bool _hasFinished = false;
 		private bool _wasStarted = false;
-		private readonly ISender _mediator;
 		private Task? _carGenerationTask;
+		private readonly ISender _mediator;
+		private readonly Lane _carStartLocation;
 
-		public SingleCarGenerator(ISender mediator)
+		public SingleCarGenerator(ISender mediator, Lane carStartLocation)
 		{
 			_mediator = mediator;
+			_carStartLocation = carStartLocation;
 		}
 
 		public ErrorOr<bool> IsGenerationFinished()
@@ -43,7 +45,7 @@ namespace TrafficSimulator.Infrastructure.CarGenerators
 		{
 			await Task.Delay(Options.DelayForGeneratingTheCar);
 
-			Car car = new Car();
+			Car car = new Car(carStartLocation);
 
 			var command = new AddCarCommand(car);
 
