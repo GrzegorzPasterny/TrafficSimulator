@@ -3,6 +3,7 @@ using FluentAssertions;
 using FluentAssertions.CSharpFunctionalExtensions;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers;
+using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Infrastructure.Intersections;
 using Xunit.Abstractions;
@@ -22,37 +23,46 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 		public void RunSimulation_GivenSimpleIntersection_GivenOneCar_CarShouldPassTheIntersectionAsExpected()
 		{
 			// Arrange
+			IntersectionCore intersectionCore = new()
+			{
+				Distance = 10,
+			};
+
 			Intersection intersection = new Intersection()
 			{
-				EastLanes = new()
-				{
-					Distance = 10,
-					InboundLanes =
-					[
-						new Lane()
-					],
-					OutboundLanes =
-					[
-						new Lane()
-					]
-				},
-				WestLanes = new()
-				{
-					Distance = 10,
-					InboundLanes =
-					[
-						new Lane()
-					],
-					OutboundLanes =
-					[
-						new Lane()
-					]
-				}
+				IntersectionCore = intersectionCore,
+				Lanes =
+				[
+					new(WorldDirection.West)
+					{
+						Distance = 10,
+						InboundLanes =
+						[
+							new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.West)
+						],
+						OutboundLanes =
+						[
+							new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.West)
+						]
+					},
+					new(WorldDirection.East)
+					{
+						Distance = 10,
+						InboundLanes =
+						[
+							new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.East)
+						],
+						OutboundLanes =
+						[
+							new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.East)
+						]
+					}
+				]
 			};
 
 			IIntersectionRepository intersectionRepository = new IntersectionManager();
 
-			ISimulationHandler simulationHandler = new SimulationHandler(intersectionRepository);
+			ISimulationHandler simulationHandler = new IntersectionSimulationHandler(intersectionRepository);
 
 			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
 

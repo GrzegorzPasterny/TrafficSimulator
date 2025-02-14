@@ -1,7 +1,14 @@
-﻿namespace TrafficSimulator.Domain.Models
+﻿using TrafficSimulator.Domain.Commons;
+
+namespace TrafficSimulator.Domain.Models
 {
 	public class Lanes
 	{
+		public Lanes(WorldDirection worldDirection)
+		{
+			WorldDirection = worldDirection;
+		}
+
 		/// <summary>
 		/// Collection of lanes from left to right that approach the intersection
 		/// </summary>
@@ -13,6 +20,8 @@
 		public List<Lane>? OutboundLanes { get; set; } = null;
 
 		public TrafficLights? TrafficLights { get; set; } = null;
+
+		public WorldDirection WorldDirection { get; }
 
 		/// <summary>
 		/// Distance from the edge of the map to the <see cref="TrafficLights"/> that car needs to cover

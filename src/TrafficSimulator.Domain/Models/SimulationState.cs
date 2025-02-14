@@ -2,6 +2,8 @@
 {
 	public class SimulationState
 	{
-		public bool HasFinished { get; }
+		public SimulationPhase SimulationPhase { set; get; }
+
+		public List<Car> Cars { get; set; }
 	}
 }

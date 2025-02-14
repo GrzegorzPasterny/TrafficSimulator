@@ -4,20 +4,16 @@ namespace TrafficSimulator.Domain.Models
 {
 	public class Lane : LocationEntity
 	{
-		public Lane(IntersectionCore intersectionCore, int distance = 10) : base(distance)
+		public Lane(IntersectionCore intersectionCore, LaneType[] laneTypes, WorldDirection worldDirection, int distance = 10) : base(distance)
 		{
 			IntersectionCore = intersectionCore;
+			LaneType = laneTypes;
+			WorldDirection = worldDirection;
 		}
 
 		public IntersectionCore IntersectionCore { get; }
 
-		//public ICarGenerator CarGenerator { get; private set; }
-
-		//public UnitResult<Error> AddCarGenerator(ICarGenerator carGenerator)
-		//{
-		//	// TODO: Handle error paths
-		//	CarGenerator = carGenerator;
-		//	return UnitResult.Success<Error>();
-		//}
+		public LaneType[] LaneType { get; }
+		public WorldDirection WorldDirection { get; }
 	}
 }
