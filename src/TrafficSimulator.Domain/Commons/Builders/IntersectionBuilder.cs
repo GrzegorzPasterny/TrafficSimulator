@@ -25,7 +25,7 @@ namespace TrafficSimulator.Domain.Commons.Builders
 
 		public IntersectionBuilder AddIntersectionCore(int distance = 10)
 		{
-			_intersection.IntersectionCore = new IntersectionCore(_intersection, distance);
+			_intersection.IntersectionCore = new IntersectionCore(_intersection, _intersection, distance);
 
 			return this;
 		}
@@ -34,7 +34,7 @@ namespace TrafficSimulator.Domain.Commons.Builders
 		{
 			string name = $"{nameof(Intersection)}.{nameof(Lanes)}.{worldDirection}";
 
-			Lanes lanes = new Lanes(_intersection, worldDirection);
+			Lanes lanes = new Lanes(_intersection, _intersection, worldDirection);
 
 			// TODO: Check if there is already lanes object with the same world direction
 			// TODO: Shuold throw an exception?
@@ -50,13 +50,13 @@ namespace TrafficSimulator.Domain.Commons.Builders
 
 			if (isInbound)
 			{
-				InboundLane inboundLane = new(_intersection, LaneTypeHelper.Straight());
+				InboundLane inboundLane = new(_intersection, lanesCollection, LaneTypeHelper.Straight());
 
 				lanesCollection.InboundLanes!.Add(inboundLane);
 			}
 			else
 			{
-				OutboundLane outboundLane = new(_intersection, LaneTypeHelper.Straight());
+				OutboundLane outboundLane = new(_intersection, lanesCollection, LaneTypeHelper.Straight());
 
 				lanesCollection.OutboundLanes!.Add(outboundLane);
 			}

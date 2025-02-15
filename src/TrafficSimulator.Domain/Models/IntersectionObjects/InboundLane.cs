@@ -1,10 +1,12 @@
-﻿using TrafficSimulator.Domain.Commons.Interfaces;
+﻿using TrafficSimulator.Domain.Commons;
+using TrafficSimulator.Domain.Commons.Interfaces;
 
 namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
 	public class InboundLane : OutboundLane
 	{
-		public InboundLane(Intersection root, LaneType[] laneTypes, int distance = 10) : base(root, laneTypes, distance)
+		public InboundLane(Intersection root, IntersectionObject? parent, LaneType[] laneTypes, int distance = 10)
+			: base(root, parent, laneTypes, distance)
 		{
 		}
 

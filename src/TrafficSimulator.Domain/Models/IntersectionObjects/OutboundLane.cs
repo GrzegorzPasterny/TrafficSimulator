@@ -4,7 +4,8 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
 	public class OutboundLane : LocationEntity
 	{
-		public OutboundLane(Intersection root, LaneType[] laneTypes, int distance = 10) : base(root, distance)
+		public OutboundLane(Intersection root, IntersectionObject? parent, LaneType[] laneTypes, int distance = 10)
+			: base(root, parent, distance)
 		{
 			LaneType = laneTypes;
 		}

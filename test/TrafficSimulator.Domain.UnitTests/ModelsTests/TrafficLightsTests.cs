@@ -10,7 +10,7 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 		private readonly ITestOutputHelper _testOutputHelper;
 		private const int _orangeLightTimespanMs = 5000;
 
-		private readonly TrafficLights _trafficLights = new TrafficLights(null, (options) =>
+		private readonly TrafficLights _trafficLights = new TrafficLights(null, null, (options) =>
 		{
 			options.SwitchLightTimespanMs = TimeSpan.FromMilliseconds(_orangeLightTimespanMs);
 			options.InitialState = TrafficLightState.Red;

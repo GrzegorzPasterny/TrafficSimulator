@@ -10,8 +10,8 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 		public bool IsOn { get; private set; } = true;
 		public TrafficLightsOptions Options { get; internal set; } = new();
 
-		public TrafficLights(Intersection root, Action<TrafficLightsOptions>? options = null)
-			: base(root)
+		public TrafficLights(Intersection root, IntersectionObject? parent, Action<TrafficLightsOptions>? options = null)
+			: base(root, parent)
 		{
 			options?.Invoke(Options);
 			TrafficLightState = Options.InitialState;
