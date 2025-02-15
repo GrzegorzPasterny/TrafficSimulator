@@ -94,6 +94,7 @@ namespace TrafficSimulator.Application.Handlers
 				_ = carGenerator.StartGenerating();
 			}
 
+			SimulationPhase = SimulationPhase.InProgress;
 			return UnitResult.Success<Error>();
 		}
 	}
