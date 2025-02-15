@@ -9,7 +9,7 @@ namespace TrafficSimulator.Domain.Commons
 		public Intersection Root { get; private set; }
 		public string Name { get; private set; }
 
-		protected IntersectionObject(Intersection root, IntersectionObject? parent = null)
+		protected IntersectionObject(Intersection root, IntersectionObject? parent)
 		{
 			// If root is null check if class itself is Intersection.
 			// If yes reference itself to Root, otherwise throw to prevent misuse

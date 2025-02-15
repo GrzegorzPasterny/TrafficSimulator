@@ -2,7 +2,7 @@
 using ErrorOr;
 using MediatR;
 using TrafficSimulator.Application.Cars.AddCar;
-using TrafficSimulator.Application.Commons.Interfaces;
+using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models.Agents;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
@@ -17,16 +17,11 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 		private bool _wasStarted = false;
 		private Task? _carGenerationTask;
 		private readonly ISender _mediator;
-		private readonly OutboundLane _carStartLocation;
-		private readonly IIntersectionProvider _intersectionProvider;
 
-		public SingleCarGenerator(Intersection root,
-			ISender mediator, OutboundLane carStartLocation, IIntersectionProvider intersectionProvider)
-			: base(root)
+		public SingleCarGenerator(Intersection root, IntersectionObject? parent, ISender mediator)
+			: base(root, parent)
 		{
 			_mediator = mediator;
-			_carStartLocation = carStartLocation;
-			_intersectionProvider = intersectionProvider;
 		}
 
 		public override ErrorOr<bool> IsGenerationFinished()
@@ -56,16 +51,7 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 		{
 			await Task.Delay(Options.DelayForGeneratingTheCar);
 
-			ErrorOr<Intersection> intersectionResult = _intersectionProvider.GetCurrentIntersection();
-
-			if (intersectionResult.IsError)
-			{
-				// TODO: Handle
-			}
-
-			Intersection intersection = intersectionResult.Value;
-
-			Car car = new Car(_carStartLocation);
+			Car car = new Car((InboundLane)Parent!);
 
 			var command = new AddCarCommand(car);
 

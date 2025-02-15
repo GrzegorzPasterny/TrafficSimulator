@@ -10,6 +10,7 @@ using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Builders;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Infrastructure.CarGenerators.Generators;
 using TrafficSimulator.Infrastructure.CarGenerators.Repositories;
 using TrafficSimulator.Infrastructure.Cars;
 using TrafficSimulator.Infrastructure.Intersections;
@@ -44,51 +45,26 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			// Arrange
 			ErrorOr<Intersection> intersectionResult =
 				IntersectionBuilder.Create()
+				.AddIntersectionCore()
 				.AddLanesCollection(WorldDirection.East)
+				.AddLane(WorldDirection.East, true)
+				//.AddCarGenerator()
+				.AddLane(WorldDirection.East, false)
 				.AddLanesCollection(WorldDirection.West)
+				.AddLane(WorldDirection.West, true)
+				.AddLane(WorldDirection.West, false)
 				.Build();
 
-			//IntersectionCore intersectionCore = new()
-			//{
-			//	Distance = 10,
-			//};
-
-			//Intersection intersection = new Intersection()
-			//{
-			//	IntersectionCore = intersectionCore,
-			//	LanesCollection =
-			//	[
-			//		new(WorldDirection.West)
-			//		{
-			//			Distance = 10,
-			//			InboundLanes =
-			//			[
-			//				new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.West)
-			//				{
-			//					CarGenerator = new SingleCarGenerator()
-			//				}
-			//			],
-			//			OutboundLanes =
-			//			[
-			//				new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.West)
-			//			]
-			//		},
-			//		new(WorldDirection.East)
-			//		{
-			//			Distance = 10,
-			//			InboundLanes =
-			//			[
-			//				new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.East)
-			//			],
-			//			OutboundLanes =
-			//			[
-			//				new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.East)
-			//			]
-			//		}
-			//	]
-			//};
+			intersectionResult.IsError.Should().BeFalse();
 
 			Intersection intersection = intersectionResult.Value;
+
+			InboundLane inboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.West)!
+				.InboundLanes!
+				.First();
+
+			inboundLane.CarGenerator = new SingleCarGenerator(intersection, inboundLane, null);
 
 			IIntersectionRepository intersectionRepository = new IntersectionManager();
 			ICarGeneratorRepository carGeneratorRepository = new CarGeneratorsRepositoryInMemory();

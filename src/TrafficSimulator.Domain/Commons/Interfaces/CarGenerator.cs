@@ -6,7 +6,7 @@ namespace TrafficSimulator.Domain.Commons.Interfaces
 {
 	public abstract class CarGenerator : IntersectionObject, ICarGenerator
 	{
-		public CarGenerator(Intersection root) : base(root)
+		public CarGenerator(Intersection root, IntersectionObject? parent) : base(root, parent)
 		{
 		}
 

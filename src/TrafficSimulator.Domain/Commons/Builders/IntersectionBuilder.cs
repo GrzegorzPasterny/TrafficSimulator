@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 
@@ -20,6 +21,13 @@ namespace TrafficSimulator.Domain.Commons.Builders
 			IntersectionBuilder builder = new IntersectionBuilder(intersection);
 
 			return builder;
+		}
+
+		public IntersectionBuilder AddIntersectionCore(int distance = 10)
+		{
+			_intersection.IntersectionCore = new IntersectionCore(_intersection, distance);
+
+			return this;
 		}
 
 		public IntersectionBuilder AddLanesCollection(WorldDirection worldDirection)
@@ -44,12 +52,35 @@ namespace TrafficSimulator.Domain.Commons.Builders
 			{
 				InboundLane inboundLane = new(_intersection, LaneTypeHelper.Straight());
 
-				lanesCollection.InboundLanes.Add(inboundLane);
+				lanesCollection.InboundLanes!.Add(inboundLane);
 			}
 			else
 			{
 				OutboundLane outboundLane = new(_intersection, LaneTypeHelper.Straight());
+
+				lanesCollection.OutboundLanes!.Add(outboundLane);
 			}
+
+			return this;
+		}
+
+		public IntersectionBuilder AddCarGenerator(ICarGenerator carGenerator, WorldDirection worldDirection, int laneNumber)
+		{
+			Lanes? lanes = _intersection.LanesCollection.Find(l => l.WorldDirection == worldDirection);
+
+			if (lanes is null)
+			{
+				// TODO Handle
+			}
+
+			if (lanes!.InboundLanes is null || lanes!.InboundLanes!.Count < --laneNumber)
+			{
+				// TODO Handle
+			}
+
+			InboundLane inboundLane = lanes!.InboundLanes![laneNumber];
+
+			inboundLane.CarGenerator = carGenerator;
 
 			return this;
 		}

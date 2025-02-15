@@ -9,7 +9,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 
 		public IntersectionCore? IntersectionCore { get; set; }
 
-		public Intersection(string name) : base(null!)
+		public Intersection(string name, IntersectionObject? parent = null) : base(null!, parent)
 		{
 		}
 
