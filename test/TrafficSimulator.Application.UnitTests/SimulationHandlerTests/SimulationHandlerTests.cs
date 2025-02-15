@@ -7,9 +7,9 @@ using Serilog.Events;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers;
 using TrafficSimulator.Domain.Commons;
+using TrafficSimulator.Domain.Commons.Builders;
 using TrafficSimulator.Domain.Models;
-using TrafficSimulator.Domain.Models.Intersection;
-using TrafficSimulator.Infrastructure.CarGenerators.Generators;
+using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Infrastructure.CarGenerators.Repositories;
 using TrafficSimulator.Infrastructure.Cars;
 using TrafficSimulator.Infrastructure.Intersections;
@@ -42,45 +42,53 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 		public async Task RunSimulation_GivenSimpleIntersection_GivenOneCar_CarShouldPassTheIntersectionAsExpected()
 		{
 			// Arrange
-			IntersectionCore intersectionCore = new()
-			{
-				Distance = 10,
-			};
+			ErrorOr<Intersection> intersectionResult =
+				IntersectionBuilder.Create()
+				.AddLanesCollection(WorldDirection.East)
+				.AddLanesCollection(WorldDirection.West)
+				.Build();
 
-			Intersection intersection = new Intersection()
-			{
-				IntersectionCore = intersectionCore,
-				Lanes =
-				[
-					new(WorldDirection.West)
-					{
-						Distance = 10,
-						InboundLanes =
-						[
-							new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.West)
-							{
-								CarGenerator = new SingleCarGenerator()
-							}
-						],
-						OutboundLanes =
-						[
-							new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.West)
-						]
-					},
-					new(WorldDirection.East)
-					{
-						Distance = 10,
-						InboundLanes =
-						[
-							new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.East)
-						],
-						OutboundLanes =
-						[
-							new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.East)
-						]
-					}
-				]
-			};
+			//IntersectionCore intersectionCore = new()
+			//{
+			//	Distance = 10,
+			//};
+
+			//Intersection intersection = new Intersection()
+			//{
+			//	IntersectionCore = intersectionCore,
+			//	LanesCollection =
+			//	[
+			//		new(WorldDirection.West)
+			//		{
+			//			Distance = 10,
+			//			InboundLanes =
+			//			[
+			//				new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.West)
+			//				{
+			//					CarGenerator = new SingleCarGenerator()
+			//				}
+			//			],
+			//			OutboundLanes =
+			//			[
+			//				new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.West)
+			//			]
+			//		},
+			//		new(WorldDirection.East)
+			//		{
+			//			Distance = 10,
+			//			InboundLanes =
+			//			[
+			//				new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.East)
+			//			],
+			//			OutboundLanes =
+			//			[
+			//				new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.East)
+			//			]
+			//		}
+			//	]
+			//};
+
+			Intersection intersection = intersectionResult.Value;
 
 			IIntersectionRepository intersectionRepository = new IntersectionManager();
 			ICarGeneratorRepository carGeneratorRepository = new CarGeneratorsRepositoryInMemory();

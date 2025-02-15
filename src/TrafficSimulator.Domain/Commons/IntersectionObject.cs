@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using TrafficSimulator.Domain.Models.Intersection;
+using TrafficSimulator.Domain.Models.IntersectionObjects;
 
 namespace TrafficSimulator.Domain.Commons
 {
@@ -9,14 +9,16 @@ namespace TrafficSimulator.Domain.Commons
 		public Intersection Root { get; private set; }
 		public string Name { get; private set; }
 
-		protected IntersectionObject(Intersection root, string name, IntersectionObject? parent = null)
+		protected IntersectionObject(Intersection root, IntersectionObject? parent = null)
 		{
 			// If root is null check if class itself is Intersection.
 			// If yes reference itself to Root, otherwise throw to prevent misuse
 			Root = root ?? (this as Intersection ?? throw new ArgumentNullException(nameof(root)));
-
 			Parent = parent;
-			Name = name;
+
+			Name = BuildObjectName(Parent is null ? "" : Parent.Name);
 		}
+
+		internal abstract string BuildObjectName(string parentName);
 	}
 }

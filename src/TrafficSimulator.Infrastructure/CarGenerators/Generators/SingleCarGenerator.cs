@@ -5,7 +5,7 @@ using TrafficSimulator.Application.Cars.AddCar;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models.Agents;
-using TrafficSimulator.Domain.Models.Intersection;
+using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Infrastructure.Errors;
 
 namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
@@ -17,12 +17,12 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 		private bool _wasStarted = false;
 		private Task? _carGenerationTask;
 		private readonly ISender _mediator;
-		private readonly Lane _carStartLocation;
+		private readonly OutboundLane _carStartLocation;
 		private readonly IIntersectionProvider _intersectionProvider;
 
-		public SingleCarGenerator(Intersection root, string name,
-			ISender mediator, Lane carStartLocation, IIntersectionProvider intersectionProvider)
-			: base(root, name)
+		public SingleCarGenerator(Intersection root,
+			ISender mediator, OutboundLane carStartLocation, IIntersectionProvider intersectionProvider)
+			: base(root)
 		{
 			_mediator = mediator;
 			_carStartLocation = carStartLocation;
@@ -47,6 +47,11 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 			return UnitResult.Success<Error>();
 		}
 
+		public override UnitResult<Error> StopGenerating()
+		{
+			throw new NotImplementedException();
+		}
+
 		private async Task GenerateCars()
 		{
 			await Task.Delay(Options.DelayForGeneratingTheCar);
@@ -67,11 +72,6 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 			await _mediator.Send(command);
 
 			_hasFinished = true;
-		}
-
-		public override UnitResult<Error> StopGenerating()
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

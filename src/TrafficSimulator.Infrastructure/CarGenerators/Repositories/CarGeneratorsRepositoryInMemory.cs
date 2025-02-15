@@ -1,4 +1,5 @@
 ﻿using TrafficSimulator.Application.Commons.Interfaces;
+using TrafficSimulator.Domain.Commons.Interfaces;
 
 namespace TrafficSimulator.Infrastructure.CarGenerators.Repositories
 {

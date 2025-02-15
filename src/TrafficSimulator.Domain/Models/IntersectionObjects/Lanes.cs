@@ -1,10 +1,10 @@
 ﻿using TrafficSimulator.Domain.Commons;
 
-namespace TrafficSimulator.Domain.Models.Intersection
+namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
 	public class Lanes : IntersectionObject
 	{
-		public Lanes(Intersection root, string name, WorldDirection worldDirection) : base(root, name)
+		public Lanes(Intersection root, WorldDirection worldDirection) : base(root)
 		{
 			WorldDirection = worldDirection;
 		}
@@ -12,12 +12,12 @@ namespace TrafficSimulator.Domain.Models.Intersection
 		/// <summary>
 		/// Collection of lanes from left to right that approach the intersection
 		/// </summary>
-		public List<Lane>? InboundLanes { get; set; } = null;
+		public List<InboundLane>? InboundLanes { get; set; } = null;
 
 		/// <summary>
 		/// Collection of lanes from left to right that exits the intersection
 		/// </summary>
-		public List<Lane>? OutboundLanes { get; set; } = null;
+		public List<OutboundLane>? OutboundLanes { get; set; } = null;
 
 		public TrafficLights? TrafficLights { get; set; } = null;
 
@@ -27,6 +27,11 @@ namespace TrafficSimulator.Domain.Models.Intersection
 		/// Distance from the edge of the map to the <see cref="TrafficLights"/> that car needs to cover
 		/// </summary>
 		public int Distance { get; set; }
+
+		internal override string BuildObjectName(string parentName)
+		{
+			return $"{parentName}.{nameof(Lanes)}.{WorldDirection}";
+		}
 		// TODO: Add zebra crossings in further versions
 	}
 }

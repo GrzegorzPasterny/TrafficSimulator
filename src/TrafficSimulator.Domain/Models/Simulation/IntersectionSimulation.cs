@@ -1,9 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using System.Diagnostics;
+using TrafficSimulator.Domain.Models.IntersectionObjects;
 
 namespace TrafficSimulator.Domain.Models
 {
-    public class IntersectionSimulation : Entity
+	public class IntersectionSimulation : Entity
 	{
 		private Intersection _intersection;
 

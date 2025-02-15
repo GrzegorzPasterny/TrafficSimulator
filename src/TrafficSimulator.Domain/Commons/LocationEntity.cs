@@ -1,15 +1,15 @@
-﻿using TrafficSimulator.Domain.Models.Intersection;
+﻿using TrafficSimulator.Domain.Models.IntersectionObjects;
 
 namespace TrafficSimulator.Domain.Commons
 {
-	public class LocationEntity : IntersectionObject
+	public abstract class LocationEntity : IntersectionObject
 	{
 		/// <summary>
 		/// Distance the vehicle must cover to pass location
 		/// </summary>
 		public int Distance { get; set; }
 
-		public LocationEntity(Intersection root, string name, int distance) : base(root, name)
+		public LocationEntity(Intersection root, int distance) : base(root)
 		{
 			Distance = distance;
 		}

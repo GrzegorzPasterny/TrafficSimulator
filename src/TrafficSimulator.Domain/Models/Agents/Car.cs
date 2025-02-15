@@ -1,43 +1,48 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
 using TrafficSimulator.Domain.Commons;
-using TrafficSimulator.Domain.Models.Intersection;
+using TrafficSimulator.Domain.Models.IntersectionObjects;
 
 namespace TrafficSimulator.Domain.Models.Agents
 {
 	public class Car : Entity
 	{
-		private readonly Lane _startLocation;
+		private readonly OutboundLane _startLocation;
 		public readonly List<LocationEntity> DistanceToCover;
 
-		public Car(Lane startLocation)
+		public Car(OutboundLane startLocation)
 		{
 			_startLocation = startLocation;
 			CurrentLocation = new(startLocation, 0);
 
 			// TODO: Randomize the logic where can can go
 			Intersection intersection = _startLocation.Root;
-			IntersectionCore intersectionCore = intersection.IntersectionCore;
+			IntersectionCore? intersectionCore = intersection.IntersectionCore;
 
-			LaneType carTurnType = _startLocation.LaneType.First();
-
-			WorldDirection outboundLaneWorldDirection = _startLocation.WorldDirection.Rotate(carTurnType);
-
-			Lanes? outboundLanes = intersection.Lanes.Find(lanes => lanes.WorldDirection == outboundLaneWorldDirection);
-
-			if (outboundLanes is null || outboundLanes.OutboundLanes?.Count == 0)
+			if (intersectionCore is null)
 			{
 				// TODO: Handle
 			}
 
-			Lane? carEndLocation = outboundLanes?.OutboundLanes?.First();
+			LaneType carTurnType = _startLocation.LaneType.First();
+
+			WorldDirection outboundLaneWorldDirection = ((Lanes)_startLocation.Parent!).WorldDirection.Rotate(carTurnType);
+
+			Lanes? lanes = intersection.LanesCollection.Find(lanes => lanes.WorldDirection == outboundLaneWorldDirection);
+
+			if (lanes is null || lanes.OutboundLanes?.Count == 0)
+			{
+				// TODO: Handle
+			}
+
+			OutboundLane? carEndLocation = lanes?.OutboundLanes?.First();
 
 			if (carEndLocation is null)
 			{
 				// TODO: Handle
 			}
 
-			DistanceToCover = [_startLocation, intersectionCore, carEndLocation!];
+			DistanceToCover = [_startLocation, intersectionCore!, carEndLocation!];
 		}
 
 		/// <summary>
