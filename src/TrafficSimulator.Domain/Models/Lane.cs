@@ -1,19 +1,18 @@
 ﻿using TrafficSimulator.Domain.Commons;
+using TrafficSimulator.Domain.Commons.Interfaces;
 
 namespace TrafficSimulator.Domain.Models
 {
 	public class Lane : LocationEntity
 	{
-		public Lane(IntersectionCore intersectionCore, LaneType[] laneTypes, WorldDirection worldDirection, int distance = 10) : base(distance)
+		public Lane(Intersection root, string name, LaneType[] laneTypes, WorldDirection worldDirection, int distance = 10) : base(root, name, distance)
 		{
-			IntersectionCore = intersectionCore;
 			LaneType = laneTypes;
 			WorldDirection = worldDirection;
 		}
 
-		public IntersectionCore IntersectionCore { get; }
-
 		public LaneType[] LaneType { get; }
 		public WorldDirection WorldDirection { get; }
+		public ICarGenerator CarGenerator { get; set; }
 	}
 }

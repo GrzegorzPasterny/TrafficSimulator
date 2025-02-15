@@ -48,9 +48,14 @@ namespace TrafficSimulator.Application.Handlers
 				case SimulationPhase.InProgress:
 					IEnumerable<Car> cars = await _carRepository.GetCarsAsync();
 					simulationState.Cars = cars.ToList();
+
+					if (cars.All(c => c.HasReachedDestination))
+					{
+						SimulationPhase = SimulationPhase.Finished;
+					}
 					break;
 				default:
-					break;
+					throw new ArgumentOutOfRangeException($"Invalid simulation state: {SimulationPhase}");
 			}
 
 			return simulationState;

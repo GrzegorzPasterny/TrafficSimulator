@@ -1,9 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
 
-namespace TrafficSimulator.Application.Commons.Interfaces
+namespace TrafficSimulator.Domain.Commons.Interfaces
 {
-	// TODO: Should be domain object
 	public interface ICarGenerator
 	{
 		UnitResult<Error> StartGenerating();

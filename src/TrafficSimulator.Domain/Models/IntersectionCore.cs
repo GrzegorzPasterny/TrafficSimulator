@@ -4,7 +4,7 @@ namespace TrafficSimulator.Domain.Models
 {
 	public class IntersectionCore : LocationEntity
 	{
-		public IntersectionCore(int distance = 10) : base(distance)
+		public IntersectionCore(Intersection root, string name, int distance = 10) : base(root, name, distance)
 		{
 		}
 	}

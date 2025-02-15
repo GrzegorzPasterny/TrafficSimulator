@@ -8,6 +8,7 @@ using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models;
+using TrafficSimulator.Infrastructure.CarGenerators.Generators;
 using TrafficSimulator.Infrastructure.CarGenerators.Repositories;
 using TrafficSimulator.Infrastructure.Cars;
 using TrafficSimulator.Infrastructure.Intersections;
@@ -56,6 +57,9 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 						InboundLanes =
 						[
 							new Lane(intersectionCore, LaneTypeHelper.Straight(), WorldDirection.West)
+							{
+								CarGenerator = new SingleCarGenerator()
+							}
 						],
 						OutboundLanes =
 						[
@@ -95,10 +99,13 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 				state = await simulationHandler.GetState();
 
 				state.IsError.Should().BeFalse();
+				state.Value.SimulationPhase.Should().NotBe(SimulationPhase.NotStarted);
 
 				_logger.LogInformation("Next cycle");
 
 			} while (state.Value.SimulationPhase == SimulationPhase.InProgress);
+
+
 
 			// TODO: Print final results
 		}
