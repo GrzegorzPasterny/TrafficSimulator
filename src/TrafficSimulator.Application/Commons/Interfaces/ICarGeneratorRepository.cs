@@ -1,4 +1,6 @@
-﻿namespace TrafficSimulator.Application.Commons.Interfaces
+﻿using TrafficSimulator.Domain.Commons.Interfaces;
+
+namespace TrafficSimulator.Application.Commons.Interfaces
 {
 	// TODO: Should be domain object
 	public interface ICarGeneratorRepository

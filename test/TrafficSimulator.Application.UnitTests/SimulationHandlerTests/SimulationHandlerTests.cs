@@ -8,6 +8,7 @@ using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models;
+using TrafficSimulator.Domain.Models.Intersection;
 using TrafficSimulator.Infrastructure.CarGenerators.Generators;
 using TrafficSimulator.Infrastructure.CarGenerators.Repositories;
 using TrafficSimulator.Infrastructure.Cars;

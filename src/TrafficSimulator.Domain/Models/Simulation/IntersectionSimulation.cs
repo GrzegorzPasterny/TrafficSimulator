@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace TrafficSimulator.Domain.Models
 {
-	public class IntersectionSimulation : Entity
+    public class IntersectionSimulation : Entity
 	{
 		private Intersection _intersection;
 

@@ -3,7 +3,10 @@ using ErrorOr;
 using System.Diagnostics;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Domain.Commons;
+using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
+using TrafficSimulator.Domain.Models.Agents;
+using TrafficSimulator.Domain.Models.Intersection;
 
 namespace TrafficSimulator.Application.Handlers
 {

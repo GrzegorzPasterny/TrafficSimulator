@@ -1,4 +1,6 @@
-﻿namespace TrafficSimulator.Domain.Models
+﻿using TrafficSimulator.Domain.Models.Agents;
+
+namespace TrafficSimulator.Domain.Models
 {
 	public class SimulationState
 	{

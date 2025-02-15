@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
 using TrafficSimulator.Domain.Models;
+using TrafficSimulator.Domain.Models.Intersection;
 
 namespace TrafficSimulator.Application.Commons.Interfaces;
 

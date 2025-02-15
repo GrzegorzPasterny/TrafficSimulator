@@ -1,6 +1,6 @@
 ﻿using TrafficSimulator.Domain.Commons;
 
-namespace TrafficSimulator.Domain.Models
+namespace TrafficSimulator.Domain.Models.Intersection
 {
 	public class IntersectionCore : LocationEntity
 	{

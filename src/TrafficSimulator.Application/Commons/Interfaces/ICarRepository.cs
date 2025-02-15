@@ -1,8 +1,8 @@
-﻿using TrafficSimulator.Domain.Models;
+﻿using TrafficSimulator.Domain.Models.Agents;
 
 namespace TrafficSimulator.Application.Commons.Interfaces
 {
-	public interface ICarRepository
+    public interface ICarRepository
 	{
 		Task AddCarAsync(Car car);
 

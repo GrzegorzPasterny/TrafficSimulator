@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using TrafficSimulator.Domain.Models;
+using TrafficSimulator.Domain.Models.Intersection;
 
 namespace TrafficSimulator.Domain.Commons
 {

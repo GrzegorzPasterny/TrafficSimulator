@@ -1,23 +1,43 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
 using TrafficSimulator.Domain.Commons;
+using TrafficSimulator.Domain.Models.Intersection;
 
-namespace TrafficSimulator.Domain.Models
+namespace TrafficSimulator.Domain.Models.Agents
 {
 	public class Car : Entity
 	{
 		private readonly Lane _startLocation;
-		private readonly Lane _endLocation;
-		private readonly IntersectionCore _intersectionCore;
 		public readonly List<LocationEntity> DistanceToCover;
 
-		public Car(Lane startLocation, Lane endLocation)
+		public Car(Lane startLocation)
 		{
 			_startLocation = startLocation;
-			_endLocation = endLocation;
-			_intersectionCore = startLocation.IntersectionCore;
 			CurrentLocation = new(startLocation, 0);
-			DistanceToCover = [_startLocation, _intersectionCore, _endLocation];
+
+			// TODO: Randomize the logic where can can go
+			Intersection intersection = _startLocation.Root;
+			IntersectionCore intersectionCore = intersection.IntersectionCore;
+
+			LaneType carTurnType = _startLocation.LaneType.First();
+
+			WorldDirection outboundLaneWorldDirection = _startLocation.WorldDirection.Rotate(carTurnType);
+
+			Lanes? outboundLanes = intersection.Lanes.Find(lanes => lanes.WorldDirection == outboundLaneWorldDirection);
+
+			if (outboundLanes is null || outboundLanes.OutboundLanes?.Count == 0)
+			{
+				// TODO: Handle
+			}
+
+			Lane? carEndLocation = outboundLanes?.OutboundLanes?.First();
+
+			if (carEndLocation is null)
+			{
+				// TODO: Handle
+			}
+
+			DistanceToCover = [_startLocation, intersectionCore, carEndLocation!];
 		}
 
 		/// <summary>

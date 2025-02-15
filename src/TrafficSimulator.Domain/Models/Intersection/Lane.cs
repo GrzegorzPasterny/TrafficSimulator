@@ -1,7 +1,7 @@
 ﻿using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
 
-namespace TrafficSimulator.Domain.Models
+namespace TrafficSimulator.Domain.Models.Intersection
 {
 	public class Lane : LocationEntity
 	{

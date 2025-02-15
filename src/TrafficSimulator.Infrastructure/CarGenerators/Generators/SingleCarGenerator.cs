@@ -3,9 +3,9 @@ using ErrorOr;
 using MediatR;
 using TrafficSimulator.Application.Cars.AddCar;
 using TrafficSimulator.Application.Commons.Interfaces;
-using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
-using TrafficSimulator.Domain.Models;
+using TrafficSimulator.Domain.Models.Agents;
+using TrafficSimulator.Domain.Models.Intersection;
 using TrafficSimulator.Infrastructure.Errors;
 
 namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
@@ -60,25 +60,7 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 
 			Intersection intersection = intersectionResult.Value;
 
-			LaneType carTurnType = _carStartLocation.LaneType.First();
-
-			WorldDirection outboundLaneWorldDirection = _carStartLocation.WorldDirection.Rotate(carTurnType);
-
-			Lanes? outboundLanes = intersection.Lanes.Find(lanes => lanes.WorldDirection == outboundLaneWorldDirection);
-
-			if (outboundLanes is null || outboundLanes.OutboundLanes?.Count == 0)
-			{
-				// TODO: Handle
-			}
-
-			Lane? carEndLocation = outboundLanes?.OutboundLanes?.First();
-
-			if (carEndLocation is null)
-			{
-				// TODO: Handle
-			}
-
-			Car car = new Car(_carStartLocation, carEndLocation);
+			Car car = new Car(_carStartLocation);
 
 			var command = new AddCarCommand(car);
 

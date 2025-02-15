@@ -1,12 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
 using TrafficSimulator.Application.Commons.Interfaces;
-using TrafficSimulator.Domain.Models;
+using TrafficSimulator.Domain.Models.Intersection;
 using TrafficSimulator.Infrastructure.Errors;
 
 namespace TrafficSimulator.Infrastructure.Intersections
 {
-	public class IntersectionManager : IIntersectionProvider, IIntersectionRepository
+    public class IntersectionManager : IIntersectionProvider, IIntersectionRepository
 	{
 		private Intersection? _currentIntersection;
 
