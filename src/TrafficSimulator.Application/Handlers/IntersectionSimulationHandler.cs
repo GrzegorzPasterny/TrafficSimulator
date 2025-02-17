@@ -116,7 +116,7 @@ namespace TrafficSimulator.Application.Handlers
 
 			SimulationPhase = SimulationPhase.InProgress;
 
-			Task.Run(SimulationRunner());
+			Task.Run(SimulationRunner);
 
 			return UnitResult.Success<Error>();
 		}
@@ -146,10 +146,11 @@ namespace TrafficSimulator.Application.Handlers
 			{
 				while (cts.IsCancellationRequested is false)
 				{
+					// TODO: Move here some logic from GetState function
 
+					// TODO: Invoke Move() method for car
 				}
 			}
-
 		}
 	}
 }
