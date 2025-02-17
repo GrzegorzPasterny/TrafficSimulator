@@ -1,11 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
-using TrafficSimulator.Domain.Models.Agents;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 
 namespace TrafficSimulator.Application.Handlers
@@ -16,13 +16,16 @@ namespace TrafficSimulator.Application.Handlers
 		private Stopwatch? _simulationTimer;
 		private ICarGeneratorRepository _carGeneratorRepository;
 		private readonly ICarRepository _carRepository;
+		private readonly ILogger<IntersectionSimulationHandler> _logger;
 
 		public SimulationPhase SimulationPhase { get; private set; }
 
-		public IntersectionSimulationHandler(ICarGeneratorRepository carGeneratorRepository, ICarRepository carRepository)
+		public IntersectionSimulationHandler(
+			ICarGeneratorRepository carGeneratorRepository, ICarRepository carRepository, ILogger<IntersectionSimulationHandler> logger)
 		{
 			_carGeneratorRepository = carGeneratorRepository;
 			_carRepository = carRepository;
+			_logger = logger;
 		}
 
 		public UnitResult<Error> Abort()
@@ -41,6 +44,7 @@ namespace TrafficSimulator.Application.Handlers
 			SimulationState simulationState = new SimulationState();
 			// TODO return good Simulation State object, or Error
 			simulationState.SimulationPhase = SimulationPhase;
+			bool allCarsFinished;
 
 			switch (SimulationPhase)
 			{
@@ -48,18 +52,34 @@ namespace TrafficSimulator.Application.Handlers
 					break;
 				case SimulationPhase.Finished:
 					break;
-				case SimulationPhase.InProgress:
-					IEnumerable<Car> cars = await _carRepository.GetCarsAsync();
-					simulationState.Cars = cars.ToList();
+				case SimulationPhase.InProgressCarGenerationFinished:
+					allCarsFinished = await AllCarsFinished(simulationState);
 
-					if (cars.All(c => c.HasReachedDestination))
+					if (allCarsFinished)
 					{
-						SimulationPhase = SimulationPhase.Finished;
+						simulationState.SimulationPhase = SimulationPhase.Finished;
+					}
+					break;
+				case SimulationPhase.InProgress:
+					bool allCarGeneratorsFinished = await AllCarGeneratorsFinished(simulationState);
+
+					if (allCarGeneratorsFinished)
+					{
+						simulationState.SimulationPhase = SimulationPhase.InProgressCarGenerationFinished;
+					}
+
+					allCarsFinished = await AllCarsFinished(simulationState);
+
+					if (allCarGeneratorsFinished && allCarsFinished)
+					{
+						simulationState.SimulationPhase = SimulationPhase.Finished;
 					}
 					break;
 				default:
 					throw new ArgumentOutOfRangeException($"Invalid simulation state: {SimulationPhase}");
 			}
+
+			_logger.LogDebug("[Simulation state = {SimulationState}]", simulationState);
 
 			return simulationState;
 		}
@@ -95,7 +115,41 @@ namespace TrafficSimulator.Application.Handlers
 			}
 
 			SimulationPhase = SimulationPhase.InProgress;
+
+			Task.Run(SimulationRunner());
+
 			return UnitResult.Success<Error>();
+		}
+
+		private async Task<bool> AllCarGeneratorsFinished(SimulationState simulationState)
+		{
+			simulationState.CarGenerators.AddRange(await _carGeneratorRepository.GetCarGeneratorsAsync());
+
+			return simulationState.CarGenerators.All(carGenerator => carGenerator.IsGenerationFinished().Value);
+		}
+
+		private async Task<bool> AllCarsFinished(SimulationState simulationState)
+		{
+			simulationState.Cars.AddRange(await _carRepository.GetCarsAsync());
+
+			if (simulationState.Cars.Count == 0)
+			{
+				return false;
+			}
+
+			return simulationState.Cars.All(c => c.HasReachedDestination);
+		}
+
+		private async Task SimulationRunner()
+		{
+			using (CancellationTokenSource cts = new(_intersectionSimulation!.Options.Timeout))
+			{
+				while (cts.IsCancellationRequested is false)
+				{
+
+				}
+			}
+
 		}
 	}
 }

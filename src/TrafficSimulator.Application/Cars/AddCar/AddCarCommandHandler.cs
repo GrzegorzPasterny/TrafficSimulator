@@ -3,7 +3,7 @@ using TrafficSimulator.Application.Commons.Interfaces;
 
 namespace TrafficSimulator.Application.Cars.AddCar
 {
-	public class AddCarCommandHandler : INotificationHandler<AddCarCommand>
+	public class AddCarCommandHandler : IRequestHandler<AddCarCommand>
 	{
 		private readonly ICarRepository _carRepository;
 
@@ -12,9 +12,9 @@ namespace TrafficSimulator.Application.Cars.AddCar
 			_carRepository = carRepository;
 		}
 
-		public async Task Handle(AddCarCommand notification, CancellationToken cancellationToken)
+		public async Task Handle(AddCarCommand command, CancellationToken cancellationToken)
 		{
-			await _carRepository.AddCarAsync(notification.Car);
+			await _carRepository.AddCarAsync(command.Car);
 		}
 	}
 }

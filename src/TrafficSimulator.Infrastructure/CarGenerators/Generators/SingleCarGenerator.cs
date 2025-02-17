@@ -59,5 +59,10 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 
 			_hasFinished = true;
 		}
+
+		public override string ToString()
+		{
+			return $"[CarsGeneratorName = {Name}, WasStarted = {_wasStarted}, HasFinished = {_hasFinished}]";
+		}
 	}
 }

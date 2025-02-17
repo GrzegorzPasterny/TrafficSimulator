@@ -1,19 +1,21 @@
 using ErrorOr;
 using FluentAssertions;
 using FluentAssertions.CSharpFunctionalExtensions;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers;
+using TrafficSimulator.Domain;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Builders;
+using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Infrastructure;
 using TrafficSimulator.Infrastructure.CarGenerators.Generators;
-using TrafficSimulator.Infrastructure.CarGenerators.Repositories;
-using TrafficSimulator.Infrastructure.Cars;
-using TrafficSimulator.Infrastructure.Intersections;
 using Xunit.Abstractions;
 
 namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
@@ -22,9 +24,19 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 	{
 		private readonly ILogger<SimulationHandlerTests> _logger;
 		private readonly ILoggerFactory _loggerFactory;
+		private readonly IMediator _mediator;
+		private readonly ICarGeneratorRepository _carGeneratorRepository;
+		private readonly ICarRepository _carRepository;
 
 		public SimulationHandlerTests(ITestOutputHelper testOutputHelper)
 		{
+			var services = new ServiceCollection();
+			services.AddDomain();
+			services.AddApplication();
+			services.AddInfrastructure();
+			var provider = services.BuildServiceProvider();
+			_mediator = provider.GetRequiredService<IMediator>();
+
 			var logger = new LoggerConfiguration()
 				.MinimumLevel.Verbose()
 				.WriteTo.TestOutput(testOutputHelper, LogEventLevel.Verbose)
@@ -37,6 +49,9 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			});
 
 			_logger = _loggerFactory.CreateLogger<SimulationHandlerTests>();
+
+			_carGeneratorRepository = provider.GetRequiredService<ICarGeneratorRepository>();
+			_carRepository = provider.GetRequiredService<ICarRepository>();
 		}
 
 		[Fact]
@@ -64,14 +79,13 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 				.InboundLanes!
 				.First();
 
-			inboundLane.CarGenerator = new SingleCarGenerator(intersection, inboundLane, null);
+			ICarGenerator carGenerator = new SingleCarGenerator(intersection, inboundLane, _mediator);
 
-			IIntersectionRepository intersectionRepository = new IntersectionManager();
-			ICarGeneratorRepository carGeneratorRepository = new CarGeneratorsRepositoryInMemory();
-			ICarRepository carRepository = new CarsRepositoryInMemory();
+			inboundLane.CarGenerator = carGenerator;
+			await _carGeneratorRepository.AddCarGeneratorAsync(carGenerator);
 
 			ISimulationHandler simulationHandler =
-				new IntersectionSimulationHandler(carGeneratorRepository, carRepository);
+				new IntersectionSimulationHandler(_carGeneratorRepository, _carRepository, _loggerFactory.CreateLogger<IntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
 
@@ -81,18 +95,17 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			do
 			{
+				await Task.Delay(100);
+
 				state = await simulationHandler.GetState();
 
 				state.IsError.Should().BeFalse();
 				state.Value.SimulationPhase.Should().NotBe(SimulationPhase.NotStarted);
 
-				_logger.LogInformation("Next cycle");
+			} while (state.Value.SimulationPhase is SimulationPhase.InProgress or SimulationPhase.InProgressCarGenerationFinished);
 
-			} while (state.Value.SimulationPhase == SimulationPhase.InProgress);
-
-
-
-			// TODO: Print final results
+			// print final result
+			state = await simulationHandler.GetState();
 		}
 	}
 }

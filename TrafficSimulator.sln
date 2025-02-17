@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficSimulator.Domain.Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficSimulator.Application.UnitTests", "test\TrafficSimulator.Application.UnitTests\TrafficSimulator.Application.UnitTests.csproj", "{4FA89723-F6E1-472E-A61C-4EA4630EAD18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSimulator.Infrastructure.UnitTests", "test\TrafficSimulator.Infrastructure.UnitTests\TrafficSimulator.Infrastructure.UnitTests.csproj", "{15BFFE3F-6D25-48EC-BD54-1E4CAB46187E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{4FA89723-F6E1-472E-A61C-4EA4630EAD18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FA89723-F6E1-472E-A61C-4EA4630EAD18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FA89723-F6E1-472E-A61C-4EA4630EAD18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15BFFE3F-6D25-48EC-BD54-1E4CAB46187E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15BFFE3F-6D25-48EC-BD54-1E4CAB46187E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15BFFE3F-6D25-48EC-BD54-1E4CAB46187E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15BFFE3F-6D25-48EC-BD54-1E4CAB46187E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{A84A8E7F-8B8A-412C-80F9-0F254A281038} = {E22C5F94-9CB3-4841-97C2-34E7BC528115}
 		{9B1111CE-7D0B-47DE-836F-AA29079E2290} = {6B82577D-BA01-428B-B831-C4AFFA006073}
 		{4FA89723-F6E1-472E-A61C-4EA4630EAD18} = {6B82577D-BA01-428B-B831-C4AFFA006073}
+		{15BFFE3F-6D25-48EC-BD54-1E4CAB46187E} = {6B82577D-BA01-428B-B831-C4AFFA006073}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0745607E-FFE9-49E7-9CAF-011106FE6DBB}

@@ -88,5 +88,15 @@ namespace TrafficSimulator.Domain.Models.Agents
 
 			return UnitResult.Success<Error>();
 		}
+
+		public override string ToString()
+		{
+			return
+				$"[CarId = {Id}, " +
+				$"HasReachedDestination = {HasReachedDestination}, " +
+				$"Location = {CurrentLocation.Location.Name}, " +
+				$"Distance = {CurrentLocation.CurrentDistance}, " +
+				$"Velocity = {Velocity}]";
+		}
 	}
 }
