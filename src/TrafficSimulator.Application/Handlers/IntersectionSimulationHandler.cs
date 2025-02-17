@@ -126,6 +126,8 @@ namespace TrafficSimulator.Application.Handlers
 					_intersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.Finished;
 				}
 			}
+
+			_logger.LogTrace("[SimulationState = {SimulationState}]", _intersectionSimulation!.SimulationState);
 		}
 
 		internal async Task PerformSimulationStep()
@@ -133,12 +135,12 @@ namespace TrafficSimulator.Application.Handlers
 			IEnumerable<Car> cars = await _carRepository.GetCarsAsync();
 			foreach (var car in cars)
 			{
-				car.Move(_intersectionSimulation!.Options.Step);
+				car.Move(_intersectionSimulation!.Options.StepTimespan);
 			}
 
 			// update metrics
 			_intersectionSimulation!.SimulationState.StepsCount++;
-			_intersectionSimulation!.SimulationState.ElapsedTime = _intersectionSimulation.Options.Step * _intersectionSimulation!.SimulationState.StepsCount;
+			_intersectionSimulation!.SimulationState.ElapsedTime = _intersectionSimulation.Options.StepTimespan * _intersectionSimulation!.SimulationState.StepsCount;
 
 			// TODO: Add car collision check
 			// TODO: Cars need to wait in the queue when car is in front of them and also when Traffic light is orange, or red

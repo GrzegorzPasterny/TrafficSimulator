@@ -7,10 +7,10 @@ namespace TrafficSimulator.Domain.Models.Agents
 {
 	public class Car : Entity
 	{
-		private readonly OutboundLane _startLocation;
+		private readonly InboundLane _startLocation;
 		public readonly List<LocationEntity> DistanceToCover;
 
-		public Car(OutboundLane startLocation)
+		public Car(InboundLane startLocation)
 		{
 			_startLocation = startLocation;
 			CurrentLocation = new(startLocation, 0);
@@ -24,7 +24,7 @@ namespace TrafficSimulator.Domain.Models.Agents
 				// TODO: Handle
 			}
 
-			LaneType carTurnType = _startLocation.LaneType.First();
+			LaneType carTurnType = _startLocation.LaneTypes.First();
 
 			WorldDirection outboundLaneWorldDirection = ((Lanes)_startLocation.Parent!).WorldDirection.Rotate(carTurnType);
 
@@ -67,7 +67,7 @@ namespace TrafficSimulator.Domain.Models.Agents
 			}
 
 			// TODO: Replace int by double for more precision if needed
-			int distanceToGo = Velocity * (int)timeElapsed.TotalSeconds;
+			double distanceToGo = Velocity * timeElapsed.TotalSeconds;
 
 			if (distanceToGo > CurrentLocation.DistanceLeft)
 			{

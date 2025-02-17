@@ -104,7 +104,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			} while (state.SimulationPhase is SimulationPhase.InProgress or SimulationPhase.InProgressCarGenerationFinished);
 
-			// print final result
+			// print the final result
 			state = simulationHandler.GetState();
 			_logger.LogDebug("[SimulationState = {SimulationState}]", state);
 

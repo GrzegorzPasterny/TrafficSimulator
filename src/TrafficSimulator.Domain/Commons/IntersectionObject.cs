@@ -7,7 +7,7 @@ namespace TrafficSimulator.Domain.Commons
 	{
 		public IntersectionObject? Parent { get; private set; }
 		public Intersection Root { get; private set; }
-		public string Name { get; private set; }
+		public string Name { get; internal set; }
 
 		protected IntersectionObject(Intersection root, IntersectionObject? parent)
 		{

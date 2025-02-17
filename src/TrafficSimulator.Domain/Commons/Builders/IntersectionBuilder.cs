@@ -56,7 +56,7 @@ namespace TrafficSimulator.Domain.Commons.Builders
 			}
 			else
 			{
-				OutboundLane outboundLane = new(_intersection, lanesCollection, LaneTypeHelper.Straight());
+				OutboundLane outboundLane = new(_intersection, lanesCollection);
 
 				lanesCollection.OutboundLanes!.Add(outboundLane);
 			}

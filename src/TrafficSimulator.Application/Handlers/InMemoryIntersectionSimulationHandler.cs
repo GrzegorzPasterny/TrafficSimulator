@@ -28,7 +28,14 @@ namespace TrafficSimulator.Application.Handlers
 
 					await DetermineState();
 
-					// TODO: Add StepLimit
+					if (_intersectionSimulation.SimulationState.StepsCount >= _intersectionSimulation.Options.StepLimit)
+					{
+						_intersectionSimulation.SimulationState.SimulationPhase = SimulationPhase.Aborted;
+
+						_logger.LogInformation("Simulation aborted due to reaching the maximum step amount " +
+							"[StepLimit = {StepLimit}]", _intersectionSimulation.Options.StepLimit);
+						return;
+					}
 
 					if (_intersectionSimulation.SimulationState.SimulationPhase is SimulationPhase.Finished)
 					{

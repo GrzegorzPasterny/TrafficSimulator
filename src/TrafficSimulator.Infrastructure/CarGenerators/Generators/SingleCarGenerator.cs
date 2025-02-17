@@ -18,10 +18,15 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 		private Task? _carGenerationTask;
 		private readonly ISender _mediator;
 
-		public SingleCarGenerator(Intersection root, IntersectionObject? parent, ISender mediator)
+		public SingleCarGenerator(Intersection root, IntersectionObject? parent, ISender mediator, SingleCarGeneratorOptions? singleCarGeneratorOptions = null)
 			: base(root, parent)
 		{
 			_mediator = mediator;
+
+			if (singleCarGeneratorOptions is not null)
+			{
+				Options = singleCarGeneratorOptions;
+			}
 		}
 
 		public override ErrorOr<bool> IsGenerationFinished()

@@ -15,11 +15,11 @@ namespace TrafficSimulator.Domain.Models
 		/// <summary>
 		/// Distance on the <see cref="Location"/> it is currently in
 		/// </summary>
-		public int CurrentDistance { get; set; }
+		public double CurrentDistance { get; set; }
 
 		/// <summary>
 		/// Distance left to cover <see cref="Location"/>
 		/// </summary>
-		public int DistanceLeft => Location.Distance - CurrentDistance;
+		public double DistanceLeft => Location.Distance - CurrentDistance;
 	}
 }

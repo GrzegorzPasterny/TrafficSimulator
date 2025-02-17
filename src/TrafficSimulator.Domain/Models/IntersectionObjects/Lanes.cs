@@ -7,6 +7,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 		public Lanes(Intersection root, IntersectionObject? parent, WorldDirection worldDirection) : base(root, parent)
 		{
 			WorldDirection = worldDirection;
+			Name = BuildObjectName(parent!.Name);
 		}
 
 		/// <summary>

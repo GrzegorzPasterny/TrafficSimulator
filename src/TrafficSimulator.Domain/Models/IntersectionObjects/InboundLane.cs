@@ -6,15 +6,17 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 	public class InboundLane : OutboundLane
 	{
 		public InboundLane(Intersection root, IntersectionObject? parent, LaneType[] laneTypes, int distance = 10)
-			: base(root, parent, laneTypes, distance)
+			: base(root, parent, distance)
 		{
+			LaneTypes = laneTypes;
 		}
 
 		public ICarGenerator CarGenerator { get; set; }
+		public LaneType[] LaneTypes { get; }
 
 		internal override string BuildObjectName(string parentName)
 		{
-			return $".{nameof(InboundLane)}";
+			return $"{parentName}.{nameof(InboundLane)}";
 		}
 	}
 }
