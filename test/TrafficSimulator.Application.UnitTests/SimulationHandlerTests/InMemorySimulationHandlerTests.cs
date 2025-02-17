@@ -20,15 +20,15 @@ using Xunit.Abstractions;
 
 namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 {
-	public class SimulationHandlerTests
+	public class InMemorySimulationHandlerTests
 	{
-		private readonly ILogger<SimulationHandlerTests> _logger;
+		private readonly ILogger<InMemorySimulationHandlerTests> _logger;
 		private readonly ILoggerFactory _loggerFactory;
 		private readonly IMediator _mediator;
 		private readonly ICarGeneratorRepository _carGeneratorRepository;
 		private readonly ICarRepository _carRepository;
 
-		public SimulationHandlerTests(ITestOutputHelper testOutputHelper)
+		public InMemorySimulationHandlerTests(ITestOutputHelper testOutputHelper)
 		{
 			var services = new ServiceCollection();
 			services.AddDomain();
@@ -48,7 +48,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 				builder.AddSerilog(logger, dispose: true);
 			});
 
-			_logger = _loggerFactory.CreateLogger<SimulationHandlerTests>();
+			_logger = _loggerFactory.CreateLogger<InMemorySimulationHandlerTests>();
 
 			_carGeneratorRepository = provider.GetRequiredService<ICarGeneratorRepository>();
 			_carRepository = provider.GetRequiredService<ICarRepository>();
@@ -63,7 +63,6 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 				.AddIntersectionCore()
 				.AddLanesCollection(WorldDirection.East)
 				.AddLane(WorldDirection.East, true)
-				//.AddCarGenerator()
 				.AddLane(WorldDirection.East, false)
 				.AddLanesCollection(WorldDirection.West)
 				.AddLane(WorldDirection.West, true)
@@ -85,27 +84,31 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			await _carGeneratorRepository.AddCarGeneratorAsync(carGenerator);
 
 			ISimulationHandler simulationHandler =
-				new IntersectionSimulationHandler(_carGeneratorRepository, _carRepository, _loggerFactory.CreateLogger<IntersectionSimulationHandler>());
+				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
 
 			simulationHandler.Start();
 
-			ErrorOr<SimulationState> state;
+			SimulationState state;
 
+			// track the progress in real time
 			do
 			{
 				await Task.Delay(100);
 
-				state = await simulationHandler.GetState();
+				state = simulationHandler.GetState();
+				_logger.LogDebug("[SimulationState = {SimulationState}]", state);
 
-				state.IsError.Should().BeFalse();
-				state.Value.SimulationPhase.Should().NotBe(SimulationPhase.NotStarted);
+				state.SimulationPhase.Should().NotBe(SimulationPhase.NotStarted);
 
-			} while (state.Value.SimulationPhase is SimulationPhase.InProgress or SimulationPhase.InProgressCarGenerationFinished);
+			} while (state.SimulationPhase is SimulationPhase.InProgress or SimulationPhase.InProgressCarGenerationFinished);
 
 			// print final result
-			state = await simulationHandler.GetState();
+			state = simulationHandler.GetState();
+			_logger.LogDebug("[SimulationState = {SimulationState}]", state);
+
+			state.SimulationPhase.Should().Be(SimulationPhase.Finished);
 		}
 	}
 }

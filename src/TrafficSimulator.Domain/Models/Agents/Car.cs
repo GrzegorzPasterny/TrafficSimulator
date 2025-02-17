@@ -59,14 +59,15 @@ namespace TrafficSimulator.Domain.Models.Agents
 
 		public bool HasReachedDestination { get; private set; } = false;
 
-		public UnitResult<Error> Move(int timeElapsed)
+		public UnitResult<Error> Move(TimeSpan timeElapsed)
 		{
 			if (HasReachedDestination)
 			{
 				return DomainErrors.CarHasReachedDestination(Id);
 			}
 
-			int distanceToGo = Velocity * timeElapsed;
+			// TODO: Replace int by double for more precision if needed
+			int distanceToGo = Velocity * (int)timeElapsed.TotalSeconds;
 
 			if (distanceToGo > CurrentLocation.DistanceLeft)
 			{

@@ -11,7 +11,7 @@ public interface ISimulationHandler
 
 	UnitResult<Error> Start();
 
-	Task<ErrorOr<SimulationState>> GetState();
+	SimulationState GetState();
 
 	UnitResult<Error> Abort();
 

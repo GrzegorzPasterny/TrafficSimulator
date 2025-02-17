@@ -6,17 +6,19 @@ using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
+using TrafficSimulator.Domain.Models.Agents;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 
 namespace TrafficSimulator.Application.Handlers
 {
-	public class IntersectionSimulationHandler : ISimulationHandler
+	public abstract class IntersectionSimulationHandler : ISimulationHandler
 	{
-		private IntersectionSimulation? _intersectionSimulation;
-		private Stopwatch? _simulationTimer;
-		private ICarGeneratorRepository _carGeneratorRepository;
-		private readonly ICarRepository _carRepository;
-		private readonly ILogger<IntersectionSimulationHandler> _logger;
+		internal IntersectionSimulation? _intersectionSimulation;
+		internal Stopwatch? _simulationTimer;
+		internal ICarGeneratorRepository _carGeneratorRepository;
+		internal readonly ICarRepository _carRepository;
+		internal readonly ILogger<IntersectionSimulationHandler> _logger;
+		internal SimulationState _simulationState = new SimulationState();
 
 		public SimulationPhase SimulationPhase { get; private set; }
 
@@ -39,49 +41,9 @@ namespace TrafficSimulator.Application.Handlers
 			return UnitResult.Success<Error>();
 		}
 
-		public async Task<ErrorOr<SimulationState>> GetState()
+		public SimulationState GetState()
 		{
-			SimulationState simulationState = new SimulationState();
-			// TODO return good Simulation State object, or Error
-			simulationState.SimulationPhase = SimulationPhase;
-			bool allCarsFinished;
-
-			switch (SimulationPhase)
-			{
-				case SimulationPhase.NotStarted:
-					break;
-				case SimulationPhase.Finished:
-					break;
-				case SimulationPhase.InProgressCarGenerationFinished:
-					allCarsFinished = await AllCarsFinished(simulationState);
-
-					if (allCarsFinished)
-					{
-						simulationState.SimulationPhase = SimulationPhase.Finished;
-					}
-					break;
-				case SimulationPhase.InProgress:
-					bool allCarGeneratorsFinished = await AllCarGeneratorsFinished(simulationState);
-
-					if (allCarGeneratorsFinished)
-					{
-						simulationState.SimulationPhase = SimulationPhase.InProgressCarGenerationFinished;
-					}
-
-					allCarsFinished = await AllCarsFinished(simulationState);
-
-					if (allCarGeneratorsFinished && allCarsFinished)
-					{
-						simulationState.SimulationPhase = SimulationPhase.Finished;
-					}
-					break;
-				default:
-					throw new ArgumentOutOfRangeException($"Invalid simulation state: {SimulationPhase}");
-			}
-
-			_logger.LogDebug("[Simulation state = {SimulationState}]", simulationState);
-
-			return simulationState;
+			return _simulationState;
 		}
 
 		public UnitResult<Error> LoadIntersection(Intersection intersection)
@@ -121,14 +83,14 @@ namespace TrafficSimulator.Application.Handlers
 			return UnitResult.Success<Error>();
 		}
 
-		private async Task<bool> AllCarGeneratorsFinished(SimulationState simulationState)
+		internal async Task<bool> AllCarGeneratorsFinished(SimulationState simulationState)
 		{
 			simulationState.CarGenerators.AddRange(await _carGeneratorRepository.GetCarGeneratorsAsync());
 
 			return simulationState.CarGenerators.All(carGenerator => carGenerator.IsGenerationFinished().Value);
 		}
 
-		private async Task<bool> AllCarsFinished(SimulationState simulationState)
+		internal async Task<bool> AllCarsFinished(SimulationState simulationState)
 		{
 			simulationState.Cars.AddRange(await _carRepository.GetCarsAsync());
 
@@ -140,17 +102,51 @@ namespace TrafficSimulator.Application.Handlers
 			return simulationState.Cars.All(c => c.HasReachedDestination);
 		}
 
-		private async Task SimulationRunner()
+		internal async Task DetermineState()
 		{
-			using (CancellationTokenSource cts = new(_intersectionSimulation!.Options.Timeout))
-			{
-				while (cts.IsCancellationRequested is false)
-				{
-					// TODO: Move here some logic from GetState function
+			bool allCarsFinished;
 
-					// TODO: Invoke Move() method for car
+			if (_simulationState.SimulationPhase == SimulationPhase.InProgressCarGenerationFinished)
+			{
+				allCarsFinished = await AllCarsFinished(_simulationState);
+
+				if (allCarsFinished)
+				{
+					_simulationState.SimulationPhase = SimulationPhase.Finished;
 				}
 			}
+			else
+			{
+				bool allCarGeneratorsFinished = await AllCarGeneratorsFinished(_simulationState);
+
+				if (allCarGeneratorsFinished)
+				{
+					_simulationState.SimulationPhase = SimulationPhase.InProgressCarGenerationFinished;
+				}
+
+				allCarsFinished = await AllCarsFinished(_simulationState);
+
+				if (allCarGeneratorsFinished && allCarsFinished)
+				{
+					_simulationState.SimulationPhase = SimulationPhase.Finished;
+				}
+			}
+
+			_logger.LogDebug("[Simulation state = {SimulationState}]", _simulationState);
 		}
+
+		internal async Task PerformSimulationStep()
+		{
+			IEnumerable<Car> cars = await _carRepository.GetCarsAsync();
+			foreach (var car in cars)
+			{
+				car.Move(_intersectionSimulation!.Options.Step);
+			}
+
+			// TODO: Add car collision check
+			// TODO: Cars need to wait in the queue when car is in front of them and also when Traffic light is orange, or red
+		}
+
+		internal abstract Task SimulationRunner();
 	}
 }

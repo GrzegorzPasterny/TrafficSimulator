@@ -6,10 +6,10 @@ namespace TrafficSimulator.Domain.Models
 {
 	public class SimulationState
 	{
-		public SimulationPhase SimulationPhase { set; get; }
+		public SimulationPhase SimulationPhase { set; get; } = SimulationPhase.NotStarted;
 
-		public List<Car> Cars { get; set; } = new();
-		public List<ICarGenerator> CarGenerators { get; set; } = new();
+		public List<Car> Cars { get; set; } = [];
+		public List<ICarGenerator> CarGenerators { get; set; } = [];
 
 		public override string ToString()
 		{
