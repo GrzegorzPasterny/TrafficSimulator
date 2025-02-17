@@ -5,6 +5,7 @@
 		NotStarted,
 		InProgress,
 		InProgressCarGenerationFinished,
-		Finished
+		Finished,
+		Aborted
 	}
 }

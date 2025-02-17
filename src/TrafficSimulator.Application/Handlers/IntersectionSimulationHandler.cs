@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
@@ -14,13 +13,9 @@ namespace TrafficSimulator.Application.Handlers
 	public abstract class IntersectionSimulationHandler : ISimulationHandler
 	{
 		internal IntersectionSimulation? _intersectionSimulation;
-		internal Stopwatch? _simulationTimer;
 		internal ICarGeneratorRepository _carGeneratorRepository;
 		internal readonly ICarRepository _carRepository;
 		internal readonly ILogger<IntersectionSimulationHandler> _logger;
-		internal SimulationState _simulationState = new SimulationState();
-
-		public SimulationPhase SimulationPhase { get; private set; }
 
 		public IntersectionSimulationHandler(
 			ICarGeneratorRepository carGeneratorRepository, ICarRepository carRepository, ILogger<IntersectionSimulationHandler> logger)
@@ -32,18 +27,19 @@ namespace TrafficSimulator.Application.Handlers
 
 		public UnitResult<Error> Abort()
 		{
-			if (SimulationPhase != SimulationPhase.InProgress)
+			if (_intersectionSimulation!.SimulationState.SimulationPhase is SimulationPhase.Finished)
 			{
-				return DomainErrors.SimulationStateChange(SimulationPhase, SimulationPhase.Finished);
+				return DomainErrors.SimulationStateChange(_intersectionSimulation!.SimulationState.SimulationPhase, SimulationPhase.Finished);
 			}
 
-			_simulationTimer?.Stop();
+			// TODO: Cancel the simulation
+
 			return UnitResult.Success<Error>();
 		}
 
 		public SimulationState GetState()
 		{
-			return _simulationState;
+			return _intersectionSimulation!.SimulationState;
 		}
 
 		public UnitResult<Error> LoadIntersection(Intersection intersection)
@@ -62,12 +58,11 @@ namespace TrafficSimulator.Application.Handlers
 		/// </remarks>
 		public UnitResult<Error> Start()
 		{
-			if (SimulationPhase != SimulationPhase.NotStarted)
+			if (_intersectionSimulation!.SimulationState.SimulationPhase != SimulationPhase.NotStarted)
 			{
-				return DomainErrors.SimulationStateChange(SimulationPhase, SimulationPhase.InProgress);
+				return DomainErrors.SimulationStateChange(_intersectionSimulation!.SimulationState.SimulationPhase, SimulationPhase.InProgress);
 			}
 
-			_simulationTimer = Stopwatch.StartNew();
 			IEnumerable<ICarGenerator> carGenerators = _carGeneratorRepository.GetCarGeneratorsAsync().Result;
 
 			foreach (var carGenerator in carGenerators)
@@ -76,7 +71,7 @@ namespace TrafficSimulator.Application.Handlers
 				_ = carGenerator.StartGenerating();
 			}
 
-			SimulationPhase = SimulationPhase.InProgress;
+			_intersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.InProgress;
 
 			Task.Run(SimulationRunner);
 
@@ -85,14 +80,14 @@ namespace TrafficSimulator.Application.Handlers
 
 		internal async Task<bool> AllCarGeneratorsFinished(SimulationState simulationState)
 		{
-			simulationState.CarGenerators.AddRange(await _carGeneratorRepository.GetCarGeneratorsAsync());
+			simulationState.CarGenerators = (await _carGeneratorRepository.GetCarGeneratorsAsync()).ToList();
 
 			return simulationState.CarGenerators.All(carGenerator => carGenerator.IsGenerationFinished().Value);
 		}
 
 		internal async Task<bool> AllCarsFinished(SimulationState simulationState)
 		{
-			simulationState.Cars.AddRange(await _carRepository.GetCarsAsync());
+			simulationState.Cars = (await _carRepository.GetCarsAsync()).ToList();
 
 			if (simulationState.Cars.Count == 0)
 			{
@@ -106,33 +101,31 @@ namespace TrafficSimulator.Application.Handlers
 		{
 			bool allCarsFinished;
 
-			if (_simulationState.SimulationPhase == SimulationPhase.InProgressCarGenerationFinished)
+			if (_intersectionSimulation!.SimulationState.SimulationPhase is SimulationPhase.InProgressCarGenerationFinished)
 			{
-				allCarsFinished = await AllCarsFinished(_simulationState);
+				allCarsFinished = await AllCarsFinished(_intersectionSimulation!.SimulationState);
 
 				if (allCarsFinished)
 				{
-					_simulationState.SimulationPhase = SimulationPhase.Finished;
+					_intersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.Finished;
 				}
 			}
 			else
 			{
-				bool allCarGeneratorsFinished = await AllCarGeneratorsFinished(_simulationState);
+				bool allCarGeneratorsFinished = await AllCarGeneratorsFinished(_intersectionSimulation!.SimulationState);
 
 				if (allCarGeneratorsFinished)
 				{
-					_simulationState.SimulationPhase = SimulationPhase.InProgressCarGenerationFinished;
+					_intersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.InProgressCarGenerationFinished;
 				}
 
-				allCarsFinished = await AllCarsFinished(_simulationState);
+				allCarsFinished = await AllCarsFinished(_intersectionSimulation!.SimulationState);
 
 				if (allCarGeneratorsFinished && allCarsFinished)
 				{
-					_simulationState.SimulationPhase = SimulationPhase.Finished;
+					_intersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.Finished;
 				}
 			}
-
-			_logger.LogDebug("[Simulation state = {SimulationState}]", _simulationState);
 		}
 
 		internal async Task PerformSimulationStep()
@@ -142,6 +135,10 @@ namespace TrafficSimulator.Application.Handlers
 			{
 				car.Move(_intersectionSimulation!.Options.Step);
 			}
+
+			// update metrics
+			_intersectionSimulation!.SimulationState.StepsCount++;
+			_intersectionSimulation!.SimulationState.ElapsedTime = _intersectionSimulation.Options.Step * _intersectionSimulation!.SimulationState.StepsCount;
 
 			// TODO: Add car collision check
 			// TODO: Cars need to wait in the queue when car is in front of them and also when Traffic light is orange, or red

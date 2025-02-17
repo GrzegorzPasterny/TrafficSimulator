@@ -10,6 +10,8 @@ namespace TrafficSimulator.Domain.Models
 		// TODO: Load options through configuration
 		public SimulationOptions Options { get; set; } = new();
 
+		public SimulationState SimulationState { get; set; } = new SimulationState();
+
 		public IntersectionSimulation(Intersection intersection)
 		{
 			_intersection = intersection;
