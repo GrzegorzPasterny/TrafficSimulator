@@ -42,15 +42,11 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			simulationHandler.Start();
 
-			SimulationState state;
-
 			// It takes few hundret milliseconds for simulation to finish
 			await Task.Delay(3000);
 
-			// print the final result
-			state = simulationHandler.GetState();
-
-			state.SimulationPhase.Should().Be(SimulationPhase.Finished);
+			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
+			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);
 		}
 	}
 }

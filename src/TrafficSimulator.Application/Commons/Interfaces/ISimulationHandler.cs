@@ -7,11 +7,12 @@ namespace TrafficSimulator.Application.Commons.Interfaces;
 
 public interface ISimulationHandler
 {
+	SimulationState SimulationState { get; }
+	SimulationResults SimulationResults { get; }
+
 	UnitResult<Error> LoadIntersection(Intersection intersection);
 
 	UnitResult<Error> Start();
-
-	SimulationState GetState();
 
 	UnitResult<Error> Abort();
 

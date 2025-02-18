@@ -9,17 +9,18 @@ namespace TrafficSimulator.Application.Handlers
 	{
 		private new readonly ILogger<RealTimeIntersectionSimulationHandler> _logger;
 		private readonly TimeSpan _timeStep = TimeSpan.FromMilliseconds(100);
-		private Stopwatch _stopwatch;
+		private Stopwatch? _stopwatch;
+		private System.Timers.Timer? _timer;
 
 		public RealTimeIntersectionSimulationHandler(ICarGeneratorRepository carGeneratorRepository, ICarRepository carRepository, ILogger<RealTimeIntersectionSimulationHandler> logger) : base(carGeneratorRepository, carRepository, logger)
 		{
 			_logger = logger;
 		}
 
-		internal override async Task SimulationRunner()
+		internal override Task SimulationRunner()
 		{
-			var timer = new System.Timers.Timer(_timeStep.TotalMilliseconds);
-			timer.Elapsed += async (s, e) =>
+			_timer = new System.Timers.Timer(_timeStep.TotalMilliseconds);
+			_timer.Elapsed += async (s, e) =>
 			{
 				// Move cars
 				await PerformSimulationStep();
@@ -30,25 +31,34 @@ namespace TrafficSimulator.Application.Handlers
 				{
 					_intersectionSimulation.SimulationState.SimulationPhase = SimulationPhase.Aborted;
 
-					_stopwatch.Stop();
 					_logger.LogInformation("Simulation aborted due to reaching the maximum step amount " +
 						"[StepLimit = {StepLimit}]", _intersectionSimulation.Options.StepLimit);
 
-					_intersectionSimulation.SimulationResults.TotalCalculationTimeMs = _stopwatch.ElapsedMilliseconds;
+					_ = Task.Run(() => GatherResults(_stopwatch.ElapsedMilliseconds));
 
+					_timer?.Stop();
+					_timer?.Dispose();
+					_timer = null;
 					return;
 				}
 
 				if (_intersectionSimulation.SimulationState.SimulationPhase is SimulationPhase.Finished)
 				{
-					_stopwatch.Stop();
 					_logger.LogInformation("The simulation has finished");
+
+					_ = Task.Run(() => GatherResults(_stopwatch.ElapsedMilliseconds));
+
+					_timer?.Stop();
+					_timer?.Dispose();
+					_timer = null;
 					return;
 				}
 			};
-			timer.Start();
+			_timer.Start();
 
 			_stopwatch = Stopwatch.StartNew();
+
+			return Task.CompletedTask;
 		}
 	}
 }

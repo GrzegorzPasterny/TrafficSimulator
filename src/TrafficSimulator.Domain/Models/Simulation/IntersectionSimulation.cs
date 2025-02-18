@@ -11,7 +11,7 @@ namespace TrafficSimulator.Domain.Models
 		public SimulationOptions Options { get; set; } = new();
 
 		public SimulationState SimulationState { get; set; } = new SimulationState();
-		public SimulationResults SimulationResults { get; set; }
+		public SimulationResults? SimulationResults { get; set; }
 
 		public IntersectionSimulation(Intersection intersection)
 		{

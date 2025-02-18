@@ -41,23 +41,19 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			simulationHandler.Start();
 
-			SimulationState state;
-
 			// track the progress in real time
 			do
 			{
 				await Task.Delay(100);
 
-				state = simulationHandler.GetState();
+				simulationHandler.SimulationState.SimulationPhase.Should().NotBe(SimulationPhase.NotStarted);
 
-				state.SimulationPhase.Should().NotBe(SimulationPhase.NotStarted);
+			} while (simulationHandler.SimulationState.SimulationPhase is SimulationPhase.InProgress or SimulationPhase.InProgressCarGenerationFinished);
 
-			} while (state.SimulationPhase is SimulationPhase.InProgress or SimulationPhase.InProgressCarGenerationFinished);
+			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
 
-			// print the final result
-			state = simulationHandler.GetState();
-
-			state.SimulationPhase.Should().Be(SimulationPhase.Finished);
+			await Task.Delay(1000);
+			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);
 		}
 	}
 }

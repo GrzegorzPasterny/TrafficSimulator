@@ -17,6 +17,9 @@ namespace TrafficSimulator.Application.Handlers
 		internal readonly ICarRepository _carRepository;
 		internal readonly ILogger<IntersectionSimulationHandler> _logger;
 
+		public SimulationState SimulationState => _intersectionSimulation!.SimulationState;
+		public SimulationResults SimulationResults => _intersectionSimulation!.SimulationResults;
+
 		public IntersectionSimulationHandler(
 			ICarGeneratorRepository carGeneratorRepository, ICarRepository carRepository, ILogger<IntersectionSimulationHandler> logger)
 		{
@@ -35,11 +38,6 @@ namespace TrafficSimulator.Application.Handlers
 			// TODO: Cancel the simulation
 
 			return UnitResult.Success<Error>();
-		}
-
-		public SimulationState GetState()
-		{
-			return _intersectionSimulation!.SimulationState;
 		}
 
 		public UnitResult<Error> LoadIntersection(Intersection intersection)
@@ -144,6 +142,19 @@ namespace TrafficSimulator.Application.Handlers
 
 			// TODO: Add car collision check
 			// TODO: Cars need to wait in the queue when car is in front of them and also when Traffic light is orange, or red
+		}
+
+		internal async Task GatherResults(long elapsedMilliseconds)
+		{
+			if (_intersectionSimulation!.SimulationResults is null)
+			{
+				_intersectionSimulation.SimulationResults = new SimulationResults();
+			}
+
+			_intersectionSimulation!.SimulationResults.TotalCalculationTimeMs = elapsedMilliseconds;
+			// TODO: Fill in value
+			_intersectionSimulation.SimulationResults.AverageCarIdleTime = 0;
+			_intersectionSimulation.SimulationResults.CarsPassed = (await _carRepository.GetCarsAsync()).Count();
 		}
 
 		internal abstract Task SimulationRunner();
