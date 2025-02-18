@@ -3,7 +3,7 @@ using System.Diagnostics;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
 
-namespace TrafficSimulator.Application.Handlers
+namespace TrafficSimulator.Application.Handlers.Simulation
 {
 	public class RealTimeIntersectionSimulationHandler : IntersectionSimulationHandler
 	{

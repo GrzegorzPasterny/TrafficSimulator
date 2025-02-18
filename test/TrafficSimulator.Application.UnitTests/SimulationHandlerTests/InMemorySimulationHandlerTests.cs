@@ -2,7 +2,7 @@ using FluentAssertions;
 using FluentAssertions.CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using TrafficSimulator.Application.Commons.Interfaces;
-using TrafficSimulator.Application.Handlers;
+using TrafficSimulator.Application.Handlers.Simulation;
 using TrafficSimulator.Application.UnitTests.Commons;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;

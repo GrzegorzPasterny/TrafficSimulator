@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
-using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Domain.Models.TrafficLights;
 using TrafficSimulator.Domain.UnitTests.Commons;
 using Xunit.Abstractions;
 
 namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 {
-	public class TrafficLightsTests
+    public class TrafficLightsTests
 	{
 		private readonly ITestOutputHelper _testOutputHelper;
 		private const int _orangeLightTimespanMs = 5000;
