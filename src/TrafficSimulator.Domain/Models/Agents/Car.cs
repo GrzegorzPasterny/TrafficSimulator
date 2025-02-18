@@ -48,7 +48,7 @@ namespace TrafficSimulator.Domain.Models.Agents
 		/// <summary>
 		/// Velocity of the car in units per second
 		/// </summary>
-		public int Velocity { get; set; } = 5;
+		public int Velocity { get; set; } = 50;
 
 		/// <summary>
 		/// Langth of the car
@@ -88,6 +88,8 @@ namespace TrafficSimulator.Domain.Models.Agents
 			else
 			{
 				CurrentLocation.CurrentDistance += distanceToGo;
+				// Remove natural double rounding error.
+				CurrentLocation.CurrentDistance = Math.Round(CurrentLocation.CurrentDistance, 5);
 			}
 
 			if (CurrentLocation.Location == DistanceToCover.Last() && CurrentLocation.DistanceLeft == 0)
