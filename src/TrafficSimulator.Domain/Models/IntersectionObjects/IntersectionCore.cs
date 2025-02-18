@@ -10,7 +10,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 
 		internal override string BuildObjectName(string parentName)
 		{
-			return $".{nameof(IntersectionCore)}";
+			return $"{parentName}.{nameof(IntersectionCore)}";
 		}
 	}
 }

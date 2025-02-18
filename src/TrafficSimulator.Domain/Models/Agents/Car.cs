@@ -80,11 +80,16 @@ namespace TrafficSimulator.Domain.Models.Agents
 				}
 
 				CurrentLocation.Location = DistanceToCover[zeroBasedIndexOfCurrentLocation++];
-				CurrentLocation.CurrentDistance = distanceToGo - CurrentLocation.CurrentDistance;
+				CurrentLocation.CurrentDistance = distanceToGo - CurrentLocation.DistanceLeft;
 			}
 			else
 			{
 				CurrentLocation.CurrentDistance += distanceToGo;
+			}
+
+			if (CurrentLocation.Location == DistanceToCover.Last() && CurrentLocation.DistanceLeft == 0)
+			{
+				HasReachedDestination = true;
 			}
 
 			return UnitResult.Success<Error>();

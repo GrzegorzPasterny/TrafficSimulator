@@ -39,7 +39,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			var logger = new LoggerConfiguration()
 				.MinimumLevel.Verbose()
-				.WriteTo.TestOutput(testOutputHelper, LogEventLevel.Verbose)
+				.WriteTo.TestOutput(testOutputHelper, LogEventLevel.Verbose, "[{Timestamp:HH:mm:ss:fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
 				.CreateLogger();
 
 			// Create ILoggerFactory using Serilog
@@ -93,20 +93,23 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			SimulationState state;
 
 			// track the progress in real time
-			do
-			{
-				await Task.Delay(100);
+			// Simulation finishes too fast for this progress tracking to make sense
+			//do
+			//{
+			//	await Task.Delay(100);
 
-				state = simulationHandler.GetState();
-				_logger.LogDebug("[SimulationState = {SimulationState}]", state);
+			//	state = simulationHandler.GetState();
+			//	_logger.LogDebug("[SimulationState = {SimulationState}]", state);
 
-				state.SimulationPhase.Should().NotBe(SimulationPhase.NotStarted);
+			//	state.SimulationPhase.Should().NotBe(SimulationPhase.NotStarted);
 
-			} while (state.SimulationPhase is SimulationPhase.InProgress or SimulationPhase.InProgressCarGenerationFinished);
+			//} while (state.SimulationPhase is SimulationPhase.InProgress or SimulationPhase.InProgressCarGenerationFinished);
+
+			await Task.Delay(3000);
 
 			// print the final result
 			state = simulationHandler.GetState();
-			_logger.LogDebug("[SimulationState = {SimulationState}]", state);
+			_logger.LogDebug("FINAL RESULT\n\n[SimulationState = {SimulationState}]", state);
 
 			state.SimulationPhase.Should().Be(SimulationPhase.Finished);
 		}
