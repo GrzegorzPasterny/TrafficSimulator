@@ -4,7 +4,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
 	public class Intersection : IntersectionObject
 	{
-		public Dictionary<string, IntersectionObject> ObjectLookup { get; } = new();
+		public List<IntersectionObject> ObjectLookup { get; } = new();
 		public List<Lanes> LanesCollection { get; set; } = new List<Lanes>();
 
 		public IntersectionCore? IntersectionCore { get; set; }
@@ -15,12 +15,17 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 
 		public void AddObject(IntersectionObject obj)
 		{
-			ObjectLookup[obj.Name] = obj;
+			ObjectLookup.Add(obj);
 		}
 
 		public T? GetObject<T>(string name) where T : IntersectionObject
 		{
-			return ObjectLookup.TryGetValue(name, out var obj) ? obj as T : null;
+			return ObjectLookup.OfType<T>().FirstOrDefault(o => o.Name == name);
+		}
+
+		public T? GetObject<T>(Func<T, bool> predicate) where T : IntersectionObject
+		{
+			return ObjectLookup.OfType<T>().FirstOrDefault(predicate);
 		}
 
 		internal override string BuildObjectName(string parentName)

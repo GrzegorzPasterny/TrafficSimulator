@@ -17,6 +17,7 @@ namespace TrafficSimulator.Domain.Commons
 			Parent = parent;
 
 			Name = BuildObjectName(Parent is null ? "" : Parent.Name);
+			Root.ObjectLookup.Add(this);
 		}
 
 		internal abstract string BuildObjectName(string parentName);

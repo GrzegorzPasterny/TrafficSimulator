@@ -55,6 +55,8 @@ namespace TrafficSimulator.Domain.Models.Agents
 		/// </summary>
 		public int Length { get; set; } = 2;
 
+		public int MovesSoFar { get; private set; } = 0;
+
 		public CarLocation CurrentLocation { get; private set; }
 
 		public bool HasReachedDestination { get; private set; } = false;
@@ -66,20 +68,21 @@ namespace TrafficSimulator.Domain.Models.Agents
 				return DomainErrors.CarHasReachedDestination(Id);
 			}
 
-			// TODO: Replace int by double for more precision if needed
+			MovesSoFar++;
 			double distanceToGo = Velocity * timeElapsed.TotalSeconds;
 
 			if (distanceToGo > CurrentLocation.DistanceLeft)
 			{
 				int zeroBasedIndexOfCurrentLocation = DistanceToCover.IndexOf(CurrentLocation.Location);
 
-				if (zeroBasedIndexOfCurrentLocation++ >= DistanceToCover.Count)
+				if (zeroBasedIndexOfCurrentLocation + 1 >= DistanceToCover.Count)
 				{
+					CurrentLocation.CurrentDistance = CurrentLocation.Location.Distance;
 					HasReachedDestination = true;
 					return UnitResult.Success<Error>();
 				}
 
-				CurrentLocation.Location = DistanceToCover[zeroBasedIndexOfCurrentLocation++];
+				CurrentLocation.Location = DistanceToCover[zeroBasedIndexOfCurrentLocation + 1];
 				CurrentLocation.CurrentDistance = distanceToGo - CurrentLocation.DistanceLeft;
 			}
 			else
