@@ -1,5 +1,4 @@
-using FluentAssertions;
-using FluentAssertions.CSharpFunctionalExtensions;
+﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers;
@@ -13,9 +12,9 @@ using Xunit.Abstractions;
 
 namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 {
-	public class InMemorySimulationHandlerTests : SimulationHandlerTestsBase
+	public class RealTimeSimulationHandlerTests : SimulationHandlerTestsBase
 	{
-		public InMemorySimulationHandlerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+		public RealTimeSimulationHandlerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
 		{
 		}
 
@@ -36,7 +35,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			await _carGeneratorRepository.AddCarGeneratorAsync(carGenerator);
 
 			ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+				new RealTimeIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
 
@@ -44,8 +43,16 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			SimulationState state;
 
-			// It takes few hundret milliseconds for simulation to finish
-			await Task.Delay(3000);
+			// track the progress in real time
+			do
+			{
+				await Task.Delay(100);
+
+				state = simulationHandler.GetState();
+
+				state.SimulationPhase.Should().NotBe(SimulationPhase.NotStarted);
+
+			} while (state.SimulationPhase is SimulationPhase.InProgress or SimulationPhase.InProgressCarGenerationFinished);
 
 			// print the final result
 			state = simulationHandler.GetState();

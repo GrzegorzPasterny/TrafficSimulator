@@ -6,7 +6,7 @@ namespace TrafficSimulator.Application.Handlers
 {
 	public class InMemoryIntersectionSimulationHandler : IntersectionSimulationHandler
 	{
-		private readonly ILogger<InMemoryIntersectionSimulationHandler> _logger;
+		private new readonly ILogger<InMemoryIntersectionSimulationHandler> _logger;
 
 		public InMemoryIntersectionSimulationHandler(
 			ICarGeneratorRepository carGeneratorRepository,
