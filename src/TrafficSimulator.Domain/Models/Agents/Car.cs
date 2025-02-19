@@ -24,7 +24,7 @@ namespace TrafficSimulator.Domain.Models.Agents
 				// TODO: Handle
 			}
 
-			LaneType carTurnType = _startLocation.LaneTypes.First();
+			LaneType carTurnType = _startLocation.TurnPossibilities.First().LaneType;
 
 			WorldDirection outboundLaneWorldDirection = ((Lanes)_startLocation.Parent!).WorldDirection.Rotate(carTurnType);
 

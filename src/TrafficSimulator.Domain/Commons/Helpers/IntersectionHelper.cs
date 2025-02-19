@@ -8,7 +8,7 @@ namespace TrafficSimulator.Domain.Commons.Helpers
 		public static IEnumerable<TurnWithTrafficLight> GetAllTurnDefinitionsWithTrafficLights(this Intersection intersection)
 		{
 			List<TurnWithTrafficLight> turnsWithTrafficLight = [];
-			IEnumerable<InboundLane> inboundLanes = (IEnumerable<InboundLane>)intersection.ObjectLookup.Where((o) => o is InboundLane);
+			IEnumerable<InboundLane> inboundLanes = intersection.ObjectLookup.OfType<InboundLane>();
 
 			foreach (InboundLane inboundLane in inboundLanes)
 			{

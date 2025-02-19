@@ -10,9 +10,13 @@ namespace TrafficSimulator.Application.UnitTests.Traffic
 		[Fact]
 		public void ChangePhases_ShouldTurnTheCorrectLightsGreenAndRed()
 		{
+			// Arrange
 			Intersection intersection = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
 
 			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+
+			IEnumerable<Domain.Models.IntersectionObjects.TrafficLights> trafficLights =
+				intersection.ObjectLookup.OfType<Domain.Models.IntersectionObjects.TrafficLights>();
 
 			// Take all Inbound lanes and all turn possibilities and add them as a default Traffic Phase
 			TrafficPhase allGreenTrafficPhase = new TrafficPhase("AllGreen", intersection);
@@ -26,12 +30,17 @@ namespace TrafficSimulator.Application.UnitTests.Traffic
 
 			trafficPhasesHandler.TrafficPhases.Add(allRedTrafficPhase);
 
+			// Act
 			trafficPhasesHandler.SetPhase("AllGreen");
 
 			// Assert
-			// TODO
+			trafficLights.All(lights => lights.TrafficLightState is TrafficLightState.Green);
 
+			// Act
 			trafficPhasesHandler.SetPhase("AllRed");
+
+			// Assert
+			trafficLights.All(lights => lights.TrafficLightState is TrafficLightState.Red);
 		}
 	}
 }
