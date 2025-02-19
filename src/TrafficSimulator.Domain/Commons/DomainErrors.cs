@@ -1,10 +1,10 @@
 ﻿using ErrorOr;
 using TrafficSimulator.Domain.Models;
-using TrafficSimulator.Domain.Models.TrafficLights;
+using TrafficSimulator.Domain.Models.Lights;
 
 namespace TrafficSimulator.Domain.Commons
 {
-    public static class DomainErrors
+	public static class DomainErrors
 	{
 		public static Error TrafficLightsOff(long id)
 			=> Error.Failure("TrafficSimulator.LightsOff",

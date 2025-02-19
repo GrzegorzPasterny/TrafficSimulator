@@ -1,11 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
 using TrafficSimulator.Domain.Commons;
-using TrafficSimulator.Domain.Models.TrafficLights;
+using TrafficSimulator.Domain.Models.Lights;
 
 namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
-    public class TrafficLights : IntersectionObject
+	// TODO: Make it an interface
+	// TODO: Add NoTrafficLights implementation for intersections without Traffic Lights
+	public class TrafficLights : IntersectionObject
 	{
 		public TrafficLightState TrafficLightState { get; private set; }
 		public bool IsOn { get; private set; } = true;

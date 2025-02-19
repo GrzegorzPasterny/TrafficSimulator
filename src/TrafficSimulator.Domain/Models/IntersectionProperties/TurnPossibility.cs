@@ -1,0 +1,17 @@
+﻿using TrafficSimulator.Domain.Models.IntersectionObjects;
+
+namespace TrafficSimulator.Domain.Models.IntersectionProperties
+{
+	public class TurnPossibility
+	{
+		public LaneType LaneType { get; set; }
+
+		// TODO: Intersection Builder should assign here Traffic Lights.
+		// TODO: Should be Get only
+		public TrafficLights? TrafficLights { get; set; }
+
+		// TODO: Intersection Builder should assign here Traffic Lights.
+		// TODO: Should be Get only
+		public bool ContainsTrafficLights { get; set; }
+	}
+}
