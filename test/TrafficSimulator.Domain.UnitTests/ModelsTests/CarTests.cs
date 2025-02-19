@@ -28,6 +28,9 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 
 			carStartLocation.Should().NotBeNull();
 
+			// Default Traffic Lights are Red, that's why They have to be set to Green
+			carStartLocation!.TurnPossibilities.First().TrafficLights!.SwitchToGreen();
+
 			Car car = new Car(carStartLocation!);
 			car.Velocity = velocity;
 			car.DistanceToCover.ForEach(l => l.Distance = locationDistance);

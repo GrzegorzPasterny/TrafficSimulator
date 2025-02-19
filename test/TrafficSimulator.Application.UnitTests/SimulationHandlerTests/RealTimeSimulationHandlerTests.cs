@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.Simulation;
+using TrafficSimulator.Application.Handlers.TrafficPhases;
 using TrafficSimulator.Application.UnitTests.Commons;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
@@ -33,6 +34,11 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			inboundLane.CarGenerator = carGenerator;
 			await _carGeneratorRepository.AddCarGeneratorAsync(carGenerator);
+
+			// Default Traffic Lights are Red, that's why They have to be set to Green
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.AllLightsGreen(intersection));
+			trafficPhasesHandler.SetPhase("AllGreen");
 
 			ISimulationHandler simulationHandler =
 				new RealTimeIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());

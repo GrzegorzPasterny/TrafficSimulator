@@ -2,6 +2,7 @@
 using ErrorOr;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Domain.Models.IntersectionProperties;
 
 namespace TrafficSimulator.Domain.Models.Agents
 {
@@ -9,13 +10,33 @@ namespace TrafficSimulator.Domain.Models.Agents
 	{
 		private readonly InboundLane _startLocation;
 		public readonly List<LocationEntity> DistanceToCover;
+		public LaneType CarTurnType { get; }
+
+		public bool IsCarWaiting { get; private set; } = false;
+
+		/// <summary>
+		/// Velocity of the car in units per second
+		/// </summary>
+		public int Velocity { get; set; } = 50;
+
+		/// <summary>
+		/// Langth of the car
+		/// </summary>
+		public int Length { get; set; } = 2;
+
+		public int MovesSoFar { get; private set; } = 0;
+		public int MovesWhenCarWaited { get; private set; } = 0;
+
+		public CarLocation CurrentLocation { get; private set; }
+
+		public bool HasReachedDestination { get; private set; } = false;
 
 		public Car(InboundLane startLocation)
 		{
 			_startLocation = startLocation;
 			CurrentLocation = new(startLocation, 0);
 
-			// TODO: Randomize the logic where can can go
+			// TODO: Randomize the logic where car can go
 			Intersection intersection = _startLocation.Root;
 			IntersectionCore? intersectionCore = intersection.IntersectionCore;
 
@@ -24,9 +45,9 @@ namespace TrafficSimulator.Domain.Models.Agents
 				// TODO: Handle
 			}
 
-			LaneType carTurnType = _startLocation.TurnPossibilities.First().LaneType;
+			CarTurnType = _startLocation.TurnPossibilities.First().LaneType;
 
-			WorldDirection outboundLaneWorldDirection = ((Lanes)_startLocation.Parent!).WorldDirection.Rotate(carTurnType);
+			WorldDirection outboundLaneWorldDirection = ((Lanes)_startLocation.Parent!).WorldDirection.Rotate(CarTurnType);
 
 			Lanes? lanes = intersection.LanesCollection.Find(lanes => lanes.WorldDirection == outboundLaneWorldDirection);
 
@@ -45,22 +66,6 @@ namespace TrafficSimulator.Domain.Models.Agents
 			DistanceToCover = [_startLocation, intersectionCore!, carEndLocation!];
 		}
 
-		/// <summary>
-		/// Velocity of the car in units per second
-		/// </summary>
-		public int Velocity { get; set; } = 50;
-
-		/// <summary>
-		/// Langth of the car
-		/// </summary>
-		public int Length { get; set; } = 2;
-
-		public int MovesSoFar { get; private set; } = 0;
-
-		public CarLocation CurrentLocation { get; private set; }
-
-		public bool HasReachedDestination { get; private set; } = false;
-
 		public UnitResult<Error> Move(TimeSpan timeElapsed)
 		{
 			if (HasReachedDestination)
@@ -71,15 +76,36 @@ namespace TrafficSimulator.Domain.Models.Agents
 			MovesSoFar++;
 			double distanceToGo = Velocity * timeElapsed.TotalSeconds;
 
+			if (IsCarAtTrafficLights(distanceToGo, CurrentLocation))
+			{
+				if (CanCarPassTheTrafficLights() is false)
+				{
+					ApproachTheTrafficLightsAndStop();
+
+					return UnitResult.Success<Error>();
+				}
+			}
+
+			MoveTheCar(distanceToGo);
+
+			DetermineIfCarReachedDestination();
+
+			return UnitResult.Success<Error>();
+		}
+
+		private void MoveTheCar(double distanceToGo)
+		{
+			IsCarWaiting = false;
+
 			if (distanceToGo > CurrentLocation.DistanceLeft)
 			{
 				int zeroBasedIndexOfCurrentLocation = DistanceToCover.IndexOf(CurrentLocation.Location);
 
 				if (zeroBasedIndexOfCurrentLocation + 1 >= DistanceToCover.Count)
 				{
+					// Car reached the destination
 					CurrentLocation.CurrentDistance = CurrentLocation.Location.Distance;
-					HasReachedDestination = true;
-					return UnitResult.Success<Error>();
+					return;
 				}
 
 				CurrentLocation.Location = DistanceToCover[zeroBasedIndexOfCurrentLocation + 1];
@@ -91,13 +117,35 @@ namespace TrafficSimulator.Domain.Models.Agents
 				// Remove natural double rounding error.
 				CurrentLocation.CurrentDistance = Math.Round(CurrentLocation.CurrentDistance, 5);
 			}
+		}
 
+		private void DetermineIfCarReachedDestination()
+		{
 			if (CurrentLocation.Location == DistanceToCover.Last() && CurrentLocation.DistanceLeft == 0)
 			{
 				HasReachedDestination = true;
 			}
+		}
 
-			return UnitResult.Success<Error>();
+		private void ApproachTheTrafficLightsAndStop()
+		{
+			// Move as far as possible to the Traffic Lights
+			CurrentLocation.CurrentDistance = CurrentLocation.Location.Distance;
+
+			IsCarWaiting = true;
+			MovesWhenCarWaited++;
+		}
+
+		private bool CanCarPassTheTrafficLights()
+		{
+			TurnPossibility turnPossibility = _startLocation.TurnPossibilities.Single(t => t.LaneType == CarTurnType);
+
+			return turnPossibility.TrafficLights!.TrafficLightState == Lights.TrafficLightState.Green;
+		}
+
+		private bool IsCarAtTrafficLights(double distanceToGo, CarLocation currentLocation)
+		{
+			return currentLocation.Location is InboundLane && currentLocation.DistanceLeft < distanceToGo;
 		}
 
 		public override string ToString()
@@ -107,7 +155,8 @@ namespace TrafficSimulator.Domain.Models.Agents
 				$"HasReachedDestination = {HasReachedDestination}, " +
 				$"Location = {CurrentLocation.Location.Name}, " +
 				$"Distance = {CurrentLocation.CurrentDistance}, " +
-				$"Velocity = {Velocity}]";
+				$"Velocity = {Velocity}, " +
+				$"IsCarWaiting = {IsCarWaiting}]";
 		}
 	}
 }

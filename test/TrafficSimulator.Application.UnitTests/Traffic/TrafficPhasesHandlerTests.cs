@@ -26,7 +26,7 @@ namespace TrafficSimulator.Application.UnitTests.Traffic
 
 			// All Inbound lanes and all turn possibilities have red light
 			TrafficPhase allRedTrafficPhase = new TrafficPhase("AllRed", intersection);
-			allGreenTrafficPhase.TrafficLightsAssignments.ForEach(a => a.TrafficLightState = TrafficLightState.Red);
+			allRedTrafficPhase.TrafficLightsAssignments.ForEach(a => a.TrafficLightState = TrafficLightState.Red);
 
 			trafficPhasesHandler.TrafficPhases.Add(allRedTrafficPhase);
 
