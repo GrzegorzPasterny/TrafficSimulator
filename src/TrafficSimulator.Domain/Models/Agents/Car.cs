@@ -8,7 +8,7 @@ namespace TrafficSimulator.Domain.Models.Agents
 {
 	public class Car : Entity
 	{
-		private readonly InboundLane _startLocation;
+		public readonly InboundLane StartLocation;
 		public readonly List<LocationEntity> DistanceToCover;
 		public LaneType CarTurnType { get; }
 
@@ -33,11 +33,11 @@ namespace TrafficSimulator.Domain.Models.Agents
 
 		public Car(InboundLane startLocation)
 		{
-			_startLocation = startLocation;
+			StartLocation = startLocation;
 			CurrentLocation = new(startLocation, 0);
 
 			// TODO: Randomize the logic where car can go
-			Intersection intersection = _startLocation.Root;
+			Intersection intersection = StartLocation.Root;
 			IntersectionCore? intersectionCore = intersection.IntersectionCore;
 
 			if (intersectionCore is null)
@@ -45,9 +45,9 @@ namespace TrafficSimulator.Domain.Models.Agents
 				// TODO: Handle
 			}
 
-			CarTurnType = _startLocation.TurnPossibilities.First().LaneType;
+			CarTurnType = StartLocation.TurnPossibilities.First().LaneType;
 
-			WorldDirection outboundLaneWorldDirection = ((Lanes)_startLocation.Parent!).WorldDirection.Rotate(CarTurnType);
+			WorldDirection outboundLaneWorldDirection = ((Lanes)StartLocation.Parent!).WorldDirection.Rotate(CarTurnType);
 
 			Lanes? lanes = intersection.LanesCollection.Find(lanes => lanes.WorldDirection == outboundLaneWorldDirection);
 
@@ -63,7 +63,7 @@ namespace TrafficSimulator.Domain.Models.Agents
 				// TODO: Handle
 			}
 
-			DistanceToCover = [_startLocation, intersectionCore!, carEndLocation!];
+			DistanceToCover = [StartLocation, intersectionCore!, carEndLocation!];
 		}
 
 		public UnitResult<Error> Move(TimeSpan timeElapsed)
@@ -138,7 +138,7 @@ namespace TrafficSimulator.Domain.Models.Agents
 
 		private bool CanCarPassTheTrafficLights()
 		{
-			TurnPossibility turnPossibility = _startLocation.TurnPossibilities.Single(t => t.LaneType == CarTurnType);
+			TurnPossibility turnPossibility = StartLocation.TurnPossibilities.Single(t => t.LaneType == CarTurnType);
 
 			return turnPossibility.TrafficLights!.TrafficLightState == Lights.TrafficLightState.Green;
 		}
