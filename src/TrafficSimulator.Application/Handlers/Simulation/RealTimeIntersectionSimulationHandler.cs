@@ -12,7 +12,12 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		private Stopwatch? _stopwatch;
 		private System.Timers.Timer? _timer;
 
-		public RealTimeIntersectionSimulationHandler(ICarGeneratorRepository carGeneratorRepository, ICarRepository carRepository, ILogger<RealTimeIntersectionSimulationHandler> logger) : base(carGeneratorRepository, carRepository, logger)
+		public RealTimeIntersectionSimulationHandler(
+			ICarGeneratorRepository carGeneratorRepository,
+			ICarRepository carRepository,
+			ITrafficLightsHandler trafficLightsHandler,
+			ILogger<RealTimeIntersectionSimulationHandler> logger)
+			: base(carGeneratorRepository, carRepository, trafficLightsHandler, logger)
 		{
 			_logger = logger;
 		}
@@ -34,7 +39,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 					_logger.LogInformation("Simulation aborted due to reaching the maximum step amount " +
 						"[StepLimit = {StepLimit}]", _intersectionSimulation.Options.StepLimit);
 
-					_ = Task.Run(() => GatherResults(_stopwatch.ElapsedMilliseconds));
+					_ = Task.Run(() => GatherResults(_stopwatch!.ElapsedMilliseconds));
 
 					_timer?.Stop();
 					_timer?.Dispose();
@@ -46,7 +51,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 				{
 					_logger.LogInformation("The simulation has finished");
 
-					_ = Task.Run(() => GatherResults(_stopwatch.ElapsedMilliseconds));
+					_ = Task.Run(() => GatherResults(_stopwatch!.ElapsedMilliseconds));
 
 					_timer?.Stop();
 					_timer?.Dispose();

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using TrafficSimulator.Application.Commons.Interfaces;
+using TrafficSimulator.Application.Handlers.Lights;
 using TrafficSimulator.Application.Handlers.Simulation;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
 using TrafficSimulator.Application.UnitTests.Commons;
@@ -41,7 +42,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			trafficPhasesHandler.SetPhase("AllGreen");
 
 			ISimulationHandler simulationHandler =
-				new RealTimeIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
+				new RealTimeIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, new NullTrafficLightsHandler(), _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
 

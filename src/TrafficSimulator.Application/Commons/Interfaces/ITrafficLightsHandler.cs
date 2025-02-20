@@ -1,7 +1,10 @@
-﻿namespace TrafficSimulator.Application.Commons.Interfaces
+﻿using CSharpFunctionalExtensions;
+using ErrorOr;
+
+namespace TrafficSimulator.Application.Commons.Interfaces
 {
 	public interface ITrafficLightsHandler
 	{
-		Task SetLights(TimeSpan timeElapsed);
+		Task<UnitResult<Error>> SetLights(TimeSpan timeElapsed);
 	}
 }

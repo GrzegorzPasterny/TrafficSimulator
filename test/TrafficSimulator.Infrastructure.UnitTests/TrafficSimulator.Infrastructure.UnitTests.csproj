@@ -31,4 +31,8 @@
     <ProjectReference Include="..\..\src\TrafficSimulator.Infrastructure\TrafficSimulator.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+
 </Project>

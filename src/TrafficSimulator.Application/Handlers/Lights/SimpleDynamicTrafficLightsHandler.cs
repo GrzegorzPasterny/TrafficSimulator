@@ -1,4 +1,6 @@
-﻿using TrafficSimulator.Application.Commons.Interfaces;
+﻿using CSharpFunctionalExtensions;
+using ErrorOr;
+using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
 using TrafficSimulator.Domain.Models.Agents;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
@@ -24,7 +26,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 			_trafficPhasesHandler = trafficPhasesHandler;
 		}
 
-		public async Task SetLights(TimeSpan timeElapsed)
+		public async Task<UnitResult<Error>> SetLights(TimeSpan timeElapsed)
 		{
 			IEnumerable<Car> waitingCars = (await _carRepository.GetCarsAsync()).Where(car => car.IsCarWaiting);
 
@@ -40,7 +42,9 @@ namespace TrafficSimulator.Application.Handlers.Lights
 			// but there is possibility that some of the cars want to turn other direction from the same lane
 			// that the traffic light does not allow to (e.g. conditional green for right turn)
 
+			// TODO: Finish implementation
 
+			return UnitResult.Success<Error>();
 		}
 	}
 }

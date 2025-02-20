@@ -2,6 +2,7 @@ using FluentAssertions;
 using FluentAssertions.CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using TrafficSimulator.Application.Commons.Interfaces;
+using TrafficSimulator.Application.Handlers.Lights;
 using TrafficSimulator.Application.Handlers.Simulation;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
 using TrafficSimulator.Application.UnitTests.Commons;
@@ -42,7 +43,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			trafficPhasesHandler.SetPhase("AllGreen");
 
 			ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, new NullTrafficLightsHandler(), _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
 

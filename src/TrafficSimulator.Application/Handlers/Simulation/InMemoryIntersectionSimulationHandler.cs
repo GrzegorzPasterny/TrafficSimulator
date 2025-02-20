@@ -13,8 +13,9 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		public InMemoryIntersectionSimulationHandler(
 			ICarGeneratorRepository carGeneratorRepository,
 			ICarRepository carRepository,
+			ITrafficLightsHandler trafficLightsHandler,
 			ILogger<InMemoryIntersectionSimulationHandler> logger)
-			: base(carGeneratorRepository, carRepository, logger)
+			: base(carGeneratorRepository, carRepository, trafficLightsHandler, logger)
 		{
 			_logger = logger;
 		}
