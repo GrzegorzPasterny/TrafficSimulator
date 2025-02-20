@@ -44,11 +44,9 @@ namespace TrafficSimulator.Infrastructure.UnitTests.CarGeneratorsTests
 			var singleCarsGenerator = new SingleCarGenerator(intersection, inboundLane, mediatorMock.Object);
 
 			// Act
-			singleCarsGenerator.StartGenerating();
-
-			while (singleCarsGenerator.IsGenerationFinished().Value == false)
+			while (singleCarsGenerator.IsGenerationFinished == false)
 			{
-				await Task.Delay(100);
+				_ = await singleCarsGenerator.Generate(TimeSpan.FromMicroseconds(100));
 			}
 
 			// Assert
