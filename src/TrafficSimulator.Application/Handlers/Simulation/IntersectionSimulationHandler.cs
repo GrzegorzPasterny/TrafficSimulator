@@ -72,19 +72,19 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 			_carGenerators = (await _carGeneratorRepository.GetCarGeneratorsAsync()).ToList();
 
-			// What I thought, but it looks like it is all wrong:
-			// Task for Simulation Runner can complete at the end of the simulation (InMemory),
-			// or it can be completed just after simulation is fired (RealTime),
-			// so it is pointless to rely on any information from it
-
 			try
 			{
+				// What I thought, but it looks like it is all wrong:
+				// Task for Simulation Runner can complete at the end of the simulation (InMemory),
+				// or it can be completed just after simulation is fired (RealTime),
+				// so it is pointless to rely on any information from it
 				await SimulationRunner();
 
 				return UnitResult.Success<Error>();
 			}
 			catch (Exception ex)
 			{
+				_logger.LogError("Unhandled Exception occured while running the simulation [Error = {Error}]", ex);
 				return ApplicationErrors.UnhandledSimulationException(ex);
 			}
 		}
