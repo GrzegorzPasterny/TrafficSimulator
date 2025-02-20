@@ -17,6 +17,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		internal readonly ICarRepository _carRepository;
 		private readonly ITrafficLightsHandler _trafficLightsHandler;
 		internal readonly ILogger<IntersectionSimulationHandler> _logger;
+		private List<ICarGenerator> _carGenerators;
 
 		public SimulationState SimulationState => _intersectionSimulation!.SimulationState;
 		public SimulationResults SimulationResults => _intersectionSimulation!.SimulationResults!;
@@ -59,24 +60,21 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		///		Starts Car generators.
 		///		Initialize Traffic Lights controller
 		/// </remarks>
-		public UnitResult<Error> Start()
+		public async Task<UnitResult<Error>> Start()
 		{
 			if (_intersectionSimulation!.SimulationState.SimulationPhase != SimulationPhase.NotStarted)
 			{
 				return DomainErrors.SimulationStateChange(_intersectionSimulation!.SimulationState.SimulationPhase, SimulationPhase.InProgress);
 			}
 
-			IEnumerable<ICarGenerator> carGenerators = _carGeneratorRepository.GetCarGeneratorsAsync().Result;
-
-			foreach (var carGenerator in carGenerators)
-			{
-				// TODO: Handle result
-				_ = carGenerator.StartGenerating();
-			}
-
 			_intersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.InProgress;
 
-			Task.Run(SimulationRunner);
+			_carGenerators = (await _carGeneratorRepository.GetCarGeneratorsAsync()).ToList();
+
+			// Task for Simulation Runner can complete at the end of the simulation (InMemory),
+			// or it can be completed just after simulation is fired (RealTime),
+			// so it is pointless to rely on any information from it
+			_ = Task.Run(SimulationRunner);
 
 			return UnitResult.Success<Error>();
 		}
@@ -85,7 +83,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		{
 			simulationState.CarGenerators = (await _carGeneratorRepository.GetCarGeneratorsAsync()).ToList();
 
-			return simulationState.CarGenerators.All(carGenerator => carGenerator.IsGenerationFinished().Value);
+			return simulationState.CarGenerators.All(carGenerator => carGenerator.IsGenerationFinished);
 		}
 
 		internal async Task<bool> AllCarsFinished(SimulationState simulationState)
@@ -135,6 +133,8 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 		internal async Task PerformSimulationStep()
 		{
+			await GenerateNewCars();
+
 			await SetTrafficLights();
 
 			await MoveCars();
@@ -145,6 +145,17 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 			// TODO: Add car collision check
 			// TODO: Cars need to wait in the queue when car is in front of them and also when Traffic light is orange, or red
+		}
+
+		private async Task GenerateNewCars()
+		{
+			foreach (ICarGenerator carGenerator in _carGenerators)
+			{
+				if (carGenerator.IsGenerationFinished == false)
+				{
+					await carGenerator.Generate(_intersectionSimulation!.Options.StepTimespan);
+				}
+			}
 		}
 
 		private Task SetTrafficLights()

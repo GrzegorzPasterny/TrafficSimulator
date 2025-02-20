@@ -12,7 +12,7 @@ public interface ISimulationHandler : IDisposable
 
 	UnitResult<Error> LoadIntersection(Intersection intersection);
 
-	UnitResult<Error> Start();
+	Task<UnitResult<Error>> Start();
 
 	UnitResult<Error> Abort();
 

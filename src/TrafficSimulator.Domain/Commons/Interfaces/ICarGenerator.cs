@@ -5,8 +5,7 @@ namespace TrafficSimulator.Domain.Commons.Interfaces
 {
 	public interface ICarGenerator
 	{
-		UnitResult<Error> StartGenerating();
-		UnitResult<Error> StopGenerating();
-		ErrorOr<bool> IsGenerationFinished();
+		Task<UnitResult<Error>> Generate(TimeSpan timeSpan);
+		bool IsGenerationFinished { get; }
 	}
 }

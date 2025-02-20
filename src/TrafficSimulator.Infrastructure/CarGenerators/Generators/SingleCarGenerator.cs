@@ -6,7 +6,6 @@ using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models.Agents;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
-using TrafficSimulator.Infrastructure.Errors;
 
 namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 {
@@ -14,9 +13,8 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 	{
 		public SingleCarGeneratorOptions Options { get; } = new();
 		private bool _hasFinished = false;
-		private bool _wasStarted = false;
-		private Task? _carGenerationTask;
 		private readonly ISender _mediator;
+		private TimeSpan _simulationTime = TimeSpan.Zero;
 
 		public SingleCarGenerator(Intersection root, IntersectionObject? parent, ISender mediator, SingleCarGeneratorOptions? singleCarGeneratorOptions = null)
 			: base(root, parent)
@@ -29,33 +27,10 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 			}
 		}
 
-		public override ErrorOr<bool> IsGenerationFinished()
+		public override bool IsGenerationFinished => _hasFinished;
+
+		private async Task GenerateCar()
 		{
-			return _hasFinished;
-		}
-
-		public override UnitResult<Error> StartGenerating()
-		{
-			if (_wasStarted)
-			{
-				return InfrastructureErrors.CarGeneratorAlreadyStarted();
-			}
-
-			_wasStarted = true;
-			_carGenerationTask = Task.Run(GenerateCars);
-
-			return UnitResult.Success<Error>();
-		}
-
-		public override UnitResult<Error> StopGenerating()
-		{
-			throw new NotImplementedException();
-		}
-
-		private async Task GenerateCars()
-		{
-			await Task.Delay(Options.DelayForGeneratingTheCar);
-
 			Car car = new Car((InboundLane)Parent!);
 
 			var command = new AddCarCommand(car);
@@ -65,9 +40,21 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 			_hasFinished = true;
 		}
 
+		public override async Task<UnitResult<Error>> Generate(TimeSpan timeSpan)
+		{
+			_simulationTime = _simulationTime.Add(timeSpan);
+
+			if (_simulationTime >= Options.DelayForGeneratingTheCar)
+			{
+				await GenerateCar();
+			}
+
+			return UnitResult.Success<Error>();
+		}
+
 		public override string ToString()
 		{
-			return $"[CarsGeneratorName = {Name}, WasStarted = {_wasStarted}, HasFinished = {_hasFinished}]";
+			return $"[CarsGeneratorName = {Name}, HasFinished = {_hasFinished}]";
 		}
 	}
 }

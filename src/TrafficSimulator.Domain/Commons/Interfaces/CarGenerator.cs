@@ -10,9 +10,9 @@ namespace TrafficSimulator.Domain.Commons.Interfaces
 		{
 		}
 
-		public abstract ErrorOr<bool> IsGenerationFinished();
-		public abstract UnitResult<Error> StartGenerating();
-		public abstract UnitResult<Error> StopGenerating();
+		public abstract bool IsGenerationFinished { get; }
+
+		public abstract Task<UnitResult<Error>> Generate(TimeSpan timeSpan);
 
 		internal override string BuildObjectName(string parentName)
 		{
