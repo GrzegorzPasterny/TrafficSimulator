@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
 using Microsoft.Extensions.Logging;
+using TrafficSimulator.Application.Commons;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
@@ -71,12 +72,21 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 			_carGenerators = (await _carGeneratorRepository.GetCarGeneratorsAsync()).ToList();
 
+			// What I thought, but it looks like it is all wrong:
 			// Task for Simulation Runner can complete at the end of the simulation (InMemory),
 			// or it can be completed just after simulation is fired (RealTime),
 			// so it is pointless to rely on any information from it
-			_ = Task.Run(SimulationRunner);
 
-			return UnitResult.Success<Error>();
+			try
+			{
+				await SimulationRunner();
+
+				return UnitResult.Success<Error>();
+			}
+			catch (Exception ex)
+			{
+				return ApplicationErrors.UnhandledSimulationException(ex);
+			}
 		}
 
 		internal async Task<bool> AllCarGeneratorsFinished(SimulationState simulationState)

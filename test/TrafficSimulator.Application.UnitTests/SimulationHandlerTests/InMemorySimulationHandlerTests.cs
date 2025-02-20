@@ -1,3 +1,5 @@
+using CSharpFunctionalExtensions;
+using ErrorOr;
 using FluentAssertions;
 using FluentAssertions.CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
@@ -52,11 +54,9 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
 
-			await simulationHandler.Start();
+			UnitResult<Error> simulationStartResult = await simulationHandler.Start();
 
-			// It takes few hundret milliseconds for simulation to finish
-			await Task.Delay(2000);
-
+			simulationStartResult.IsSuccess.Should().BeTrue();
 			simulationHandler.SimulationState.SimulationPhase.Should().Be(expectedSimulationPhase);
 			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);
 		}
@@ -89,10 +89,9 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
 
-			await simulationHandler.Start();
+			UnitResult<Error> simulationStartResult = await simulationHandler.Start();
 
-			// It takes few hundret milliseconds for simulation to finish
-			await Task.Delay(2000);
+			simulationStartResult.IsSuccess.Should().BeTrue();
 
 			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
 			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);
@@ -134,10 +133,9 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
 
-			await simulationHandler.Start();
+			UnitResult<Error> simulationStartResult = await simulationHandler.Start();
 
-			// It takes few hundret milliseconds for simulation to finish
-			await Task.Delay(20000);
+			simulationStartResult.IsSuccess.Should().BeTrue();
 
 			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
 			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);

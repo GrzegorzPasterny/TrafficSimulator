@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.Lights;
-using TrafficSimulator.Domain.UnitTests.Commons;
+using TrafficSimulator.Tests.Commons.Assets;
 using Xunit.Abstractions;
 
 namespace TrafficSimulator.Domain.UnitTests.ModelsTests
