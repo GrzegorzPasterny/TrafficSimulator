@@ -11,6 +11,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		private readonly TimeSpan _timeStep = TimeSpan.FromMilliseconds(100);
 		private Stopwatch? _stopwatch;
 		private System.Timers.Timer? _timer;
+		private CancellationTokenSource? _cancellationTokenSource;
 
 		public RealTimeIntersectionSimulationHandler(
 			ICarGeneratorRepository carGeneratorRepository,
@@ -22,12 +23,34 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			_logger = logger;
 		}
 
+		public override void Dispose()
+		{
+			_cancellationTokenSource?.Dispose();
+		}
+
 		internal override Task SimulationRunner()
 		{
 			_timer = new System.Timers.Timer(_timeStep.TotalMilliseconds);
+			_stopwatch = Stopwatch.StartNew();
+
+			// Define a cancellation token for timeout
+			_cancellationTokenSource = new CancellationTokenSource(_intersectionSimulation!.Options.Timeout);
+			var cancellationToken = _cancellationTokenSource.Token;
+
 			_timer.Elapsed += async (s, e) =>
 			{
-				// Move cars
+				if (cancellationToken.IsCancellationRequested)
+				{
+					_logger.LogWarning("Simulation aborted due to timeout [TimeLimit = {TimeLimit} ms]",
+						_intersectionSimulation!.Options.Timeout);
+
+					_intersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.Aborted;
+					_ = Task.Run(() => GatherResults(_stopwatch.ElapsedMilliseconds));
+
+					CleanupTimer();
+					return;
+				}
+
 				await PerformSimulationStep();
 
 				await DetermineState();
@@ -41,9 +64,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 					_ = Task.Run(() => GatherResults(_stopwatch!.ElapsedMilliseconds));
 
-					_timer?.Stop();
-					_timer?.Dispose();
-					_timer = null;
+					CleanupTimer();
 					return;
 				}
 
@@ -53,17 +74,21 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 					_ = Task.Run(() => GatherResults(_stopwatch!.ElapsedMilliseconds));
 
-					_timer?.Stop();
-					_timer?.Dispose();
-					_timer = null;
+					CleanupTimer();
 					return;
 				}
 			};
+
 			_timer.Start();
 
-			_stopwatch = Stopwatch.StartNew();
-
 			return Task.CompletedTask;
+		}
+
+		private void CleanupTimer()
+		{
+			_timer?.Stop();
+			_timer?.Dispose();
+			_timer = null;
 		}
 	}
 }

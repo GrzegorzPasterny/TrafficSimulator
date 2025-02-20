@@ -175,5 +175,6 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		}
 
 		internal abstract Task SimulationRunner();
+		public abstract void Dispose();
 	}
 }

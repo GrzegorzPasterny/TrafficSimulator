@@ -20,6 +20,11 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			_logger = logger;
 		}
 
+		public override void Dispose()
+		{
+			// Nothing to dispose
+		}
+
 		internal override async Task SimulationRunner()
 		{
 			_stopwatch = Stopwatch.StartNew();

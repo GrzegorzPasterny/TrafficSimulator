@@ -5,7 +5,7 @@ using TrafficSimulator.Domain.Models.IntersectionObjects;
 
 namespace TrafficSimulator.Application.Commons.Interfaces;
 
-public interface ISimulationHandler
+public interface ISimulationHandler : IDisposable
 {
 	SimulationState SimulationState { get; }
 	SimulationResults SimulationResults { get; }

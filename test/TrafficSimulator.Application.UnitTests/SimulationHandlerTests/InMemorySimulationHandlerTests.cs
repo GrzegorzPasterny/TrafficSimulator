@@ -21,8 +21,47 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 		{
 		}
 
+		[Theory]
+		[InlineData("AllGreen", SimulationPhase.Finished)]
+		[InlineData("AllRed", SimulationPhase.Aborted)]
+		public async Task RunSimulation_GivenSimpleIntersection_GivenOneCar_GivenLightsCondition_CarShouldPassTheIntersectionAsExpected(
+			string trafficLightsPhaseName,
+			SimulationPhase expectedSimulationPhase)
+		{
+			// Arrange
+			Intersection intersection = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+
+			InboundLane inboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.West)!
+				.InboundLanes!
+				.First();
+
+			ICarGenerator carGenerator = new SingleCarGenerator(intersection, inboundLane, _mediator);
+
+			inboundLane.CarGenerator = carGenerator;
+			await _carGeneratorRepository.AddCarGeneratorAsync(carGenerator);
+
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.AllLightsGreen(intersection));
+			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.AllLightsRed(intersection));
+			trafficPhasesHandler.SetPhase(trafficLightsPhaseName);
+
+			using ISimulationHandler simulationHandler =
+				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, new NullTrafficLightsHandler(), _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+
+			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
+
+			simulationHandler.Start();
+
+			// It takes few hundret milliseconds for simulation to finish
+			await Task.Delay(2000);
+
+			simulationHandler.SimulationState.SimulationPhase.Should().Be(expectedSimulationPhase);
+			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);
+		}
+
 		[Fact]
-		public async Task RunSimulation_GivenSimpleIntersection_GivenOneCar_CarShouldPassTheIntersectionAsExpected()
+		public async Task RunSimulation_GivenSimpleIntersection_GivenOneCar_GivenSimpleTrafficHandler_CarShouldPassTheIntersectionAsExpected()
 		{
 			// Arrange
 			Intersection intersection = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
@@ -40,10 +79,12 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			// Default Traffic Lights are Red, that's why They have to be set to Green
 			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
 			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.AllLightsGreen(intersection));
-			trafficPhasesHandler.SetPhase("AllGreen");
+			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.AllLightsRed(intersection));
 
-			ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, new NullTrafficLightsHandler(), _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+			ITrafficLightsHandler trafficLightsHandler = new SimpleTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleTrafficLightsHandler>());
+
+			using ISimulationHandler simulationHandler =
+				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
 

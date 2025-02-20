@@ -1,4 +1,5 @@
-﻿using TrafficSimulator.Domain.Commons.Helpers;
+﻿using System.Text;
+using TrafficSimulator.Domain.Commons.Helpers;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.IntersectionProperties;
 
@@ -22,5 +23,21 @@ namespace TrafficSimulator.Domain.Models.Lights
 			=> TrafficLightsAssignments.Where(a => a.TrafficLightState is TrafficLightState.Green);
 		public IEnumerable<TurnWithTrafficLight> LanesWithRedLight
 			=> TrafficLightsAssignments.Where(a => a.TrafficLightState is TrafficLightState.Red);
+
+		public override string ToString()
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+
+			stringBuilder.Append($"[TrafficPhaseName = {Name}, ");
+
+			foreach (var turn in TrafficLightsAssignments)
+			{
+				stringBuilder.Append(turn.ToString());
+			}
+
+			stringBuilder.Append(']');
+
+			return stringBuilder.ToString();
+		}
 	}
 }
