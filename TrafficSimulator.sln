@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficSimulator.Domain.Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficSimulator.Application.UnitTests", "test\TrafficSimulator.Application.UnitTests\TrafficSimulator.Application.UnitTests.csproj", "{4FA89723-F6E1-472E-A61C-4EA4630EAD18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSimulator.Infrastructure.UnitTests", "test\TrafficSimulator.Infrastructure.UnitTests\TrafficSimulator.Infrastructure.UnitTests.csproj", "{15BFFE3F-6D25-48EC-BD54-1E4CAB46187E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficSimulator.Infrastructure.UnitTests", "test\TrafficSimulator.Infrastructure.UnitTests\TrafficSimulator.Infrastructure.UnitTests.csproj", "{15BFFE3F-6D25-48EC-BD54-1E4CAB46187E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSimulator.Tests.Commons", "test\TrafficSimulator.Tests.Commons\TrafficSimulator.Tests.Commons.csproj", "{3DBCBF84-C0C0-4623-8DAC-4EE8B8238EFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{15BFFE3F-6D25-48EC-BD54-1E4CAB46187E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15BFFE3F-6D25-48EC-BD54-1E4CAB46187E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15BFFE3F-6D25-48EC-BD54-1E4CAB46187E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DBCBF84-C0C0-4623-8DAC-4EE8B8238EFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DBCBF84-C0C0-4623-8DAC-4EE8B8238EFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DBCBF84-C0C0-4623-8DAC-4EE8B8238EFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DBCBF84-C0C0-4623-8DAC-4EE8B8238EFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{9B1111CE-7D0B-47DE-836F-AA29079E2290} = {6B82577D-BA01-428B-B831-C4AFFA006073}
 		{4FA89723-F6E1-472E-A61C-4EA4630EAD18} = {6B82577D-BA01-428B-B831-C4AFFA006073}
 		{15BFFE3F-6D25-48EC-BD54-1E4CAB46187E} = {6B82577D-BA01-428B-B831-C4AFFA006073}
+		{3DBCBF84-C0C0-4623-8DAC-4EE8B8238EFC} = {6B82577D-BA01-428B-B831-C4AFFA006073}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0745607E-FFE9-49E7-9CAF-011106FE6DBB}

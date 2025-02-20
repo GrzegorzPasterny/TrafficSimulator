@@ -11,6 +11,7 @@ using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Infrastructure.CarGenerators.Generators;
+using TrafficSimulator.Tests.Commons.Assets;
 using Xunit.Abstractions;
 
 namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
@@ -51,7 +52,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
 
-			simulationHandler.Start();
+			await simulationHandler.Start();
 
 			// It takes few hundret milliseconds for simulation to finish
 			await Task.Delay(2000);
@@ -88,10 +89,55 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
 
-			simulationHandler.Start();
+			await simulationHandler.Start();
 
 			// It takes few hundret milliseconds for simulation to finish
 			await Task.Delay(2000);
+
+			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
+			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);
+		}
+
+		[Fact]
+		public async Task RunSimulation_GivenForkIntersection_GivenOneCar_GivenSimpleTrafficHandler_CarShouldPassTheIntersectionAsExpected()
+		{
+			// Arrange
+			Intersection intersection = IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLights;
+
+			InboundLane westInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.West)!
+				.InboundLanes!
+				.First();
+
+			InboundLane eastInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.East)!
+				.InboundLanes!
+				.First();
+
+			ICarGenerator westLaneCarGenerator = new SingleCarGenerator(intersection, westInboundLane, _mediator);
+			westInboundLane.CarGenerator = westLaneCarGenerator;
+			await _carGeneratorRepository.AddCarGeneratorAsync(westLaneCarGenerator);
+
+			ICarGenerator eastLaneCarGenerator = new SingleCarGenerator(intersection, eastInboundLane, _mediator);
+			eastInboundLane.CarGenerator = eastLaneCarGenerator;
+			await _carGeneratorRepository.AddCarGeneratorAsync(eastLaneCarGenerator);
+
+			// Default Traffic Lights are Red, that's why They have to be set to Green
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
+			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
+
+			ITrafficLightsHandler trafficLightsHandler = new SimpleTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleTrafficLightsHandler>());
+
+			using ISimulationHandler simulationHandler =
+				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+
+			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
+
+			await simulationHandler.Start();
+
+			// It takes few hundret milliseconds for simulation to finish
+			await Task.Delay(20000);
 
 			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
 			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);

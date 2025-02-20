@@ -4,9 +4,12 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
 	public class OutboundLane : LocationEntity
 	{
-		public OutboundLane(Intersection root, IntersectionObject? parent, int distance = 10)
+		public WorldDirection WorldDirection { get; }
+
+		public OutboundLane(Intersection root, IntersectionObject? parent, WorldDirection worldDirection, int distance = 10)
 			: base(root, parent, distance)
 		{
+			WorldDirection = worldDirection;
 		}
 
 		internal override string BuildObjectName(string parentName)

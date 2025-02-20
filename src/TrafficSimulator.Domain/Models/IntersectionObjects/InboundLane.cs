@@ -6,8 +6,8 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
 	public class InboundLane : OutboundLane
 	{
-		public InboundLane(Intersection root, IntersectionObject? parent, LaneType[] laneTypes, bool addTrafficLights = true, int distance = 10)
-			: base(root, parent, distance)
+		public InboundLane(Intersection root, IntersectionObject? parent, LaneType[] laneTypes, WorldDirection worldDirection, bool addTrafficLights = true, int distance = 10)
+			: base(root, parent, worldDirection, distance)
 		{
 			foreach (var laneType in laneTypes)
 			{

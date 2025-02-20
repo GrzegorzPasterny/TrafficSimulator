@@ -12,15 +12,13 @@
   <ItemGroup>
     <PackageReference Include="ErrorOr" Version="2.0.1" />
     <PackageReference Include="FluentAssertions.CSharpFunctionalExtensions" Version="1.0.2" />
-    <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
-    <PackageReference Include="Moq" Version="4.20.72" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
+    <PackageReference Include="xunit" Version="2.4.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="6.0.4">
+    <PackageReference Include="coverlet.collector" Version="6.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -30,11 +28,6 @@
     <ProjectReference Include="..\..\src\TrafficSimulator.Application\TrafficSimulator.Application.csproj" />
     <ProjectReference Include="..\..\src\TrafficSimulator.Domain\TrafficSimulator.Domain.csproj" />
     <ProjectReference Include="..\..\src\TrafficSimulator.Infrastructure\TrafficSimulator.Infrastructure.csproj" />
-    <ProjectReference Include="..\TrafficSimulator.Tests.Commons\TrafficSimulator.Tests.Commons.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Helpers\" />
   </ItemGroup>
 
 </Project>

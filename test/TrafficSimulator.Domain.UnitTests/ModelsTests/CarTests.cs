@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using TrafficSimulator.Domain.Models.Agents;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.UnitTests.Commons;
+using TrafficSimulator.Tests.Commons.Assets;
 using Xunit.Abstractions;
 
 namespace TrafficSimulator.Domain.UnitTests.ModelsTests

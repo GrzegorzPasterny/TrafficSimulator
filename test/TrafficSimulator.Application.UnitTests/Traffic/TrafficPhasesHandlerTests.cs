@@ -1,7 +1,7 @@
 ﻿using TrafficSimulator.Application.Handlers.TrafficPhases;
-using TrafficSimulator.Application.UnitTests.Commons;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.Lights;
+using TrafficSimulator.Tests.Commons.Assets;
 
 namespace TrafficSimulator.Application.UnitTests.Traffic
 {

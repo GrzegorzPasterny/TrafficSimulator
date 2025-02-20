@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TrafficSimulator.Domain\TrafficSimulator.Domain.csproj" />
+    <ProjectReference Include="..\TrafficSimulator.Tests.Commons\TrafficSimulator.Tests.Commons.csproj" />
   </ItemGroup>
 
 </Project>

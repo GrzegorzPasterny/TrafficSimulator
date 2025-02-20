@@ -44,22 +44,24 @@ namespace TrafficSimulator.Domain.Commons.Builders
 			return this;
 		}
 
-		public IntersectionBuilder AddLane(WorldDirection worldDirection, bool isInbound)
+		public IntersectionBuilder AddOutboundLane(WorldDirection worldDirection)
 		{
 			Lanes lanesCollection = _intersection.LanesCollection.Single(l => l.WorldDirection == worldDirection);
 
-			if (isInbound)
-			{
-				InboundLane inboundLane = new(_intersection, lanesCollection, LaneTypeHelper.Straight());
+			OutboundLane outboundLane = new(_intersection, lanesCollection, worldDirection);
 
-				lanesCollection.InboundLanes!.Add(inboundLane);
-			}
-			else
-			{
-				OutboundLane outboundLane = new(_intersection, lanesCollection);
+			lanesCollection.OutboundLanes!.Add(outboundLane);
 
-				lanesCollection.OutboundLanes!.Add(outboundLane);
-			}
+			return this;
+		}
+
+		public IntersectionBuilder AddInboundLane(WorldDirection worldDirection, LaneType[] laneTypes)
+		{
+			Lanes lanesCollection = _intersection.LanesCollection.Single(l => l.WorldDirection == worldDirection);
+
+			InboundLane inboundLane = new(_intersection, lanesCollection, laneTypes, worldDirection);
+
+			lanesCollection.InboundLanes!.Add(inboundLane);
 
 			return this;
 		}

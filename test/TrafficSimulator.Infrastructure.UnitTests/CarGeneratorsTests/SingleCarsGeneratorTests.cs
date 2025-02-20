@@ -1,12 +1,10 @@
-﻿using ErrorOr;
-using FluentAssertions;
-using MediatR;
+﻿using MediatR;
 using Moq;
 using TrafficSimulator.Application.Cars.AddCar;
 using TrafficSimulator.Domain.Commons;
-using TrafficSimulator.Domain.Commons.Builders;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Infrastructure.CarGenerators.Generators;
+using TrafficSimulator.Tests.Commons.Assets;
 
 namespace TrafficSimulator.Infrastructure.UnitTests.CarGeneratorsTests
 {
@@ -18,21 +16,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.CarGeneratorsTests
 		public async Task RunCarsGenerator_ShouldProduceOneCar()
 		{
 			// Arrange
-			ErrorOr<Intersection> intersectionResult =
-				IntersectionBuilder.Create()
-				.AddIntersectionCore()
-				.AddLanesCollection(WorldDirection.East)
-				.AddLane(WorldDirection.East, true)
-				//.AddCarGenerator()
-				.AddLane(WorldDirection.East, false)
-				.AddLanesCollection(WorldDirection.West)
-				.AddLane(WorldDirection.West, true)
-				.AddLane(WorldDirection.West, false)
-				.Build();
-
-			intersectionResult.IsError.Should().BeFalse();
-
-			Intersection intersection = intersectionResult.Value;
+			Intersection intersection = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
 
 			InboundLane inboundLane = intersection.LanesCollection!
 				.Find(l => l.WorldDirection == WorldDirection.West)!

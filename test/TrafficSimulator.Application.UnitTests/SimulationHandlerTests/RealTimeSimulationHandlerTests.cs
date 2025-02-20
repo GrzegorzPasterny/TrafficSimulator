@@ -10,6 +10,7 @@ using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Infrastructure.CarGenerators.Generators;
+using TrafficSimulator.Tests.Commons.Assets;
 using Xunit.Abstractions;
 
 namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
@@ -50,7 +51,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
 
-			simulationHandler.Start();
+			await simulationHandler.Start();
 
 			// track the progress in real time
 			do
@@ -95,7 +96,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
 
-			simulationHandler.Start();
+			await simulationHandler.Start();
 
 			// track the progress in real time
 			do

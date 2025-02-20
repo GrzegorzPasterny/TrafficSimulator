@@ -56,6 +56,9 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 						_ = Task.Run(() => GatherResults(_stopwatch.ElapsedMilliseconds));
 						return;
 					}
+
+					// small delay to allow other Tasks to run and to prevent CPU burning
+					//await Task.Delay(16);
 				}
 
 				if (cts.IsCancellationRequested)
