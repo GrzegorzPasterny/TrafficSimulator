@@ -5,14 +5,14 @@ namespace TrafficSimulator.Domain.Models.IntersectionProperties
 {
 	public class TurnWithTrafficLight
 	{
-		public InboundLane InboundLane { get; set; }
-		public TurnPossibility TurnPossibility { get; set; }
+		public InboundLane? InboundLane { get; set; }
+		public TurnPossibility? TurnPossibility { get; set; }
 		public TrafficLightState TrafficLightState { get; set; }
 
 		public override string ToString()
 		{
-			return $"[InboundLaneName = {InboundLane.Name}, " +
-				$"TurnType = {TurnPossibility.LaneType}, " +
+			return $"[InboundLaneName = {InboundLane?.Name}, " +
+				$"TurnType = {TurnPossibility?.LaneType}, " +
 				$"TrafficLightsState = {TrafficLightState}]";
 		}
 	}

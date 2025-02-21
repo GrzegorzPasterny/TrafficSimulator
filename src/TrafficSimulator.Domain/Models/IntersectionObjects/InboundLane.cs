@@ -25,7 +25,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 			}
 		}
 
-		public ICarGenerator CarGenerator { get; set; }
+		public ICarGenerator? CarGenerator { get; set; }
 
 		public List<TurnPossibility> TurnPossibilities { get; set; } = [];
 

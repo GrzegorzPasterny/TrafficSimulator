@@ -2,7 +2,6 @@
 using ErrorOr;
 using MediatR;
 using TrafficSimulator.Domain.Commons;
-using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 
 namespace TrafficSimulator.Application.Handlers.CarGenerators
@@ -31,6 +30,8 @@ namespace TrafficSimulator.Application.Handlers.CarGenerators
 			if (_simulationTime >= Options.DelayForGeneratingTheCar)
 			{
 				await GenerateCar();
+
+				_isGenerationFinished = true;
 			}
 
 			return UnitResult.Success<Error>();

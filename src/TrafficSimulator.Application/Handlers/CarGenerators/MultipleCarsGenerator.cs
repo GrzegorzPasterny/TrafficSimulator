@@ -37,7 +37,7 @@ namespace TrafficSimulator.Application.Handlers.CarGenerators
 
 			_timeFromLastGeneration += timeSpan;
 
-			if (_timeFromLastGeneration > Options.DelayBetweenCarGeneration)
+			if (_carsGeneratedSoFar == 0 || _timeFromLastGeneration > Options.DelayBetweenCarGeneration)
 			{
 				await GenerateCar();
 

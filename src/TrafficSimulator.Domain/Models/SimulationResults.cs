@@ -4,13 +4,15 @@
 	{
 		public long TotalCalculationTimeMs { get; set; }
 		public int CarsPassed { get; set; }
-		public int AverageCarIdleTime { get; set; }
+		public double TotalCarsIdleTimeMs { get; set; }
+		public double AverageCarIdleTimeMs => TotalCarsIdleTimeMs / CarsPassed;
 
 		public override string ToString()
 		{
 			return $"[TotalCalculationTimeMs = {TotalCalculationTimeMs}, " +
 				$"CarsPassed = {CarsPassed}, " +
-				$"AverageCarIdleTime = {AverageCarIdleTime}]";
+				$"AverageCarIdleTime = {AverageCarIdleTimeMs:F2}, " +
+				$"TotalCarsIdleTimeMs = {TotalCarsIdleTimeMs:F1}]";
 		}
 	}
 }
