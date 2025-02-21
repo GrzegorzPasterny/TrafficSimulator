@@ -18,5 +18,10 @@ namespace TrafficSimulator.Domain.Commons.Interfaces
 		{
 			return $"{parentName}.{typeof(CarGenerator).Name}";
 		}
+
+		public override string ToString()
+		{
+			return $"[CarsGeneratorName = {Name}, HasFinished = {IsGenerationFinished}]";
+		}
 	}
 }

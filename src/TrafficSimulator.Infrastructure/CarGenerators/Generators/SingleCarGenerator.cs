@@ -12,7 +12,7 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 	public class SingleCarGenerator : CarGenerator
 	{
 		public SingleCarGeneratorOptions Options { get; } = new();
-		private bool _hasFinished = false;
+		private bool _isGenerationFinished = false;
 		private readonly ISender _mediator;
 		private TimeSpan _simulationTime = TimeSpan.Zero;
 
@@ -27,7 +27,7 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 			}
 		}
 
-		public override bool IsGenerationFinished => _hasFinished;
+		public override bool IsGenerationFinished => _isGenerationFinished;
 
 		private async Task GenerateCar()
 		{
@@ -37,7 +37,7 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 
 			await _mediator.Send(command);
 
-			_hasFinished = true;
+			_isGenerationFinished = true;
 		}
 
 		public override async Task<UnitResult<Error>> Generate(TimeSpan timeSpan)
@@ -54,7 +54,7 @@ namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
 
 		public override string ToString()
 		{
-			return $"[CarsGeneratorName = {Name}, HasFinished = {_hasFinished}]";
+			return $"[CarsGeneratorName = {Name}, HasFinished = {_isGenerationFinished}]";
 		}
 	}
 }

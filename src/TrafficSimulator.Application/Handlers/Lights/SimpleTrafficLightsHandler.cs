@@ -43,6 +43,8 @@ namespace TrafficSimulator.Application.Handlers.Lights
 				// TODO: Handle
 				_ = _trafficPhasesHandler.SetPhase(_circularListForTrafficPhases.Current);
 
+				CurrentPhaseTime = TimeSpan.Zero;
+
 				_logger.LogInformation("Traffic Lights phase changed [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
 			}
 
