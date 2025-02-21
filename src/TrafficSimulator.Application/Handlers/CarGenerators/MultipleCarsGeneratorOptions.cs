@@ -1,4 +1,4 @@
-﻿namespace TrafficSimulator.Infrastructure.CarGenerators.Generators
+﻿namespace TrafficSimulator.Application.Handlers.CarGenerators
 {
 	public class MultipleCarsGeneratorOptions
 	{

@@ -4,6 +4,7 @@ using FluentAssertions;
 using FluentAssertions.CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using TrafficSimulator.Application.Commons.Interfaces;
+using TrafficSimulator.Application.Handlers.CarGenerators;
 using TrafficSimulator.Application.Handlers.Lights;
 using TrafficSimulator.Application.Handlers.Simulation;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
@@ -12,7 +13,6 @@ using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
-using TrafficSimulator.Infrastructure.CarGenerators.Generators;
 using TrafficSimulator.Tests.Commons.Assets;
 using Xunit.Abstractions;
 
