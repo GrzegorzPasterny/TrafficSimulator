@@ -22,7 +22,7 @@ namespace TrafficSimulator.Application.Handlers.CarGenerators
 
 		public abstract Task<UnitResult<Error>> Generate(TimeSpan timeSpan);
 
-		internal override string BuildObjectName(string parentName)
+		public override string BuildObjectName(string parentName)
 		{
 			return $"{parentName}.{typeof(CarGenerator).Name}";
 		}

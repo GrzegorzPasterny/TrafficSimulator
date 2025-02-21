@@ -20,6 +20,6 @@ namespace TrafficSimulator.Domain.Commons
 			Root.ObjectLookup.Add(this);
 		}
 
-		internal abstract string BuildObjectName(string parentName);
+		public abstract string BuildObjectName(string parentName);
 	}
 }

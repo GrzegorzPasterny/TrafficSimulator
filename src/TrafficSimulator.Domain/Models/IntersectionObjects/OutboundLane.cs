@@ -12,7 +12,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 			WorldDirection = worldDirection;
 		}
 
-		internal override string BuildObjectName(string parentName)
+		public override string BuildObjectName(string parentName)
 		{
 			return $"{parentName}.{nameof(OutboundLane)}";
 		}

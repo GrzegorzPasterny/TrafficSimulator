@@ -29,7 +29,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 
 		public List<TurnPossibility> TurnPossibilities { get; set; } = [];
 
-		internal override string BuildObjectName(string parentName)
+		public override string BuildObjectName(string parentName)
 		{
 			return $"{parentName}.{nameof(InboundLane)}";
 		}

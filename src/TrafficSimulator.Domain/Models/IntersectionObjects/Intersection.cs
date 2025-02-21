@@ -28,7 +28,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 			return ObjectLookup.OfType<T>().FirstOrDefault(predicate);
 		}
 
-		internal override string BuildObjectName(string parentName)
+		public override string BuildObjectName(string parentName)
 		{
 			if (string.IsNullOrWhiteSpace(parentName))
 			{
