@@ -8,9 +8,10 @@ using Xunit.Abstractions;
 
 namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 {
+	[Collection("Test collection")]
 	public class CarTests : TestsBase
 	{
-		public CarTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+		public CarTests(TestFixture testFixture, ITestOutputHelper testOutputHelper) : base(testFixture, testOutputHelper)
 		{
 		}
 

@@ -89,7 +89,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.AllLightsGreen(intersection));
 			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.AllLightsRed(intersection));
 
-			ITrafficLightsHandler trafficLightsHandler = new SimpleTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleTrafficLightsHandler>());
+			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 
 			using ISimulationHandler simulationHandler =
 				new RealTimeIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());

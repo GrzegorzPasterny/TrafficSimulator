@@ -7,22 +7,20 @@ using Xunit.Abstractions;
 namespace TrafficSimulator.Domain.UnitTests.Commons
 {
 	[ExcludeFromCodeCoverage]
-	public class TestsBase
+	public abstract class TestsBase
 	{
 		internal readonly ILogger<TestsBase> _logger;
 		internal readonly ILoggerFactory _loggerFactory;
 
-		public TestsBase(ITestOutputHelper testOutputHelper)
+		public TestsBase(TestFixture testFixture, ITestOutputHelper testOutputHelper)
 		{
 			var logger = new LoggerConfiguration()
 			.MinimumLevel.Verbose()
 				.WriteTo.TestOutput(testOutputHelper, LogEventLevel.Verbose, "[{Timestamp:HH:mm:ss:fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
 				.CreateLogger();
 
-			_loggerFactory = LoggerFactory.Create(builder =>
-			{
-				builder.AddSerilog(logger, dispose: true);
-			});
+			_loggerFactory = testFixture._loggerFactory;
+			_loggerFactory.AddSerilog(logger);
 
 			_logger = _loggerFactory.CreateLogger<TestsBase>();
 		}

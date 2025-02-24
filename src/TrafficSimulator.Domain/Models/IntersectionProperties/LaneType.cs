@@ -1,4 +1,5 @@
-﻿namespace TrafficSimulator.Domain.Models
+﻿
+namespace TrafficSimulator.Domain.Models
 {
 	public enum LaneType
 	{
@@ -15,5 +16,7 @@
 		public static LaneType[] Right() => [LaneType.Right];
 		public static LaneType[] StraightAndRight() => [LaneType.Straight, LaneType.Right];
 		public static LaneType[] StraightAndLeft() => [LaneType.Straight, LaneType.Left];
+		public static LaneType[] LeftAndRight() => [LaneType.Left, LaneType.Right];
+		public static LaneType[] StraightLeftAndRight() => [LaneType.Straight, LaneType.Left, LaneType.Right];
 	}
 }

@@ -11,10 +11,10 @@ namespace TrafficSimulator.Application.Handlers.Lights
 	/// <summary>
 	/// Changes Traffic Lights phases one by one in some time interval
 	/// </summary>
-	public class SimpleTrafficLightsHandler : ITrafficLightsHandler
+	public class SimpleSequentialTrafficLightsHandler : ITrafficLightsHandler
 	{
 		private readonly TrafficPhasesHandler _trafficPhasesHandler;
-		private readonly ILogger<SimpleTrafficLightsHandler> _logger;
+		private readonly ILogger<SimpleSequentialTrafficLightsHandler> _logger;
 		private readonly CircularList<TrafficPhase> _circularListForTrafficPhases;
 
 		public TimeSpan CurrentPhaseTime { get; set; }
@@ -22,7 +22,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 		// Options
 		public TimeSpan TimeForOnePhase { get; set; } = TimeSpan.FromSeconds(1);
 
-		public SimpleTrafficLightsHandler(TrafficPhasesHandler trafficPhasesHandler, ILogger<SimpleTrafficLightsHandler> logger)
+		public SimpleSequentialTrafficLightsHandler(TrafficPhasesHandler trafficPhasesHandler, ILogger<SimpleSequentialTrafficLightsHandler> logger)
 		{
 			_trafficPhasesHandler = trafficPhasesHandler;
 			_logger = logger;

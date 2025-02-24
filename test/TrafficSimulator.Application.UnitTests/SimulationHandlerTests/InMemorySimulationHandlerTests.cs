@@ -82,7 +82,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.AllLightsGreen(intersection));
 			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.AllLightsRed(intersection));
 
-			ITrafficLightsHandler trafficLightsHandler = new SimpleTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleTrafficLightsHandler>());
+			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 
 			using ISimulationHandler simulationHandler =
 				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
@@ -127,7 +127,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
 			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
 
-			ITrafficLightsHandler trafficLightsHandler = new SimpleTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleTrafficLightsHandler>());
+			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 
 			using ISimulationHandler simulationHandler =
 				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
@@ -172,7 +172,62 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
 			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
 
-			ITrafficLightsHandler trafficLightsHandler = new SimpleTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleTrafficLightsHandler>());
+			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
+
+			using ISimulationHandler simulationHandler =
+				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+
+			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
+
+			UnitResult<Error> simulationStartResult = await simulationHandler.Start();
+
+			simulationStartResult.IsSuccess.Should().BeTrue();
+
+			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
+
+			await Task.Delay(200); // Wait for the results
+			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);
+		}
+
+		[Fact]
+		public async Task RunSimulation_GivenThreeDirectionIntersection_GivenMultipleCars_GivenSimpleTrafficHandler_CarShouldPassTheIntersectionAsExpected()
+		{
+			// Arrange
+			Intersection intersection = IntersectionsRepository.ThreeDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLights;
+
+			InboundLane eastInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.East)!
+				.InboundLanes!
+				.First();
+
+			InboundLane southInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.South)!
+				.InboundLanes!
+				.First();
+
+			InboundLane westInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.West)!
+				.InboundLanes!
+				.First();
+
+			ICarGenerator eastLaneCarGenerator = new MultipleCarsGenerator(intersection, eastInboundLane, _mediator);
+			eastInboundLane.CarGenerator = eastLaneCarGenerator;
+			await _carGeneratorRepository.AddCarGeneratorAsync(eastLaneCarGenerator);
+
+			ICarGenerator southLaneCarGenerator = new MultipleCarsGenerator(intersection, southInboundLane, _mediator);
+			southInboundLane.CarGenerator = southLaneCarGenerator;
+			await _carGeneratorRepository.AddCarGeneratorAsync(southLaneCarGenerator);
+
+			ICarGenerator westLaneCarGenerator = new MultipleCarsGenerator(intersection, westInboundLane, _mediator);
+			westInboundLane.CarGenerator = westLaneCarGenerator;
+			await _carGeneratorRepository.AddCarGeneratorAsync(westLaneCarGenerator);
+
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
+			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.South));
+			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
+
+			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 
 			using ISimulationHandler simulationHandler =
 				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
