@@ -10,8 +10,13 @@ namespace TrafficSimulator.Domain.Models.IntersectionProperties
 		// TODO: Should be Get only
 		public TrafficLights? TrafficLights { get; set; }
 
-		// TODO: Intersection Builder should assign here Traffic Lights.
 		// TODO: Should be Get only
 		public bool ContainsTrafficLights { get; set; }
+
+		public override string ToString()
+		{
+			return $"[LaneType = {LaneType}, " +
+				$"TrafficLights = {TrafficLights}]";
+		}
 	}
 }

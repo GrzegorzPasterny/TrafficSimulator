@@ -84,5 +84,11 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 		{
 			return $"{parentName}.{nameof(TrafficLights)}";
 		}
+
+		public override string ToString()
+		{
+			return $"[Name = {Name}, " +
+				$"State = {TrafficLightState}]";
+		}
 	}
 }

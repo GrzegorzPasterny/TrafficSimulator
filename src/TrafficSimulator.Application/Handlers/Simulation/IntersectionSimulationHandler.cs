@@ -18,7 +18,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		internal readonly ICarRepository _carRepository;
 		private readonly ITrafficLightsHandler _trafficLightsHandler;
 		internal readonly ILogger<IntersectionSimulationHandler> _logger;
-		private List<ICarGenerator> _carGenerators;
+		private List<ICarGenerator>? _carGenerators;
 
 		public SimulationState SimulationState => _intersectionSimulation!.SimulationState;
 		public SimulationResults SimulationResults => _intersectionSimulation!.SimulationResults!;
@@ -178,7 +178,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			IEnumerable<Car> cars = await _carRepository.GetCarsAsync();
 			foreach (var car in cars)
 			{
-				car.Move(_intersectionSimulation!.Options.StepTimespan);
+				car.Move(_intersectionSimulation!.Options.StepTimespan, cars);
 			}
 		}
 

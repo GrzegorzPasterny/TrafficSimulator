@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using System.Diagnostics.CodeAnalysis;
 using Xunit.Abstractions;
 
 namespace TrafficSimulator.Domain.UnitTests.Commons
 {
+	[ExcludeFromCodeCoverage]
 	public class TestsBase
 	{
 		internal readonly ILogger<TestsBase> _logger;
