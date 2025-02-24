@@ -1,4 +1,5 @@
 ﻿using TrafficSimulator.Domain.Commons;
+using TrafficSimulator.Domain.Models.Lights;
 
 namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
@@ -9,6 +10,9 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 
 		public IntersectionCore? IntersectionCore { get; set; }
 
+		public List<TrafficPhase> TrafficPhases { get; } = [];
+
+		// TODO: Use Name argument
 		public Intersection(string name, IntersectionObject? parent = null) : base(null!, parent)
 		{
 		}

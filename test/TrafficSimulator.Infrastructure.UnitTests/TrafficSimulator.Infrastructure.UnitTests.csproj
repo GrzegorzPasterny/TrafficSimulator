@@ -10,6 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Helpers\**" />
+    <EmbeddedResource Remove="Helpers\**" />
+    <None Remove="Helpers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ErrorOr" Version="2.0.1" />
     <PackageReference Include="FluentAssertions.CSharpFunctionalExtensions" Version="1.0.2" />
     <PackageReference Include="MediatR" Version="12.4.1" />
@@ -31,10 +37,6 @@
     <ProjectReference Include="..\..\src\TrafficSimulator.Domain\TrafficSimulator.Domain.csproj" />
     <ProjectReference Include="..\..\src\TrafficSimulator.Infrastructure\TrafficSimulator.Infrastructure.csproj" />
     <ProjectReference Include="..\TrafficSimulator.Tests.Commons\TrafficSimulator.Tests.Commons.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Helpers\" />
   </ItemGroup>
 
 </Project>

@@ -13,7 +13,7 @@ namespace TrafficSimulator.Application.UnitTests.Traffic
 			// Arrange
 			Intersection intersection = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
 
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
 
 			IEnumerable<Domain.Models.IntersectionObjects.TrafficLights> trafficLights =
 				intersection.ObjectLookup.OfType<Domain.Models.IntersectionObjects.TrafficLights>();

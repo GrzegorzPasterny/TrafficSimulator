@@ -1,12 +1,20 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
+using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.Lights;
 
 namespace TrafficSimulator.Application.Handlers.TrafficPhases
 {
 	public class TrafficPhasesHandler
 	{
-		public List<TrafficPhase> TrafficPhases { get; set; } = [];
+		private readonly Intersection _intersection;
+
+		public TrafficPhasesHandler(Intersection intersection)
+		{
+			_intersection = intersection;
+		}
+
+		public List<TrafficPhase> TrafficPhases => _intersection.TrafficPhases;
 
 		// Current phase must be assigned when starting the simulation
 		public TrafficPhase? CurrentPhase { get; set; }

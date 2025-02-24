@@ -41,7 +41,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			inboundLane.CarGenerator = carGenerator;
 			await _carGeneratorRepository.AddCarGeneratorAsync(carGenerator);
 
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
 			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.AllLightsGreen(intersection));
 			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.AllLightsRed(intersection));
 			trafficPhasesHandler.SetPhase(trafficLightsPhaseName);
@@ -85,7 +85,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			await _carGeneratorRepository.AddCarGeneratorAsync(carGenerator);
 
 			// Default Traffic Lights are Red, that's why They have to be set to Green
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
 			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.AllLightsGreen(intersection));
 			trafficPhasesHandler.TrafficPhases.Add(TrafficPhasesRespository.AllLightsRed(intersection));
 
