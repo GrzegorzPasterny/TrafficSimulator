@@ -190,13 +190,13 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			}
 
 			_intersectionSimulation!.SimulationResults.TotalCalculationTimeMs = elapsedMilliseconds;
+			_intersectionSimulation!.SimulationResults.SimulationStepsTaken = _intersectionSimulation.SimulationState.StepsCount;
 
 			List<Car> cars = (await _carRepository.GetCarsAsync()).ToList();
 
 			_intersectionSimulation.SimulationResults.CarsPassed = cars.Count();
 			_intersectionSimulation.SimulationResults.TotalCarsIdleTimeMs =
 				cars.Sum(c => c.MovesWhenCarWaited) * _intersectionSimulation.Options.StepTimespan.TotalMilliseconds;
-
 		}
 
 		internal abstract Task SimulationRunner();
