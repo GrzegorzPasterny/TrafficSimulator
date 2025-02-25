@@ -2,14 +2,14 @@
 using ErrorOr;
 using MediatR;
 using TrafficSimulator.Application.Cars.AddCar;
+using TrafficSimulator.Domain.Cars;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
-using TrafficSimulator.Domain.Models.Agents;
-using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Domain.IntersectionObjects;
 
 namespace TrafficSimulator.Application.Handlers.CarGenerators
 {
-	public abstract class CarGenerator : IntersectionObject, ICarGenerator
+    public abstract class CarGenerator : IntersectionObject, ICarGenerator
 	{
 		private readonly ISender _mediator;
 

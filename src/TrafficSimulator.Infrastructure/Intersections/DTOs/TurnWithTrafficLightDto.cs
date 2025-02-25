@@ -1,6 +1,4 @@
-﻿using TrafficSimulator.Domain.Models.Lights;
-
-namespace TrafficSimulator.Infrastructure.DTOs
+﻿namespace TrafficSimulator.Infrastructure.DTOs
 {
 	public class TurnWithTrafficLightDto
 	{

@@ -1,4 +1,4 @@
-﻿using TrafficSimulator.Domain.Models.Agents;
+﻿using TrafficSimulator.Domain.Cars;
 
 namespace TrafficSimulator.Application.Commons.Interfaces
 {

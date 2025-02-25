@@ -1,5 +1,5 @@
 ﻿using ErrorOr;
-using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Domain.IntersectionObjects;
 
 namespace TrafficSimulator.Application.Commons.Interfaces
 {

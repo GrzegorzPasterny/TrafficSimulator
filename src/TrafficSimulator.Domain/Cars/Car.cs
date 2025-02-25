@@ -1,12 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
+using TrafficSimulator.Domain.Cars;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.IntersectionProperties;
 
 namespace TrafficSimulator.Domain.Models.Agents
 {
-	public class Car : Entity<Guid>
+    public class Car : Entity<Guid>
 	{
 		public readonly InboundLane StartLocation;
 		public readonly List<LocationEntity> DistanceToCover;

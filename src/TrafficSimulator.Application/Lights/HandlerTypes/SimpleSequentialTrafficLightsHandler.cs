@@ -3,15 +3,15 @@ using ErrorOr;
 using Microsoft.Extensions.Logging;
 using TrafficSimulator.Application.Commons.Helpers;
 using TrafficSimulator.Application.Commons.Interfaces;
-using TrafficSimulator.Application.Handlers.TrafficPhases;
-using TrafficSimulator.Domain.Models.Lights;
+using TrafficSimulator.Application.TrafficPhases;
+using TrafficSimulator.Domain.IntersectionObjects.IntersectionProperties;
 
 namespace TrafficSimulator.Application.Handlers.Lights
 {
-	/// <summary>
-	/// Changes Traffic Lights phases one by one in some time interval
-	/// </summary>
-	public class SimpleSequentialTrafficLightsHandler : ITrafficLightsHandler
+    /// <summary>
+    /// Changes Traffic Lights phases one by one in some time interval
+    /// </summary>
+    public class SimpleSequentialTrafficLightsHandler : ITrafficLightsHandler
 	{
 		private readonly TrafficPhasesHandler _trafficPhasesHandler;
 		private readonly ILogger<SimpleSequentialTrafficLightsHandler> _logger;

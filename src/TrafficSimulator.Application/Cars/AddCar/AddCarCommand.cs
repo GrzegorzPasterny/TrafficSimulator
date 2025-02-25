@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using TrafficSimulator.Domain.Models.Agents;
+using TrafficSimulator.Domain.Cars;
 
 namespace TrafficSimulator.Application.Cars.AddCar
 {
-	public record AddCarCommand(Car Car) : IRequest;
+    public record AddCarCommand(Car Car) : IRequest;
 }

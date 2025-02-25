@@ -2,12 +2,12 @@
 using FluentAssertions;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Builders;
-using TrafficSimulator.Domain.Models;
-using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Domain.IntersectionObjects;
+using TrafficSimulator.Domain.IntersectionObjects.IntersectionProperties;
 
 namespace TrafficSimulator.Tests.Commons.Assets
 {
-	public static class IntersectionsRepository
+    public static class IntersectionsRepository
 	{
 		public static Intersection ZebraCrossingOnOneLaneRoadEastWest
 		{
