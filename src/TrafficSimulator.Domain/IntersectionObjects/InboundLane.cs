@@ -7,12 +7,11 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 	public class InboundLane : OutboundLane
 	{
 		public InboundLane(
-			Intersection root, IntersectionObject? parent, LaneType[] laneTypes,
-			WorldDirection worldDirection, bool addTrafficLights = true,
-			int distance = 10, string name = "")
-			: base(root, parent, worldDirection, distance, name)
+			Intersection root, IntersectionObject? parent, LaneType[] laneTypes, WorldDirection worldDirection,
+			string name = "", bool addTrafficLights = true, int distance = 10)
+			: base(root, parent, worldDirection, name, distance)
 		{
-			foreach (var laneType in laneTypes)
+			TurnPossibilities = (IReadOnlyList<TurnPossibility>)laneTypes.ToList().Select(laneType =>
 			{
 				TurnPossibility turnPossibility = new TurnPossibility();
 
@@ -24,12 +23,12 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 					turnPossibility.TrafficLights = new TrafficLights(root, this);
 				}
 
-				TurnPossibilities.Add(turnPossibility);
-			}
+				return turnPossibility;
+			});
 		}
 
 		public ICarGenerator? CarGenerator { get; set; }
 
-		public List<TurnPossibility> TurnPossibilities { get; set; } = [];
+		public IReadOnlyList<TurnPossibility> TurnPossibilities { get; }
 	}
 }

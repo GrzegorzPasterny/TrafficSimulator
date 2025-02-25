@@ -6,7 +6,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 	{
 		public WorldDirection WorldDirection { get; }
 
-		public OutboundLane(Intersection root, IntersectionObject? parent, WorldDirection worldDirection, int distance = 10, string name = "")
+		public OutboundLane(Intersection root, IntersectionObject? parent, WorldDirection worldDirection, string name = "", int distance = 10)
 			: base(root, parent, distance, name)
 		{
 			WorldDirection = worldDirection;

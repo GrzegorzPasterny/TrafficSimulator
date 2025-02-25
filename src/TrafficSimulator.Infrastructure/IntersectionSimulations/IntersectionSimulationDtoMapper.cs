@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using TrafficSimulator.Domain.Commons.Builders;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.IntersectionProperties;
@@ -12,7 +13,59 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 	{
 		public ErrorOr<IntersectionSimulation> ToDomain(IntersectionSimulationDto intersectionSimulationDto)
 		{
-			throw new NotImplementedException();
+			IntersectionDto intersectionDto = intersectionSimulationDto.Intersection;
+
+			IntersectionBuilder intersectionBuilder =
+				IntersectionBuilder.Create(intersectionSimulationDto.Intersection.Name)
+				.AddIntersectionCore(
+					intersectionDto.IntersectionCore.Name,
+					intersectionDto.IntersectionCore.Distance
+					);
+
+			foreach (LanesDto lanes in intersectionDto.LanesCollection)
+			{
+				intersectionBuilder.AddLanesCollection(lanes.WorldDirection, lanes.Name);
+
+				foreach (OutboundLaneDto outboundLaneDto in lanes.OutboundLanes)
+				{
+					intersectionBuilder.AddOutboundLane(outboundLaneDto.WorldDirection, outboundLaneDto.Name, outboundLaneDto.Distance);
+				}
+
+				foreach (InboundLaneDto inboundLaneDto in lanes.InboundLanes)
+				{
+					intersectionBuilder.AddInboundLane(
+						inboundLaneDto.WorldDirection, inboundLaneDto.LaneTypes, inboundLaneDto.Name,
+						inboundLaneDto.ContainsTrafficLights, inboundLaneDto.Distance);
+				}
+			}
+
+			ErrorOr<Intersection> intersectionResult = intersectionBuilder.Build();
+
+			if (intersectionResult.IsError)
+			{
+				// TODO: Handle
+				throw new NotImplementedException();
+			}
+
+			IntersectionSimulation intersectionSimulation = new(intersectionResult.Value)
+			{
+				Options = ToDomain(intersectionSimulationDto.Options)
+			};
+
+
+
+			return intersectionSimulation;
+		}
+
+		private IntersectionSimulationOptions ToDomain(IntersectionSimulationOptionsDto intersectionSimulationOptionsDto)
+		{
+			return new IntersectionSimulationOptions()
+			{
+				MinimalDistanceBetweenTheCars = intersectionSimulationOptionsDto.MinimalDistanceBetweenTheCars,
+				StepLimit = intersectionSimulationOptionsDto.StepLimit,
+				StepTimespan = TimeSpan.FromMilliseconds(intersectionSimulationOptionsDto.StepTimespanMs),
+				Timeout = TimeSpan.FromMilliseconds(intersectionSimulationOptionsDto.TimeoutMs)
+			};
 		}
 
 		public ErrorOr<IntersectionSimulationDto> ToDto(IntersectionSimulation intersectionSimulation)
@@ -82,15 +135,12 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 				Name = lane.Name,
 				WorldDirection = lane.WorldDirection,
 				ParentName = lane.Parent.FullName,
-				TurnPossibilities = ToDto(lane.TurnPossibilities),
+				LaneTypes = lane.TurnPossibilities.Select(turn => turn.LaneType).ToArray(),
+				ContainsTrafficLights = lane.TurnPossibilities.Any(t => t.ContainsTrafficLights),
 				CarGeneratorTypeName = lane.CarGenerator is null ? string.Empty : lane.CarGenerator.GetType().Name
 			};
 		}
 
-		private List<TurnPossibilityDto> ToDto(List<TurnPossibility> turnPossibilities)
-		{
-			return turnPossibilities.Select(ToDto).ToList();
-		}
 
 		private TurnPossibilityDto ToDto(TurnPossibility turn)
 		{
