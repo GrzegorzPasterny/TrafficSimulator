@@ -102,7 +102,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 								TrafficLightsAssignments = [
 									new TurnWithTrafficLightDto()
 									{
-										InboundLaneName = "ZebraCrossing.Lanes.West.InboundLane",
+										InboundLaneName = ".ZebraCrossing.Lanes.East.InboundLane",
 										TrafficLightState = Domain.Models.Lights.TrafficLightState.Green,
 										TurnPossibility = new TurnPossibilityDto()
 										{
@@ -112,14 +112,14 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 									},
 									new TurnWithTrafficLightDto()
 									{
-										InboundLaneName = "ZebraCrossing.Lanes.East.InboundLane",
+										InboundLaneName = ".ZebraCrossing.Lanes.West.InboundLane",
 										TrafficLightState = Domain.Models.Lights.TrafficLightState.Green,
 										TurnPossibility = new TurnPossibilityDto()
 										{
 											ContainsTrafficLights = true,
 											LaneType = LaneType.Straight
 										}
-									}
+									},
 								]
 							},
 							new TrafficPhaseDto()
@@ -128,7 +128,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 								TrafficLightsAssignments = [
 									new TurnWithTrafficLightDto()
 									{
-										InboundLaneName = "ZebraCrossing.Lanes.West.InboundLane",
+										InboundLaneName = ".ZebraCrossing.Lanes.East.InboundLane",
 										TrafficLightState = Domain.Models.Lights.TrafficLightState.Red,
 										TurnPossibility = new TurnPossibilityDto()
 										{
@@ -138,14 +138,14 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 									},
 									new TurnWithTrafficLightDto()
 									{
-										InboundLaneName = "ZebraCrossing.Lanes.East.InboundLane",
+										InboundLaneName = ".ZebraCrossing.Lanes.West.InboundLane",
 										TrafficLightState = Domain.Models.Lights.TrafficLightState.Red,
 										TurnPossibility = new TurnPossibilityDto()
 										{
 											ContainsTrafficLights = true,
 											LaneType = LaneType.Straight
 										}
-									}
+									},
 								]
 							}
 						]
