@@ -42,13 +42,10 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 										ParentName = ".ZebraCrossing.Lanes.West",
 										Distance = 10,
 										WorldDirection = WorldDirection.West,
-										TurnPossibilities = [
-											new TurnPossibilityDto()
-											{
-												ContainsTrafficLights = true,
-												LaneType = LaneType.Straight
-											}
+										LaneTypes = [
+											LaneType.Straight
 										],
+										ContainsTrafficLights = true,
 										CarGeneratorTypeName = "",
 									}
 								],
@@ -74,13 +71,10 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 										ParentName = ".ZebraCrossing.Lanes.East",
 										Distance = 10,
 										WorldDirection = WorldDirection.East,
-										TurnPossibilities = [
-											new TurnPossibilityDto()
-											{
-												ContainsTrafficLights = true,
-												LaneType = LaneType.Straight
-											}
+										LaneTypes = [
+											LaneType.Straight
 										],
+										ContainsTrafficLights = true,
 										CarGeneratorTypeName = "",
 									}
 								],

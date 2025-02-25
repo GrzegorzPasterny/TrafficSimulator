@@ -52,7 +52,25 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 				Options = ToDomain(intersectionSimulationDto.Options)
 			};
 
+			Intersection intersection = intersectionSimulation.Intersection;
 
+			intersectionDto.TrafficPhases.ForEach(trafficPhase =>
+			{
+				intersection.TrafficPhases.Add(new TrafficPhase(trafficPhase.Name, intersection)
+				{
+					TrafficLightsAssignments = trafficPhase.TrafficLightsAssignments.Select(light => new TurnWithTrafficLight()
+					{
+						InboundLane = intersection.GetObject<InboundLane>(light.InboundLaneName),
+						TrafficLightState = light.TrafficLightState,
+						TurnPossibility = new TurnPossibility()
+						{
+							ContainsTrafficLights = light.TurnPossibility.ContainsTrafficLights,
+							LaneType = light.TurnPossibility.LaneType,
+							TrafficLights = new TrafficLights(intersection, intersection.GetObject<InboundLane>(light.InboundLaneName))
+						}
+					}).ToList()
+				});
+			});
 
 			return intersectionSimulation;
 		}

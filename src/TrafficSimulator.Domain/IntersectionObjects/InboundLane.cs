@@ -1,4 +1,5 @@
-﻿using TrafficSimulator.Domain.Commons;
+﻿using System.Collections.Immutable;
+using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models.IntersectionProperties;
 
@@ -11,7 +12,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 			string name = "", bool addTrafficLights = true, int distance = 10)
 			: base(root, parent, worldDirection, name, distance)
 		{
-			TurnPossibilities = (IReadOnlyList<TurnPossibility>)laneTypes.ToList().Select(laneType =>
+			TurnPossibilities = laneTypes.ToList().Select(laneType =>
 			{
 				TurnPossibility turnPossibility = new TurnPossibility();
 
@@ -24,7 +25,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 				}
 
 				return turnPossibility;
-			});
+			}).ToImmutableList();
 		}
 
 		public ICarGenerator? CarGenerator { get; set; }

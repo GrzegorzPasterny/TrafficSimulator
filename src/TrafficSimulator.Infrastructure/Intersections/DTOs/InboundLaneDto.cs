@@ -8,6 +8,6 @@ namespace TrafficSimulator.Infrastructure.DTOs
 		public string CarGeneratorTypeName { get; set; }
 		public object[] CarGeneratorOptions { get; set; }
 		public LaneType[] LaneTypes { get; set; }
-		public bool ContainsTrafficLights { get; internal set; }
+		public bool ContainsTrafficLights { get; set; }
 	}
 }

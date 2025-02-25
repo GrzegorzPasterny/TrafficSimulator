@@ -5,7 +5,7 @@ namespace TrafficSimulator.Domain.Commons
 {
 	public abstract class IntersectionObject : Entity
 	{
-		public IntersectionObject? Parent { get; private set; }
+		public IntersectionObject Parent { get; private set; }
 		public Intersection Root { get; private set; }
 		public string Name { get; internal set; }
 		public string FullName => BuildObjectFullName();
