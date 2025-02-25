@@ -1,14 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
 using TrafficSimulator.Application.Commons.Interfaces;
-using TrafficSimulator.Application.TrafficPhases;
-using TrafficSimulator.Domain.Cars;
-using TrafficSimulator.Domain.IntersectionObjects;
-using TrafficSimulator.Domain.IntersectionObjects.IntersectionProperties;
+using TrafficSimulator.Application.Handlers.TrafficPhases;
+using TrafficSimulator.Domain.Models.Agents;
+using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Domain.Models.Lights;
 
 namespace TrafficSimulator.Application.Handlers.Lights
 {
-    public class SimpleDynamicTrafficLightsHandler : ITrafficLightsHandler
+	public class SimpleDynamicTrafficLightsHandler : ITrafficLightsHandler
 	{
 		private readonly Intersection _intersection;
 		private readonly ICarRepository _carRepository;

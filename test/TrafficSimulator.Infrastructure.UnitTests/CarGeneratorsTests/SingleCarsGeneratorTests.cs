@@ -3,12 +3,12 @@ using Moq;
 using TrafficSimulator.Application.Cars.AddCar;
 using TrafficSimulator.Application.Handlers.CarGenerators;
 using TrafficSimulator.Domain.Commons;
-using TrafficSimulator.Domain.IntersectionObjects;
+using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Tests.Commons.Assets;
 
 namespace TrafficSimulator.Infrastructure.UnitTests.CarGeneratorsTests
 {
-    public class SingleCarsGeneratorTests
+	public class SingleCarsGeneratorTests
 	{
 
 

@@ -3,7 +3,7 @@ using TrafficSimulator.Infrastructure.DTOs;
 
 namespace TrafficSimulator.Infrastructure.IntersectionSimulation
 {
-    public class IntersectionSimulationDtoMapper : ISimulationSetupMapper
+	public class IntersectionSimulationDtoMapper : ISimulationSetupMapper
 	{
 		public ErrorOr<Domain.Simulation.IntersectionSimulation> ToDomain(IntersectionSimulationDto intersectionSimulationDto)
 		{

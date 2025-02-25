@@ -1,9 +1,9 @@
 ﻿using TrafficSimulator.Application.Commons.Interfaces;
-using TrafficSimulator.Domain.Cars;
+using TrafficSimulator.Domain.Models.Agents;
 
 namespace TrafficSimulator.Infrastructure.Cars
 {
-    public class CarsRepositoryInMemory : ICarRepository
+	public class CarsRepositoryInMemory : ICarRepository
 	{
 		public List<Car> Cars { get; set; } = new();
 

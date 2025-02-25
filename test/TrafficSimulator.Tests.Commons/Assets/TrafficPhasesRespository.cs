@@ -1,10 +1,10 @@
 ﻿using TrafficSimulator.Domain.Commons;
-using TrafficSimulator.Domain.IntersectionObjects;
-using TrafficSimulator.Domain.IntersectionObjects.IntersectionProperties;
+using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Domain.Models.Lights;
 
 namespace TrafficSimulator.Application.UnitTests.Commons
 {
-    public static class TrafficPhasesRespository
+	public static class TrafficPhasesRespository
 	{
 		public static TrafficPhase AllLightsGreen(Intersection intersection)
 		{

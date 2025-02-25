@@ -2,11 +2,11 @@
 using ErrorOr;
 using MediatR;
 using TrafficSimulator.Domain.Commons;
-using TrafficSimulator.Domain.IntersectionObjects;
+using TrafficSimulator.Domain.Models.IntersectionObjects;
 
 namespace TrafficSimulator.Application.Handlers.CarGenerators
 {
-    public class SingleCarGenerator : CarGenerator
+	public class SingleCarGenerator : CarGenerator
 	{
 		public SingleCarGeneratorOptions Options { get; } = new();
 		private TimeSpan _simulationTime = TimeSpan.Zero;

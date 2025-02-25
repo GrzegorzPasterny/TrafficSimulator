@@ -1,5 +1,5 @@
 ﻿using TrafficSimulator.Domain.Commons;
-using TrafficSimulator.Domain.IntersectionObjects.IntersectionProperties;
+using TrafficSimulator.Domain.Models;
 
 namespace TrafficSimulator.Domain.UnitTests.CommonsTests;
 

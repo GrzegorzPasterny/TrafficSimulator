@@ -1,4 +1,6 @@
-﻿namespace TrafficSimulator.Infrastructure.DTOs
+﻿using TrafficSimulator.Domain.Models;
+
+namespace TrafficSimulator.Infrastructure.DTOs
 {
 	public class TurnPossibilityDto
 	{

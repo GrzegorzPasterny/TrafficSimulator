@@ -1,4 +1,6 @@
-﻿namespace TrafficSimulator.Infrastructure.DTOs
+﻿using TrafficSimulator.Domain.Models.IntersectionProperties;
+
+namespace TrafficSimulator.Infrastructure.DTOs
 {
 	public class TrafficPhaseDto
 	{
