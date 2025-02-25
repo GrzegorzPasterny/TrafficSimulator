@@ -2,9 +2,9 @@
 {
 	public class IntersectionSimulationOptionsDto
 	{
-		public int MinimalDistanceBetweenTheCars { get; set; } = 5;
-		public TimeSpan StepTimespan { get; set; } = TimeSpan.FromMilliseconds(100);
-		public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(5);
-		public int StepLimit { get; set; } = 1000;
+		public int MinimalDistanceBetweenTheCars { get; set; }
+		public double StepTimespanMs { get; set; }
+		public double TimeoutMs { get; set; }
+		public int StepLimit { get; set; }
 	}
 }

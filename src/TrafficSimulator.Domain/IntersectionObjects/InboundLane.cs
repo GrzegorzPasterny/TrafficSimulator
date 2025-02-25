@@ -6,8 +6,11 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
 	public class InboundLane : OutboundLane
 	{
-		public InboundLane(Intersection root, IntersectionObject? parent, LaneType[] laneTypes, WorldDirection worldDirection, bool addTrafficLights = true, int distance = 10)
-			: base(root, parent, worldDirection, distance)
+		public InboundLane(
+			Intersection root, IntersectionObject? parent, LaneType[] laneTypes,
+			WorldDirection worldDirection, bool addTrafficLights = true,
+			int distance = 10, string name = "")
+			: base(root, parent, worldDirection, distance, name)
 		{
 			foreach (var laneType in laneTypes)
 			{
@@ -28,10 +31,5 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 		public ICarGenerator? CarGenerator { get; set; }
 
 		public List<TurnPossibility> TurnPossibilities { get; set; } = [];
-
-		public override string BuildObjectName(string parentName)
-		{
-			return $"{parentName}.{nameof(InboundLane)}";
-		}
 	}
 }

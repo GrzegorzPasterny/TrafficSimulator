@@ -6,15 +6,10 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 	{
 		public WorldDirection WorldDirection { get; }
 
-		public OutboundLane(Intersection root, IntersectionObject? parent, WorldDirection worldDirection, int distance = 10)
-			: base(root, parent, distance)
+		public OutboundLane(Intersection root, IntersectionObject? parent, WorldDirection worldDirection, int distance = 10, string name = "")
+			: base(root, parent, distance, name)
 		{
 			WorldDirection = worldDirection;
-		}
-
-		public override string BuildObjectName(string parentName)
-		{
-			return $"{parentName}.{nameof(OutboundLane)}";
 		}
 	}
 }

@@ -22,11 +22,6 @@ namespace TrafficSimulator.Application.Handlers.CarGenerators
 
 		public abstract Task<UnitResult<Error>> Generate(TimeSpan timeSpan);
 
-		public override string BuildObjectName(string parentName)
-		{
-			return $"{parentName}.{typeof(CarGenerator).Name}";
-		}
-
 		internal async Task GenerateCar()
 		{
 			Car car = new Car((InboundLane)Parent!);

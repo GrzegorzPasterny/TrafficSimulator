@@ -80,11 +80,6 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 			return UnitResult.Success<Error>();
 		}
 
-		public override string BuildObjectName(string parentName)
-		{
-			return $"{parentName}.{nameof(TrafficLights)}";
-		}
-
 		public override string ToString()
 		{
 			return $"[Name = {Name}, " +

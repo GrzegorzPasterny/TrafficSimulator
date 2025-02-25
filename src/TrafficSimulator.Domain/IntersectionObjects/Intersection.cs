@@ -12,8 +12,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 
 		public List<TrafficPhase> TrafficPhases { get; } = [];
 
-		// TODO: Use Name argument
-		public Intersection(string name, IntersectionObject? parent = null) : base(null!, parent)
+		public Intersection(string name, IntersectionObject? parent = null) : base(null!, parent, name)
 		{
 		}
 
@@ -32,17 +31,16 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 			return ObjectLookup.OfType<T>().FirstOrDefault(predicate);
 		}
 
-		public override string BuildObjectName(string parentName)
-		{
-			if (string.IsNullOrWhiteSpace(parentName))
-			{
-				return nameof(Intersection);
-			}
-			else
-			{
-				return $"{parentName}.{nameof(Intersection)}";
-			}
-
-		}
+		//public override string BuildObjectName()
+		//{
+		//	if (string.IsNullOrWhiteSpace(Parent?.Name))
+		//	{
+		//		return _name;
+		//	}
+		//	else
+		//	{
+		//		return $"{Parent?.Name}.{_name}";
+		//	}
+		//}
 	}
 }

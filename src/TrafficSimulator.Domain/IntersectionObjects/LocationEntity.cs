@@ -9,7 +9,7 @@ namespace TrafficSimulator.Domain.Commons
 		/// </summary>
 		public int Distance { get; set; }
 
-		public LocationEntity(Intersection root, IntersectionObject? parent, int distance) : base(root, parent)
+		public LocationEntity(Intersection root, IntersectionObject? parent, int distance, string name = "") : base(root, parent, name)
 		{
 			Distance = distance;
 		}

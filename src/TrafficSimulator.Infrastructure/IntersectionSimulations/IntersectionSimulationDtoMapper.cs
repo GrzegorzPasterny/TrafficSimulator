@@ -38,7 +38,7 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 
 		private List<LanesDto> ToDto(List<Lanes> lanesCollection)
 		{
-			return lanesCollection.Select(lanes => ToDto(lanes)).ToList();
+			return lanesCollection.Select(ToDto).ToList();
 		}
 
 		private LanesDto ToDto(Lanes lanes)
@@ -46,7 +46,7 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 			return new LanesDto()
 			{
 				Name = lanes.Name,
-				ParentName = lanes.Parent.Name,
+				ParentName = lanes.Parent.FullName,
 				WorldDirection = lanes.WorldDirection,
 				InboundLanes = ToDto(lanes.InboundLanes),
 				OutboundLanes = ToDto(lanes.OutboundLanes),
@@ -55,7 +55,7 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 
 		private List<OutboundLaneDto> ToDto(List<OutboundLane>? outboundLanes)
 		{
-			return outboundLanes.Select(lane => ToDto(lane)).ToList();
+			return outboundLanes.Select(ToDto).ToList();
 		}
 
 		private OutboundLaneDto ToDto(OutboundLane lane)
@@ -65,7 +65,7 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 				Distance = lane.Distance,
 				Name = lane.Name,
 				WorldDirection = lane.WorldDirection,
-				ParentName = lane.Parent.Name
+				ParentName = lane.Parent.FullName
 			};
 		}
 
@@ -81,15 +81,15 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 				Distance = lane.Distance,
 				Name = lane.Name,
 				WorldDirection = lane.WorldDirection,
-				ParentName = lane.Parent.Name,
+				ParentName = lane.Parent.FullName,
 				TurnPossibilities = ToDto(lane.TurnPossibilities),
-				CarGeneratorTypeName = lane.CarGenerator.GetType().Name
+				CarGeneratorTypeName = lane.CarGenerator is null ? string.Empty : lane.CarGenerator.GetType().Name
 			};
 		}
 
 		private List<TurnPossibilityDto> ToDto(List<TurnPossibility> turnPossibilities)
 		{
-			return turnPossibilities.Select(turn => ToDto(turn)).ToList();
+			return turnPossibilities.Select(ToDto).ToList();
 		}
 
 		private TurnPossibilityDto ToDto(TurnPossibility turn)
@@ -103,7 +103,7 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 
 		private List<TrafficPhaseDto> ToDto(List<TrafficPhase> trafficPhases)
 		{
-			return trafficPhases.Select(trafficPhase => ToDto(trafficPhase)).ToList();
+			return trafficPhases.Select(ToDto).ToList();
 		}
 
 		private TrafficPhaseDto ToDto(TrafficPhase trafficPhase)
@@ -111,7 +111,22 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 			return new TrafficPhaseDto()
 			{
 				Name = trafficPhase.Name,
-				TrafficLightsAssignments = trafficPhase.TrafficLightsAssignments,
+				TrafficLightsAssignments = ToDto(trafficPhase.TrafficLightsAssignments),
+			};
+		}
+
+		private List<TurnWithTrafficLightDto> ToDto(List<TurnWithTrafficLight> trafficLightsAssignments)
+		{
+			return trafficLightsAssignments.Select(ToDto).ToList();
+		}
+
+		private TurnWithTrafficLightDto ToDto(TurnWithTrafficLight trafficLightsAssignment)
+		{
+			return new TurnWithTrafficLightDto()
+			{
+				InboundLaneName = trafficLightsAssignment.InboundLane.FullName,
+				TrafficLightState = trafficLightsAssignment.TrafficLightState,
+				TurnPossibility = ToDto(trafficLightsAssignment.TurnPossibility),
 			};
 		}
 
@@ -121,7 +136,7 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 			{
 				Distance = intersectionCore.Distance,
 				Name = intersectionCore.Name,
-				ParentName = intersectionCore.Parent.Name
+				ParentName = intersectionCore.Parent.FullName
 			};
 		}
 
@@ -131,8 +146,8 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 			{
 				MinimalDistanceBetweenTheCars = intersectionSimulationOptions.MinimalDistanceBetweenTheCars,
 				StepLimit = intersectionSimulationOptions.StepLimit,
-				StepTimespan = intersectionSimulationOptions.StepTimespan,
-				Timeout = intersectionSimulationOptions.Timeout,
+				StepTimespanMs = intersectionSimulationOptions.StepTimespan.TotalMilliseconds,
+				TimeoutMs = intersectionSimulationOptions.Timeout.TotalMilliseconds,
 			};
 		}
 	}

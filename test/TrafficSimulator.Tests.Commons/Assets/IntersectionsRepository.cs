@@ -14,7 +14,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			get
 			{
 				ErrorOr<Intersection> intersectionResult =
-				IntersectionBuilder.Create()
+				IntersectionBuilder.Create("ZebraCrossing")
 				.AddIntersectionCore()
 				.AddLanesCollection(WorldDirection.East)
 				.AddInboundLane(WorldDirection.East, LaneTypeHelper.Straight())

@@ -1,0 +1,157 @@
+﻿using TrafficSimulator.Domain.Commons;
+using TrafficSimulator.Domain.Models;
+using TrafficSimulator.Infrastructure.DTOs;
+
+namespace TrafficSimulator.Infrastructure.UnitTests.Assets
+{
+	public static class IntersectionSimulationDtosRepository
+	{
+		public static IntersectionSimulationDto ZebraCrossingOnOneLaneRoadEastWest
+		{
+			get
+			{
+				return new IntersectionSimulationDto()
+				{
+					Options = new()
+					{
+						MinimalDistanceBetweenTheCars = 1,
+						StepLimit = 1000,
+						StepTimespanMs = 100,
+						TimeoutMs = 5000
+					},
+					Intersection = new()
+					{
+						Name = "ZebraCrossing",
+						ParentName = string.Empty,
+						IntersectionCore = new()
+						{
+							Distance = 10,
+							Name = "IntersectionCore",
+							ParentName = ".ZebraCrossing"
+						},
+						LanesCollection = [
+							new LanesDto()
+							{
+								Name = "Lanes.West",
+								WorldDirection = WorldDirection.West,
+								ParentName = ".ZebraCrossing",
+								InboundLanes = [
+									new InboundLaneDto()
+									{
+										Name = "InboundLane",
+										ParentName = ".ZebraCrossing.Lanes.West",
+										Distance = 10,
+										WorldDirection = WorldDirection.West,
+										TurnPossibilities = [
+											new TurnPossibilityDto()
+											{
+												ContainsTrafficLights = true,
+												LaneType = LaneType.Straight
+											}
+										],
+										CarGeneratorTypeName = "",
+									}
+								],
+								OutboundLanes = [
+									new OutboundLaneDto()
+									{
+										Distance = 10,
+										Name = "OutboundLane",
+										ParentName = ".ZebraCrossing.Lanes.West",
+										WorldDirection = WorldDirection.West
+									}
+								]
+							},
+							new LanesDto()
+							{
+								Name = "Lanes.East",
+								WorldDirection = WorldDirection.East,
+								ParentName = ".ZebraCrossing",
+								InboundLanes = [
+									new InboundLaneDto()
+									{
+										Name = "InboundLane",
+										ParentName = ".ZebraCrossing.Lanes.East",
+										Distance = 10,
+										WorldDirection = WorldDirection.East,
+										TurnPossibilities = [
+											new TurnPossibilityDto()
+											{
+												ContainsTrafficLights = true,
+												LaneType = LaneType.Straight
+											}
+										],
+										CarGeneratorTypeName = "",
+									}
+								],
+								OutboundLanes = [
+									new OutboundLaneDto()
+									{
+										Distance = 10,
+										Name = "OutboundLane",
+										ParentName = ".ZebraCrossing.Lanes.East",
+										WorldDirection = WorldDirection.East
+									}
+								]
+							}
+						],
+						TrafficPhases = [
+							new TrafficPhaseDto()
+							{
+								Name = "AllGreen",
+								TrafficLightsAssignments = [
+									new TurnWithTrafficLightDto()
+									{
+										InboundLaneName = "ZebraCrossing.Lanes.West.InboundLane",
+										TrafficLightState = Domain.Models.Lights.TrafficLightState.Green,
+										TurnPossibility = new TurnPossibilityDto()
+										{
+											ContainsTrafficLights = true,
+											LaneType = LaneType.Straight
+										}
+									},
+									new TurnWithTrafficLightDto()
+									{
+										InboundLaneName = "ZebraCrossing.Lanes.East.InboundLane",
+										TrafficLightState = Domain.Models.Lights.TrafficLightState.Green,
+										TurnPossibility = new TurnPossibilityDto()
+										{
+											ContainsTrafficLights = true,
+											LaneType = LaneType.Straight
+										}
+									}
+								]
+							},
+							new TrafficPhaseDto()
+							{
+								Name = "AllRed",
+								TrafficLightsAssignments = [
+									new TurnWithTrafficLightDto()
+									{
+										InboundLaneName = "ZebraCrossing.Lanes.West.InboundLane",
+										TrafficLightState = Domain.Models.Lights.TrafficLightState.Red,
+										TurnPossibility = new TurnPossibilityDto()
+										{
+											ContainsTrafficLights = true,
+											LaneType = LaneType.Straight
+										}
+									},
+									new TurnWithTrafficLightDto()
+									{
+										InboundLaneName = "ZebraCrossing.Lanes.East.InboundLane",
+										TrafficLightState = Domain.Models.Lights.TrafficLightState.Red,
+										TurnPossibility = new TurnPossibilityDto()
+										{
+											ContainsTrafficLights = true,
+											LaneType = LaneType.Straight
+										}
+									}
+								]
+							}
+						]
+					}
+				};
+			}
+		}
+	}
+}

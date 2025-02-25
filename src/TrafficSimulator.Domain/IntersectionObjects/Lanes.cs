@@ -4,10 +4,10 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
 	public class Lanes : IntersectionObject
 	{
-		public Lanes(Intersection root, IntersectionObject? parent, WorldDirection worldDirection) : base(root, parent)
+		public Lanes(Intersection root, IntersectionObject? parent, WorldDirection worldDirection, string name = "") : base(root, parent, name)
 		{
 			WorldDirection = worldDirection;
-			Name = BuildObjectName(parent!.Name);
+			Name = BuildDefaultObjectName();
 		}
 
 		/// <summary>
@@ -22,9 +22,9 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 
 		public WorldDirection WorldDirection { get; }
 
-		public override string BuildObjectName(string parentName)
+		public override string BuildDefaultObjectName()
 		{
-			return $"{parentName}.{nameof(Lanes)}.{WorldDirection}";
+			return $"{nameof(Lanes)}.{WorldDirection}";
 		}
 		// TODO: Add zebra crossings in further versions
 	}

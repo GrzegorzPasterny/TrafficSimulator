@@ -7,6 +7,7 @@ namespace TrafficSimulator.Domain.Simulation
 	public class IntersectionSimulation : Entity
 	{
 		public Intersection Intersection { get; }
+		public string Name { get; set; } = "IS";
 
 		// TODO: Load options through configuration
 		public IntersectionSimulationOptions Options { get; set; } = new();

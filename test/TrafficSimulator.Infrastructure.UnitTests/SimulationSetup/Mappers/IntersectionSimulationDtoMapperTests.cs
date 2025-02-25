@@ -3,6 +3,7 @@ using FluentAssertions;
 using TrafficSimulator.Domain.Simulation;
 using TrafficSimulator.Infrastructure.DTOs;
 using TrafficSimulator.Infrastructure.IntersectionSimulations;
+using TrafficSimulator.Infrastructure.UnitTests.Assets;
 using TrafficSimulator.Tests.Commons.Assets;
 
 namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
@@ -20,6 +21,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 			ErrorOr<IntersectionSimulationDto> intersectionSimulationDto = mapper.ToDto(intersectionSimulation);
 
 			intersectionSimulationDto.IsError.Should().BeFalse();
+			intersectionSimulationDto.Value.Should().BeEquivalentTo(IntersectionSimulationDtosRepository.ZebraCrossingOnOneLaneRoadEastWest);
 		}
 	}
 }
