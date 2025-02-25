@@ -8,6 +8,7 @@ using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.Agents;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Domain.Models.Simulation;
 
 namespace TrafficSimulator.Application.Handlers.Simulation
 {

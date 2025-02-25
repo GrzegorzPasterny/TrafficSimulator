@@ -20,14 +20,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 		/// </summary>
 		public List<OutboundLane>? OutboundLanes { get; set; } = new();
 
-		public TrafficLights? TrafficLights { get; set; } = null;
-
 		public WorldDirection WorldDirection { get; }
-
-		/// <summary>
-		/// Distance from the edge of the map to the <see cref="TrafficLights"/> that car needs to cover
-		/// </summary>
-		public int Distance { get; set; }
 
 		public override string BuildObjectName(string parentName)
 		{

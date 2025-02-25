@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 
-namespace TrafficSimulator.Domain.Models
+namespace TrafficSimulator.Domain.Models.Simulation
 {
 	public class IntersectionSimulation : Entity
 	{
