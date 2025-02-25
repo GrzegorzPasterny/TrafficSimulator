@@ -4,7 +4,7 @@ namespace TrafficSimulator.Infrastructure.DTOs
 {
 	public class OutboundLaneDto : LocationEntityDto
 	{
-		public WorldDirection WorldDirection { get; }
+		public WorldDirection WorldDirection { get; set; }
 
 	}
 }

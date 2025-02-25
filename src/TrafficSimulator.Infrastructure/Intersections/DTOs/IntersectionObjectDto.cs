@@ -1,8 +1,6 @@
-﻿using CSharpFunctionalExtensions;
-
-namespace TrafficSimulator.Infrastructure.DTOs
+﻿namespace TrafficSimulator.Infrastructure.DTOs
 {
-	public class IntersectionObjectDto : Entity
+	public class IntersectionObjectDto
 	{
 		public string Name { get; set; }
 		public string ParentName { get; set; }

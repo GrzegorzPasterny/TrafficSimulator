@@ -1,6 +1,6 @@
 ﻿namespace TrafficSimulator.Domain.Models
 {
-	public class SimulationOptions
+	public class IntersectionSimulationOptions
 	{
 		public int MinimalDistanceBetweenTheCars { get; set; } = 5;
 		public TimeSpan StepTimespan { get; set; } = TimeSpan.FromMilliseconds(100);

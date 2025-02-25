@@ -6,17 +6,17 @@ namespace TrafficSimulator.Domain.Simulation
 {
 	public class IntersectionSimulation : Entity
 	{
-		private Intersection _intersection;
+		public Intersection Intersection { get; }
 
 		// TODO: Load options through configuration
-		public SimulationOptions Options { get; set; } = new();
+		public IntersectionSimulationOptions Options { get; set; } = new();
 
 		public SimulationState SimulationState { get; set; } = new SimulationState();
 		public SimulationResults? SimulationResults { get; set; }
 
 		public IntersectionSimulation(Intersection intersection)
 		{
-			_intersection = intersection;
+			Intersection = intersection;
 		}
 	}
 }

@@ -10,8 +10,6 @@ namespace TrafficSimulator.Infrastructure.UnitTests.CarGeneratorsTests
 {
 	public class SingleCarsGeneratorTests
 	{
-
-
 		[Fact]
 		public async Task RunCarsGenerator_ShouldProduceOneCar()
 		{
@@ -23,7 +21,6 @@ namespace TrafficSimulator.Infrastructure.UnitTests.CarGeneratorsTests
 				.InboundLanes!
 				.First();
 
-			// Arrange
 			var mediatorMock = new Mock<IMediator>();
 			var singleCarsGenerator = new SingleCarGenerator(intersection, inboundLane, mediatorMock.Object);
 
