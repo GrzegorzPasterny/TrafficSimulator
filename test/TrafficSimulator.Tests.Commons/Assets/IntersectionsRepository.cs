@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using FluentAssertions;
+using TrafficSimulator.Application.UnitTests.Commons;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Builders;
 using TrafficSimulator.Domain.Models;
@@ -23,10 +24,12 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				.AddInboundLane(WorldDirection.West, LaneTypeHelper.Straight())
 				.AddOutboundLane(WorldDirection.West)
 				.Build();
-
 				intersectionResult.IsError.Should().BeFalse();
 
 				Intersection intersection = intersectionResult.Value;
+
+				intersection.TrafficPhases.Add(TrafficPhasesRespository.AllLightsGreen(intersection));
+				intersection.TrafficPhases.Add(TrafficPhasesRespository.AllLightsRed(intersection));
 
 				return intersection;
 			}
@@ -50,6 +53,8 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				intersectionResult.IsError.Should().BeFalse();
 
 				Intersection intersection = intersectionResult.Value;
+				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
+				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
 
 				return intersection;
 			}
@@ -74,10 +79,11 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				.Build();
 
 				intersectionResult.IsError.Should().BeFalse();
-
 				Intersection intersection = intersectionResult.Value;
 
-				return intersection;
+				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
+				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.South));
+				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West)); return intersection;
 			}
 		}
 	}

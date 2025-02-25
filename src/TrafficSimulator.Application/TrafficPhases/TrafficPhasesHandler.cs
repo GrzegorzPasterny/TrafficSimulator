@@ -14,7 +14,7 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 			_intersection = intersection;
 		}
 
-		public List<TrafficPhase> TrafficPhases => _intersection.TrafficPhases;
+		internal List<TrafficPhase> TrafficPhases => _intersection.TrafficPhases;
 
 		// Current phase must be assigned when starting the simulation
 		public TrafficPhase? CurrentPhase { get; set; }

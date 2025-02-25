@@ -22,13 +22,9 @@ namespace TrafficSimulator.Application.UnitTests.Traffic
 			TrafficPhase allGreenTrafficPhase = new TrafficPhase("AllGreen", intersection);
 			allGreenTrafficPhase.TrafficLightsAssignments.ForEach(a => a.TrafficLightState = TrafficLightState.Green);
 
-			trafficPhasesHandler.TrafficPhases.Add(allGreenTrafficPhase);
-
 			// All Inbound lanes and all turn possibilities have red light
 			TrafficPhase allRedTrafficPhase = new TrafficPhase("AllRed", intersection);
 			allRedTrafficPhase.TrafficLightsAssignments.ForEach(a => a.TrafficLightState = TrafficLightState.Red);
-
-			trafficPhasesHandler.TrafficPhases.Add(allRedTrafficPhase);
 
 			// Act
 			trafficPhasesHandler.SetPhase("AllGreen");
