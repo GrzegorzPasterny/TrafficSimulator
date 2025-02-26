@@ -37,4 +37,8 @@
     <ProjectReference Include="..\TrafficSimulator.Tests.Commons\TrafficSimulator.Tests.Commons.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commons\" />
+  </ItemGroup>
+
 </Project>

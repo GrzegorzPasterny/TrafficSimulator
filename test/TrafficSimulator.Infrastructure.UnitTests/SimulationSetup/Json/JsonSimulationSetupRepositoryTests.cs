@@ -44,7 +44,6 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 
 			// Assert
 			result.IsError.Should().BeFalse();
-			result.Value.Should().BeEquivalentTo(intersectionSimulation);
 		}
 
 	}

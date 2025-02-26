@@ -12,6 +12,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 			{
 				return new IntersectionSimulationDto()
 				{
+					Name = "IS",
 					Options = new()
 					{
 						MinimalDistanceBetweenTheCars = 1,

@@ -1,18 +1,32 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 using TrafficSimulator.Domain.Models.Agents;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
-using TrafficSimulator.Domain.UnitTests.Commons;
 using TrafficSimulator.Tests.Commons.Assets;
 using Xunit.Abstractions;
 
 namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 {
-	[Collection("Test collection")]
-	public class CarTests : TestsBase
+	public class CarTests
 	{
-		public CarTests(TestFixture testFixture, ITestOutputHelper testOutputHelper) : base(testFixture, testOutputHelper)
+		internal readonly ILogger<CarTests> _logger;
+		internal readonly ILoggerFactory _loggerFactory;
+
+		public CarTests(ITestOutputHelper testOutputHelper)
 		{
+			var logger = new LoggerConfiguration()
+				.MinimumLevel.Verbose()
+				.WriteTo.TestOutput(testOutputHelper, LogEventLevel.Verbose, "[{Timestamp:HH:mm:ss:fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+				.CreateLogger();
+
+			_loggerFactory = LoggerFactory.Create(builder =>
+			{
+				builder.AddSerilog(logger, dispose: true);
+			});
+
+			_logger = _loggerFactory.CreateLogger<CarTests>();
 		}
 
 		[Theory]
