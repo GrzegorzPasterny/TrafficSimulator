@@ -39,11 +39,11 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 
 			// Assert
 			intersectionSimulation.IsError.Should().BeFalse();
-			intersectionSimulation.Value.Should().BeEquivalentTo(IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest,
+			intersectionSimulation.Value.Intersection.Should().BeEquivalentTo(IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest,
 				options => options
-					.IgnoringCyclicReferences()
-					.Excluding(x => x.Parent)
-					.Excluding(x => x.Root));
+					//.ComparingByMembers<IntersectionObject>()
+					//.ComparingByMembers<IntersectionCore>()
+					);
 		}
 	}
 }

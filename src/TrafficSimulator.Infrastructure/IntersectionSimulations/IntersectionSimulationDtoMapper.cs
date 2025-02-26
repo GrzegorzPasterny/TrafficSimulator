@@ -58,16 +58,18 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 			{
 				intersection.TrafficPhases.Add(new TrafficPhase(trafficPhase.Name, intersection)
 				{
-					TrafficLightsAssignments = trafficPhase.TrafficLightsAssignments.Select(light => new TurnWithTrafficLight()
+					TrafficLightsAssignments = trafficPhase.TrafficLightsAssignments.Select(light =>
 					{
-						InboundLane = intersection.GetObject<InboundLane>(light.InboundLaneName),
-						TrafficLightState = light.TrafficLightState,
-						TurnPossibility = new TurnPossibility()
+						InboundLane? inboundLane = intersection.GetObject<InboundLane>(light.InboundLaneName);
+						TurnPossibility turnPossibility = inboundLane.TurnPossibilities.First(turn => turn.LaneType == light.TurnPossibility.LaneType);
+
+						return new TurnWithTrafficLight()
 						{
-							ContainsTrafficLights = light.TurnPossibility.ContainsTrafficLights,
-							LaneType = light.TurnPossibility.LaneType,
-							TrafficLights = new TrafficLights(intersection, intersection.GetObject<InboundLane>(light.InboundLaneName))
-						}
+							InboundLane = inboundLane,
+							TrafficLightState = light.TrafficLightState,
+							TurnPossibility = turnPossibility
+
+						};
 					}).ToList()
 				});
 			});

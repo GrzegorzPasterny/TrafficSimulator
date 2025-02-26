@@ -21,9 +21,9 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 			ObjectLookup.Add(obj);
 		}
 
-		public T? GetObject<T>(string name) where T : IntersectionObject
+		public T? GetObject<T>(string fullName) where T : IntersectionObject
 		{
-			return ObjectLookup.OfType<T>().FirstOrDefault(o => o.Name == name);
+			return ObjectLookup.OfType<T>().FirstOrDefault(o => o.FullName == fullName);
 		}
 
 		public T? GetObject<T>(Func<T, bool> predicate) where T : IntersectionObject
