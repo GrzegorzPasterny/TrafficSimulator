@@ -17,7 +17,8 @@ using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
-using TrafficSimulator.Infrastructure;
+using TrafficSimulator.Domain.Simulation;
+using TrafficSimulator.Infrastructure.DI;
 using TrafficSimulator.Tests.Commons.Assets;
 using Xunit.Abstractions;
 
@@ -65,7 +66,8 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			SimulationPhase expectedSimulationPhase)
 		{
 			// Arrange
-			Intersection intersection = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			Intersection intersection = intersectionSimulation.Intersection;
 
 			InboundLane inboundLane = intersection.LanesCollection!
 				.Find(l => l.WorldDirection == WorldDirection.West)!
@@ -83,7 +85,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			using ISimulationHandler simulationHandler =
 				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, new NullTrafficLightsHandler(), _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
 
-			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
+			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
 			UnitResult<Error> simulationStartResult = await simulationHandler.Start();
 
@@ -96,7 +98,8 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 		public async Task RunSimulation_GivenSimpleIntersection_GivenOneCar_GivenSimpleTrafficHandler_CarShouldPassTheIntersectionAsExpected()
 		{
 			// Arrange
-			Intersection intersection = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			Intersection intersection = intersectionSimulation.Intersection;
 
 			InboundLane inboundLane = intersection.LanesCollection!
 				.Find(l => l.WorldDirection == WorldDirection.West)!
@@ -115,7 +118,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			using ISimulationHandler simulationHandler =
 				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
 
-			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
+			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
 			UnitResult<Error> simulationStartResult = await simulationHandler.Start();
 
@@ -131,7 +134,8 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 		public async Task RunSimulation_GivenForkIntersection_GivenOneCar_GivenSimpleTrafficHandler_CarShouldPassTheIntersectionAsExpected()
 		{
 			// Arrange
-			Intersection intersection = IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLights;
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLights;
+			Intersection intersection = intersectionSimulation.Intersection;
 
 			InboundLane westInboundLane = intersection.LanesCollection!
 				.Find(l => l.WorldDirection == WorldDirection.West)!
@@ -158,7 +162,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			using ISimulationHandler simulationHandler =
 				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
 
-			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
+			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
 			UnitResult<Error> simulationStartResult = await simulationHandler.Start();
 
@@ -174,7 +178,8 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 		public async Task RunSimulation_GivenForkIntersection_GivenMultipleCars_GivenSimpleTrafficHandler_CarShouldPassTheIntersectionAsExpected()
 		{
 			// Arrange
-			Intersection intersection = IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLights;
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLights;
+			Intersection intersection = intersectionSimulation.Intersection;
 
 			InboundLane westInboundLane = intersection.LanesCollection!
 				.Find(l => l.WorldDirection == WorldDirection.West)!
@@ -201,7 +206,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			using ISimulationHandler simulationHandler =
 				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
 
-			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
+			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
 			UnitResult<Error> simulationStartResult = await simulationHandler.Start();
 
@@ -217,7 +222,8 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 		public async Task RunSimulation_GivenThreeDirectionIntersection_GivenMultipleCars_GivenSimpleTrafficHandler_CarShouldPassTheIntersectionAsExpected()
 		{
 			// Arrange
-			Intersection intersection = IntersectionsRepository.ThreeDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLights;
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ThreeDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLights;
+			Intersection intersection = intersectionSimulation.Intersection;
 
 			InboundLane eastInboundLane = intersection.LanesCollection!
 				.Find(l => l.WorldDirection == WorldDirection.East)!
@@ -253,7 +259,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			using ISimulationHandler simulationHandler =
 				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
 
-			simulationHandler.LoadIntersection(intersection).IsSuccess.Should().BeTrue();
+			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
 			UnitResult<Error> simulationStartResult = await simulationHandler.Start();
 

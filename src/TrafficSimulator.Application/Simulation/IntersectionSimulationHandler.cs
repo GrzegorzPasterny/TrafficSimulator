@@ -7,7 +7,6 @@ using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.Agents;
-using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Simulation;
 
 namespace TrafficSimulator.Application.Handlers.Simulation
@@ -48,9 +47,9 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			return UnitResult.Success<Error>();
 		}
 
-		public UnitResult<Error> LoadIntersection(Intersection intersection)
+		public UnitResult<Error> LoadIntersection(IntersectionSimulation intersectionSimulation)
 		{
-			_intersectionSimulation = new(intersection);
+			_intersectionSimulation = intersectionSimulation;
 
 			return UnitResult.Success<Error>();
 		}

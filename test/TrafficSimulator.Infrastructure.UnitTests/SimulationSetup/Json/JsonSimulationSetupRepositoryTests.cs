@@ -12,7 +12,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 		public void SaveIntersectionSimulationToJson_ShouldProduceFileOnTheDisc()
 		{
 			// Arrange
-			IntersectionSimulation intersectionSimulation = new(IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest);
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
 
 			JsonSimulationSetupRepository jsonSimulationSetupRepository =
 				new JsonSimulationSetupRepository(new IntersectionSimulationDtoMapper());
@@ -31,8 +31,8 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 		public void LoadIntersectionSimulation_ShouldReturnCorrectSimulation_WhenFileExists()
 		{
 			// Arrange
-			var intersectionSimulation = new IntersectionSimulation(
-				IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest);
+			var intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+
 			JsonSimulationSetupRepository jsonSimulationSetupRepository =
 				new JsonSimulationSetupRepository(new IntersectionSimulationDtoMapper());
 

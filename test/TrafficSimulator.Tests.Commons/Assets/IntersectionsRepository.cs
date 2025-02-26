@@ -5,12 +5,13 @@ using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Builders;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Domain.Simulation;
 
 namespace TrafficSimulator.Tests.Commons.Assets
 {
 	public static class IntersectionsRepository
 	{
-		public static Intersection ZebraCrossingOnOneLaneRoadEastWest
+		public static IntersectionSimulation ZebraCrossingOnOneLaneRoadEastWest
 		{
 			get
 			{
@@ -31,11 +32,11 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				intersection.TrafficPhases.Add(TrafficPhasesRespository.AllLightsGreen(intersection));
 				intersection.TrafficPhases.Add(TrafficPhasesRespository.AllLightsRed(intersection));
 
-				return intersection;
+				return new IntersectionSimulation(intersection);
 			}
 		}
 
-		public static Intersection ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLights
+		public static IntersectionSimulation ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLights
 		{
 			get
 			{
@@ -56,11 +57,11 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
 				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
 
-				return intersection;
+				return new IntersectionSimulation(intersection);
 			}
 		}
 
-		public static Intersection ThreeDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLights
+		public static IntersectionSimulation ThreeDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLights
 		{
 			get
 			{
@@ -83,7 +84,9 @@ namespace TrafficSimulator.Tests.Commons.Assets
 
 				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
 				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.South));
-				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West)); return intersection;
+				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
+
+				return new IntersectionSimulation(intersection);
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.Lights;
+using TrafficSimulator.Domain.Simulation;
 using TrafficSimulator.Tests.Commons.Assets;
 using Xunit.Abstractions;
 
@@ -10,13 +11,14 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 	{
 		private readonly ITestOutputHelper _testOutputHelper;
 		private const int _orangeLightTimespanMs = 5000;
-		private readonly Intersection _intersection;
+		private readonly IntersectionSimulation _intersectionSimulation;
+		private Intersection _intersection => _intersectionSimulation.Intersection;
 		private readonly TrafficLights _trafficLights;
 
 		public TrafficLightsTests(ITestOutputHelper testOutputHelper)
 		{
 			_testOutputHelper = testOutputHelper;
-			_intersection = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			_intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
 
 			InboundLane sampleInboundLane = _intersection.LanesCollection.First().InboundLanes!.First();
 

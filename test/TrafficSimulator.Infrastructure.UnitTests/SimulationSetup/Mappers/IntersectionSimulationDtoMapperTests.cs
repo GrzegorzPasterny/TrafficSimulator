@@ -17,7 +17,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 			// Arrange
 			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper();
 
-			IntersectionSimulation intersectionSimulation = new(IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest);
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
 
 			// Act
 			ErrorOr<IntersectionSimulationDto> intersectionSimulationDto = mapper.ToDto(intersectionSimulation);
@@ -91,8 +91,8 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 			}
 
 			// Create and save a few test simulations
-			var intersectionSimulation1 = new IntersectionSimulation(IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest);
-			var intersectionSimulation2 = new IntersectionSimulation(IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLights);
+			var intersectionSimulation1 = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			var intersectionSimulation2 = IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLights;
 			jsonSimulationSetupRepository.Save(intersectionSimulation1);
 			jsonSimulationSetupRepository.Save(intersectionSimulation2);
 
@@ -105,6 +105,5 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 			result.Value.Should().ContainEquivalentOf(intersectionSimulation1);
 			result.Value.Should().ContainEquivalentOf(intersectionSimulation2);
 		}
-
 	}
 }

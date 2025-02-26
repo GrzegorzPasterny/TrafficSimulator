@@ -1,6 +1,7 @@
 ﻿using TrafficSimulator.Application.Handlers.TrafficPhases;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.Lights;
+using TrafficSimulator.Domain.Simulation;
 using TrafficSimulator.Tests.Commons.Assets;
 
 namespace TrafficSimulator.Application.UnitTests.Traffic
@@ -11,7 +12,8 @@ namespace TrafficSimulator.Application.UnitTests.Traffic
 		public void ChangePhases_ShouldTurnTheCorrectLightsGreenAndRed()
 		{
 			// Arrange
-			Intersection intersection = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			Intersection intersection = intersectionSimulation.Intersection;
 
 			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
 

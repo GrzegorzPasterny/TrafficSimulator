@@ -4,6 +4,7 @@ using Serilog;
 using Serilog.Events;
 using TrafficSimulator.Domain.Models.Agents;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Domain.Simulation;
 using TrafficSimulator.Tests.Commons.Assets;
 using Xunit.Abstractions;
 
@@ -38,7 +39,9 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 		public void CarMoves_CurrentLocationShouldBeCalculatedProperly(
 			int locationDistance, int velocity, int timespanMs, int amountOfMovesExpected)
 		{
-			Intersection intersection = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			Intersection intersection = intersectionSimulation.Intersection;
+
 			InboundLane? carStartLocation = intersection.GetObject<InboundLane>((lane) => true);
 			TimeSpan timeSpan = TimeSpan.FromMilliseconds(timespanMs);
 
@@ -65,7 +68,9 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 		[Fact]
 		public void CarsMove_WithOtherCarsOnTheWayOnRedLight_ShouldMoveWithoutCollisions()
 		{
-			Intersection intersection = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			Intersection intersection = intersectionSimulation.Intersection;
+
 			InboundLane? carStartLocation = intersection.GetObject<InboundLane>((lane) => true);
 			TimeSpan timeSpan = TimeSpan.FromMilliseconds(100);
 

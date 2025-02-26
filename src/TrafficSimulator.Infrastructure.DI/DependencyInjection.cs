@@ -3,7 +3,7 @@ using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Infrastructure.CarGenerators.Repositories;
 using TrafficSimulator.Infrastructure.Cars;
 
-namespace TrafficSimulator.Infrastructure
+namespace TrafficSimulator.Infrastructure.DI
 {
 	public static class DependencyInjection
 	{
