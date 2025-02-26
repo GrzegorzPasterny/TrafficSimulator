@@ -39,11 +39,35 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 
 			// Assert
 			intersectionSimulation.IsError.Should().BeFalse();
+
+			// This assertion does not entirely work
 			intersectionSimulation.Value.Intersection.Should().BeEquivalentTo(IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest,
 				options => options
 					//.ComparingByMembers<IntersectionObject>()
 					//.ComparingByMembers<IntersectionCore>()
+					//.Excluding(x => x.Parent)
+					//.Excluding(x => x.Root)
 					);
+		}
+
+		[Fact]
+		public void MapFromDtoToDomainAndBackToDto_GivenZebraCrossingDto_DtosObjectsShouldBeTheSame()
+		{
+			// Arrange
+			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper();
+
+			IntersectionSimulationDto intersectionSimulationDto = IntersectionSimulationDtosRepository.ZebraCrossingOnOneLaneRoadEastWest;
+
+			// Act
+			ErrorOr<IntersectionSimulation> intersectionSimulation = mapper.ToDomain(intersectionSimulationDto);
+
+			intersectionSimulation.IsError.Should().BeFalse();
+
+			ErrorOr<IntersectionSimulationDto> intersectionSimulationDto2Result = mapper.ToDto(intersectionSimulation.Value);
+
+			// Assert
+			intersectionSimulationDto2Result.IsError.Should().BeFalse();
+			intersectionSimulationDto2Result.Value.Should().BeEquivalentTo(intersectionSimulationDto);
 		}
 	}
 }
