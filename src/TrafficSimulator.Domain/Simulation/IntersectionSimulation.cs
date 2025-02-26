@@ -4,7 +4,7 @@ using TrafficSimulator.Domain.Models.IntersectionObjects;
 
 namespace TrafficSimulator.Domain.Simulation
 {
-	public class IntersectionSimulation : Entity
+	public class IntersectionSimulation : Entity<Guid>
 	{
 		public Intersection Intersection { get; }
 		public string Name { get; set; } = "IS";
@@ -17,6 +17,13 @@ namespace TrafficSimulator.Domain.Simulation
 
 		public IntersectionSimulation(Intersection intersection)
 		{
+			Id = Guid.NewGuid();
+			Intersection = intersection;
+		}
+
+		public IntersectionSimulation(Intersection intersection, Guid id)
+		{
+			Id = id;
 			Intersection = intersection;
 		}
 	}

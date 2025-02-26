@@ -7,6 +7,7 @@ namespace TrafficSimulator.Application.Commons.Interfaces
 	public interface ISimulationSetupRepository
 	{
 		UnitResult<Error> Save(IntersectionSimulation intersectionSimulation);
-		ErrorOr<IntersectionSimulation> Load();
+		ErrorOr<IntersectionSimulation> Load(Guid id);
+		ErrorOr<List<IntersectionSimulation>> LoadAll();
 	}
 }
