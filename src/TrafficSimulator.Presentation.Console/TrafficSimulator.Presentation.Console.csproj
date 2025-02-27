@@ -12,12 +12,32 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.2" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TrafficSimulator.Application\TrafficSimulator.Application.csproj" />
     <ProjectReference Include="..\TrafficSimulator.Domain\TrafficSimulator.Domain.csproj" />
     <ProjectReference Include="..\TrafficSimulator.Infrastructure.DI\TrafficSimulator.Infrastructure.DI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\ForkSimulation_641c2b72-da21-424e-8b43-3b339415013b.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\NormalThreeStreetsSimulation_0dac5dbe-1d37-4289-928d-dd9798bf3007.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\ZebraCrossingSimulation_5ce2fb45-c62b-4b92-88ef-456ed1dbe66e.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -17,6 +17,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		internal ICarGeneratorRepository _carGeneratorRepository;
 		internal readonly ICarRepository _carRepository;
 		private readonly ITrafficLightsHandler _trafficLightsHandler;
+		private readonly ISimulationSetupRepository _simulationSetupRepository;
 		internal readonly ILogger<IntersectionSimulationHandler> _logger;
 		private List<ICarGenerator>? _carGenerators;
 
@@ -27,11 +28,13 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			ICarGeneratorRepository carGeneratorRepository,
 			ICarRepository carRepository,
 			ITrafficLightsHandler trafficLightsHandler,
+			ISimulationSetupRepository simulationSetupRepository,
 			ILogger<IntersectionSimulationHandler> logger)
 		{
 			_carGeneratorRepository = carGeneratorRepository;
 			_carRepository = carRepository;
 			_trafficLightsHandler = trafficLightsHandler;
+			_simulationSetupRepository = simulationSetupRepository;
 			_logger = logger;
 		}
 
@@ -50,6 +53,21 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		public UnitResult<Error> LoadIntersection(IntersectionSimulation intersectionSimulation)
 		{
 			_intersectionSimulation = intersectionSimulation;
+
+			return UnitResult.Success<Error>();
+		}
+
+		public UnitResult<Error> LoadIntersection(string identifier)
+		{
+			ErrorOr<IntersectionSimulation> simulationResult = _simulationSetupRepository.Load(identifier);
+
+			if (simulationResult.IsError)
+			{
+				// TODO: Combine Errors
+				return simulationResult.FirstError;
+			}
+
+			_intersectionSimulation = simulationResult.Value;
 
 			return UnitResult.Success<Error>();
 		}
@@ -201,5 +219,6 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 		internal abstract Task SimulationRunner();
 		public abstract void Dispose();
+
 	}
 }

@@ -12,6 +12,13 @@ public interface ISimulationHandler : IDisposable
 
 	UnitResult<Error> LoadIntersection(IntersectionSimulation intersectionSimulation);
 
+	/// <summary>
+	/// Loads Intersection based on <paramref name="identifier"/>
+	/// </summary>
+	/// <param name="identifier">Simulation configuration id, or filePath</param>
+	/// <returns></returns>
+	UnitResult<Error> LoadIntersection(string identifier);
+
 	Task<UnitResult<Error>> Start();
 
 	UnitResult<Error> Abort();

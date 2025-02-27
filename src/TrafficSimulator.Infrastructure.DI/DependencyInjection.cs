@@ -7,7 +7,7 @@ namespace TrafficSimulator.Infrastructure.DI
 {
 	public static class DependencyInjection
 	{
-		public static ServiceCollection AddInfrastructure(this ServiceCollection services)
+		public static IServiceCollection AddInfrastructure(this IServiceCollection services)
 		{
 			services.AddSingleton<ICarGeneratorRepository, CarGeneratorsRepositoryInMemory>();
 			services.AddSingleton<ICarRepository, CarsRepositoryInMemory>();

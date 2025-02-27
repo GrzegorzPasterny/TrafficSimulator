@@ -4,7 +4,7 @@ namespace TrafficSimulator.Domain
 {
 	public static class DependencyInjection
 	{
-		public static ServiceCollection AddDomain(this ServiceCollection services)
+		public static IServiceCollection AddDomain(this IServiceCollection services)
 		{
 			services.AddMediatR(options =>
 			{

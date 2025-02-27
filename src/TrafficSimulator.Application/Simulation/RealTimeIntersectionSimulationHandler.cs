@@ -18,8 +18,9 @@ namespace TrafficSimulator.Application.Simulation
 			ICarGeneratorRepository carGeneratorRepository,
 			ICarRepository carRepository,
 			ITrafficLightsHandler trafficLightsHandler,
+			ISimulationSetupRepository simulationSetupRepository,
 			ILogger<RealTimeIntersectionSimulationHandler> logger)
-			: base(carGeneratorRepository, carRepository, trafficLightsHandler, logger)
+			: base(carGeneratorRepository, carRepository, trafficLightsHandler, simulationSetupRepository, logger)
 		{
 			_logger = logger;
 		}

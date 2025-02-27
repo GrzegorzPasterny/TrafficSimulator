@@ -1,0 +1,121 @@
+{
+  "Id": "5ce2fb45-c62b-4b92-88ef-456ed1dbe66e",
+  "Name": "ZebraCrossingSimulation",
+  "Intersection": {
+    "LanesCollection": [
+      {
+        "InboundLanes": [
+          {
+            "TurnPossibilities": null,
+            "CarGeneratorTypeName": "",
+            "CarGeneratorOptions": null,
+            "LaneTypes": [
+              0
+            ],
+            "ContainsTrafficLights": true,
+            "WorldDirection": 3,
+            "Distance": 10,
+            "Name": "InboundLane",
+            "ParentName": ".ZebraCrossing.Lanes.East"
+          }
+        ],
+        "OutboundLanes": [
+          {
+            "WorldDirection": 3,
+            "Distance": 10,
+            "Name": "OutboundLane",
+            "ParentName": ".ZebraCrossing.Lanes.East"
+          }
+        ],
+        "WorldDirection": 3,
+        "Name": "Lanes.East",
+        "ParentName": ".ZebraCrossing"
+      },
+      {
+        "InboundLanes": [
+          {
+            "TurnPossibilities": null,
+            "CarGeneratorTypeName": "",
+            "CarGeneratorOptions": null,
+            "LaneTypes": [
+              0
+            ],
+            "ContainsTrafficLights": true,
+            "WorldDirection": 1,
+            "Distance": 10,
+            "Name": "InboundLane",
+            "ParentName": ".ZebraCrossing.Lanes.West"
+          }
+        ],
+        "OutboundLanes": [
+          {
+            "WorldDirection": 1,
+            "Distance": 10,
+            "Name": "OutboundLane",
+            "ParentName": ".ZebraCrossing.Lanes.West"
+          }
+        ],
+        "WorldDirection": 1,
+        "Name": "Lanes.West",
+        "ParentName": ".ZebraCrossing"
+      }
+    ],
+    "IntersectionCore": {
+      "Distance": 10,
+      "Name": "IntersectionCore",
+      "ParentName": ".ZebraCrossing"
+    },
+    "TrafficPhases": [
+      {
+        "Name": "AllGreen",
+        "TrafficLightsAssignments": [
+          {
+            "InboundLaneName": ".ZebraCrossing.Lanes.East.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 0,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 1
+          },
+          {
+            "InboundLaneName": ".ZebraCrossing.Lanes.West.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 0,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 1
+          }
+        ]
+      },
+      {
+        "Name": "AllRed",
+        "TrafficLightsAssignments": [
+          {
+            "InboundLaneName": ".ZebraCrossing.Lanes.East.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 0,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          },
+          {
+            "InboundLaneName": ".ZebraCrossing.Lanes.West.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 0,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          }
+        ]
+      }
+    ],
+    "Name": "ZebraCrossing",
+    "ParentName": ""
+  },
+  "Options": {
+    "MinimalDistanceBetweenTheCars": 1,
+    "StepTimespanMs": 100,
+    "TimeoutMs": 5000,
+    "StepLimit": 1000
+  }
+}

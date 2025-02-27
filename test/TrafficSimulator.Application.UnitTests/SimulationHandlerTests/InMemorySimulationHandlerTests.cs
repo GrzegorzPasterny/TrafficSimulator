@@ -83,7 +83,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			trafficPhasesHandler.SetPhase(trafficLightsPhaseName);
 
 			using ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, new NullTrafficLightsHandler(), _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, new NullTrafficLightsHandler(), null, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
@@ -116,7 +116,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 
 			using ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, null, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
@@ -160,7 +160,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 
 			using ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, null, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
@@ -204,7 +204,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 
 			using ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, null, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
@@ -257,7 +257,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 
 			using ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+				new InMemoryIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, null, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 

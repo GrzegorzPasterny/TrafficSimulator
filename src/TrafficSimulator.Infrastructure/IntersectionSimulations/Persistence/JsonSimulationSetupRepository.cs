@@ -10,6 +10,7 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations.Persistence
 {
 	public class JsonSimulationSetupRepository : ISimulationSetupRepository
 	{
+		private const string _jsonFileExtension = ".json";
 		private readonly ISimulationSetupMapper _simulationSetupMapper;
 		public JsonSimulationSetupRepositoryOptions Options { get; } = new();
 
@@ -73,6 +74,40 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations.Persistence
 				return Error.Failure($"Failed to load simulation: {ex.Message}");
 			}
 		}
+
+		public ErrorOr<IntersectionSimulation> Load(string identifier)
+		{
+			try
+			{
+				if (File.Exists(identifier))
+				{
+					return InfrastructureErrors.FileNotFound(identifier);
+				}
+
+				if (Path.GetExtension(identifier) != _jsonFileExtension)
+				{
+					return InfrastructureErrors.FileExtensionIncorrect(identifier, ".json");
+				}
+
+				string json = File.ReadAllText(identifier);
+
+				IntersectionSimulationDto? dto = JsonSerializer.Deserialize<IntersectionSimulationDto>(json);
+
+				if (dto is null)
+				{
+					// TODO: Make InfrastructureError
+					return Error.Failure("Deserialization failed: Simulation data is corrupted.");
+				}
+
+				return _simulationSetupMapper.ToDomain(dto);
+			}
+			catch (Exception ex)
+			{
+				// TODO: Make InfrastructureError
+				return Error.Failure($"Failed to load simulation: {ex.Message}");
+			}
+		}
+
 
 		public ErrorOr<List<IntersectionSimulation>> LoadAll()
 		{

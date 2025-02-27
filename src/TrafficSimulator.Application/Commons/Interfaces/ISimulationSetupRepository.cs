@@ -8,6 +8,7 @@ namespace TrafficSimulator.Application.Commons.Interfaces
 	{
 		UnitResult<Error> Save(IntersectionSimulation intersectionSimulation);
 		ErrorOr<IntersectionSimulation> Load(Guid id);
+		ErrorOr<IntersectionSimulation> Load(string identifier);
 		ErrorOr<List<IntersectionSimulation>> LoadAll();
 	}
 }

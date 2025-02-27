@@ -1,0 +1,269 @@
+{
+  "Id": "0dac5dbe-1d37-4289-928d-dd9798bf3007",
+  "Name": "NormalThreeStreetsSimulation",
+  "Intersection": {
+    "LanesCollection": [
+      {
+        "InboundLanes": [
+          {
+            "TurnPossibilities": null,
+            "CarGeneratorTypeName": "",
+            "CarGeneratorOptions": null,
+            "LaneTypes": [
+              0,
+              2
+            ],
+            "ContainsTrafficLights": true,
+            "WorldDirection": 3,
+            "Distance": 10,
+            "Name": "InboundLane",
+            "ParentName": ".NormalThreeStreets.Lanes.East"
+          }
+        ],
+        "OutboundLanes": [
+          {
+            "WorldDirection": 3,
+            "Distance": 10,
+            "Name": "OutboundLane",
+            "ParentName": ".NormalThreeStreets.Lanes.East"
+          }
+        ],
+        "WorldDirection": 3,
+        "Name": "Lanes.East",
+        "ParentName": ".NormalThreeStreets"
+      },
+      {
+        "InboundLanes": [
+          {
+            "TurnPossibilities": null,
+            "CarGeneratorTypeName": "",
+            "CarGeneratorOptions": null,
+            "LaneTypes": [
+              2,
+              1
+            ],
+            "ContainsTrafficLights": true,
+            "WorldDirection": 2,
+            "Distance": 10,
+            "Name": "InboundLane",
+            "ParentName": ".NormalThreeStreets.Lanes.South"
+          }
+        ],
+        "OutboundLanes": [
+          {
+            "WorldDirection": 2,
+            "Distance": 10,
+            "Name": "OutboundLane",
+            "ParentName": ".NormalThreeStreets.Lanes.South"
+          }
+        ],
+        "WorldDirection": 2,
+        "Name": "Lanes.South",
+        "ParentName": ".NormalThreeStreets"
+      },
+      {
+        "InboundLanes": [
+          {
+            "TurnPossibilities": null,
+            "CarGeneratorTypeName": "",
+            "CarGeneratorOptions": null,
+            "LaneTypes": [
+              0,
+              1
+            ],
+            "ContainsTrafficLights": true,
+            "WorldDirection": 1,
+            "Distance": 10,
+            "Name": "InboundLane",
+            "ParentName": ".NormalThreeStreets.Lanes.West"
+          }
+        ],
+        "OutboundLanes": [
+          {
+            "WorldDirection": 1,
+            "Distance": 10,
+            "Name": "OutboundLane",
+            "ParentName": ".NormalThreeStreets.Lanes.West"
+          }
+        ],
+        "WorldDirection": 1,
+        "Name": "Lanes.West",
+        "ParentName": ".NormalThreeStreets"
+      }
+    ],
+    "IntersectionCore": {
+      "Distance": 10,
+      "Name": "IntersectionCore",
+      "ParentName": ".NormalThreeStreets"
+    },
+    "TrafficPhases": [
+      {
+        "Name": "GreenForEastOnly",
+        "TrafficLightsAssignments": [
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.East.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 0,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 1
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.East.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 2,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 1
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.South.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 2,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.South.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 1,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.West.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 0,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.West.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 1,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          }
+        ]
+      },
+      {
+        "Name": "GreenForSouthOnly",
+        "TrafficLightsAssignments": [
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.East.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 0,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.East.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 2,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.South.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 2,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 1
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.South.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 1,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 1
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.West.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 0,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.West.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 1,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          }
+        ]
+      },
+      {
+        "Name": "GreenForWestOnly",
+        "TrafficLightsAssignments": [
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.East.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 0,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.East.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 2,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.South.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 2,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.South.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 1,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.West.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 0,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 1
+          },
+          {
+            "InboundLaneName": ".NormalThreeStreets.Lanes.West.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 1,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 1
+          }
+        ]
+      }
+    ],
+    "Name": "NormalThreeStreets",
+    "ParentName": ""
+  },
+  "Options": {
+    "MinimalDistanceBetweenTheCars": 1,
+    "StepTimespanMs": 100,
+    "TimeoutMs": 5000,
+    "StepLimit": 1000
+  }
+}

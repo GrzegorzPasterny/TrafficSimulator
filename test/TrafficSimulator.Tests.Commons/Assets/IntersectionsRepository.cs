@@ -32,7 +32,9 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				intersection.TrafficPhases.Add(TrafficPhasesRespository.AllLightsGreen(intersection));
 				intersection.TrafficPhases.Add(TrafficPhasesRespository.AllLightsRed(intersection));
 
-				return new IntersectionSimulation(intersection);
+				Guid id = Guid.Parse("5ce2fb45-c62b-4b92-88ef-456ed1dbe66e");
+
+				return new IntersectionSimulation(intersection, id, "ZebraCrossingSimulation");
 			}
 		}
 
@@ -41,7 +43,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			get
 			{
 				ErrorOr<Intersection> intersectionResult =
-				IntersectionBuilder.Create()
+				IntersectionBuilder.Create("Fork")
 				.AddIntersectionCore()
 				.AddLanesCollection(WorldDirection.East)
 				.AddInboundLane(WorldDirection.East, LaneTypeHelper.Right())
@@ -57,7 +59,9 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
 				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
 
-				return new IntersectionSimulation(intersection);
+				Guid id = Guid.Parse("641c2b72-da21-424e-8b43-3b339415013b");
+
+				return new IntersectionSimulation(intersection, id, "ForkSimulation");
 			}
 		}
 
@@ -66,7 +70,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			get
 			{
 				ErrorOr<Intersection> intersectionResult =
-				IntersectionBuilder.Create()
+				IntersectionBuilder.Create("NormalThreeStreets")
 				.AddIntersectionCore()
 				.AddLanesCollection(WorldDirection.East)
 				.AddInboundLane(WorldDirection.East, LaneTypeHelper.StraightAndLeft())
@@ -86,7 +90,9 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.South));
 				intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
 
-				return new IntersectionSimulation(intersection);
+				Guid id = Guid.Parse("0dac5dbe-1d37-4289-928d-dd9798bf3007");
+
+				return new IntersectionSimulation(intersection, id, "NormalThreeStreetsSimulation");
 			}
 		}
 	}

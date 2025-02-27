@@ -12,7 +12,8 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 			{
 				return new IntersectionSimulationDto()
 				{
-					Name = "IS",
+					Id = Guid.Parse("5ce2fb45-c62b-4b92-88ef-456ed1dbe66e"),
+					Name = "ZebraCrossingSimulation",
 					Options = new()
 					{
 						MinimalDistanceBetweenTheCars = 1,

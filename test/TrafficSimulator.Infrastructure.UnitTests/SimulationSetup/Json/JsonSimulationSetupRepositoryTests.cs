@@ -8,12 +8,27 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 {
 	public class JsonSimulationSetupRepositoryTests
 	{
-		[Fact]
-		public void SaveIntersectionSimulationToJson_ShouldProduceFileOnTheDisc()
+		public static IEnumerable<object[]> SaveIntersectionSimulationToJson_ShouldProduceFileOnTheDisc_DataSource()
+		{
+			yield return new object[]
+			{
+				IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest
+			};
+			yield return new object[]
+			{
+				IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLights
+			};
+			yield return new object[]
+			{
+				IntersectionsRepository.ThreeDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLights
+			};
+		}
+
+		[Theory]
+		[MemberData(nameof(SaveIntersectionSimulationToJson_ShouldProduceFileOnTheDisc_DataSource))]
+		public void SaveIntersectionSimulationToJson_ShouldProduceFileOnTheDisc(IntersectionSimulation intersectionSimulation)
 		{
 			// Arrange
-			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
-
 			JsonSimulationSetupRepository jsonSimulationSetupRepository =
 				new JsonSimulationSetupRepository(new IntersectionSimulationDtoMapper());
 

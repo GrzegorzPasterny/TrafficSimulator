@@ -47,10 +47,9 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 				throw new NotImplementedException();
 			}
 
-			IntersectionSimulation intersectionSimulation = new(intersectionResult.Value, intersectionSimulationDto.Id)
+			IntersectionSimulation intersectionSimulation = new(intersectionResult.Value, intersectionSimulationDto.Id, intersectionSimulationDto.Name)
 			{
 				Options = ToDomain(intersectionSimulationDto.Options),
-				Name = intersectionSimulationDto.Name,
 			};
 
 			Intersection intersection = intersectionSimulation.Intersection;

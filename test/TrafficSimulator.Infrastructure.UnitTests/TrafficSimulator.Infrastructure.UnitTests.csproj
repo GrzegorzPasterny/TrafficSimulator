@@ -40,4 +40,16 @@
     <ProjectReference Include="..\TrafficSimulator.Tests.Commons\TrafficSimulator.Tests.Commons.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Assets\ForkSimulation_641c2b72-da21-424e-8b43-3b339415013b.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\NormalThreeStreetsSimulation_0dac5dbe-1d37-4289-928d-dd9798bf3007.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\ZebraCrossingSimulation_5ce2fb45-c62b-4b92-88ef-456ed1dbe66e.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

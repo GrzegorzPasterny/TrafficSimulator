@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Console Help": {
+      "commandName": "Project",
+      "commandLineArgs": "-h"
+    },
+    "Console Run": {
+      "commandName": "Project",
+      "commandLineArgs": "Run -f \"Assets/ForkSimulation_641c2b72-da21-424e-8b43-3b339415013b.json\""
+    }
+  }
+}
