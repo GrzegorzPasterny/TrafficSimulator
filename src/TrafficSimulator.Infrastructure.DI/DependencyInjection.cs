@@ -2,6 +2,9 @@
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Infrastructure.CarGenerators.Repositories;
 using TrafficSimulator.Infrastructure.Cars;
+using TrafficSimulator.Infrastructure.DTOs;
+using TrafficSimulator.Infrastructure.IntersectionSimulations;
+using TrafficSimulator.Infrastructure.IntersectionSimulations.Persistence;
 
 namespace TrafficSimulator.Infrastructure.DI
 {
@@ -11,6 +14,8 @@ namespace TrafficSimulator.Infrastructure.DI
 		{
 			services.AddSingleton<ICarGeneratorRepository, CarGeneratorsRepositoryInMemory>();
 			services.AddSingleton<ICarRepository, CarsRepositoryInMemory>();
+			services.AddScoped<ISimulationSetupMapper, IntersectionSimulationDtoMapper>();
+			services.AddScoped<ISimulationSetupRepository, JsonSimulationSetupRepository>();
 
 			return services;
 		}

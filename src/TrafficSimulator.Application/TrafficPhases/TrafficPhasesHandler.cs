@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
+using TrafficSimulator.Application.Commons;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.Lights;
 
@@ -7,17 +8,26 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 {
 	public class TrafficPhasesHandler
 	{
-		private readonly Intersection _intersection;
+		private Intersection? _intersection;
 
 		public TrafficPhasesHandler(Intersection intersection)
 		{
 			_intersection = intersection;
 		}
 
-		internal List<TrafficPhase> TrafficPhases => _intersection.TrafficPhases;
+		public TrafficPhasesHandler()
+		{
+		}
+
+		internal List<TrafficPhase>? TrafficPhases => _intersection?.TrafficPhases;
 
 		// Current phase must be assigned when starting the simulation
 		public TrafficPhase? CurrentPhase { get; set; }
+
+		public void LoadIntersection(Intersection intersection)
+		{
+			_intersection = intersection;
+		}
 
 		public UnitResult<Error> SetPhase(TrafficPhase trafficPhase)
 		{
@@ -26,6 +36,11 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 
 		public UnitResult<Error> SetPhase(string trafficPhaseName)
 		{
+			if (TrafficPhases is null)
+			{
+				return ApplicationErrors.IntersectionUninitialized();
+			}
+
 			TrafficPhase? trafficPhase = TrafficPhases.Find((p) => p.Name == trafficPhaseName);
 
 			return SetLights(trafficPhase);

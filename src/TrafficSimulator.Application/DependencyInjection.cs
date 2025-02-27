@@ -1,4 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TrafficSimulator.Application.Commons.Interfaces;
+using TrafficSimulator.Application.Handlers.Lights;
+using TrafficSimulator.Application.Handlers.TrafficPhases;
+using TrafficSimulator.Application.Simulation;
 
 namespace TrafficSimulator.Application
 {
@@ -10,6 +14,10 @@ namespace TrafficSimulator.Application
 			{
 				options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection));
 			});
+
+			services.AddScoped<TrafficPhasesHandler>();
+			services.AddScoped<ITrafficLightsHandler, SimpleSequentialTrafficLightsHandler>();
+			services.AddScoped<ISimulationHandler, InMemoryIntersectionSimulationHandler>();
 
 			return services;
 		}

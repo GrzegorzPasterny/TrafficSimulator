@@ -79,7 +79,7 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations.Persistence
 		{
 			try
 			{
-				if (File.Exists(identifier))
+				if (File.Exists(identifier) == false)
 				{
 					return InfrastructureErrors.FileNotFound(identifier);
 				}

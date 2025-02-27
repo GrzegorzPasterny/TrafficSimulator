@@ -10,7 +10,6 @@ namespace TrafficSimulator.Application.Handlers.Lights
 {
 	public class SimpleDynamicTrafficLightsHandler : ITrafficLightsHandler
 	{
-		private readonly Intersection _intersection;
 		private readonly ICarRepository _carRepository;
 		private readonly TrafficPhasesHandler _trafficPhasesHandler;
 
@@ -19,9 +18,8 @@ namespace TrafficSimulator.Application.Handlers.Lights
 		// Options
 		public TimeSpan MinimalTimeForOnePhase { get; set; } = TimeSpan.FromSeconds(1);
 
-		public SimpleDynamicTrafficLightsHandler(Intersection intersection, ICarRepository carRepository, TrafficPhasesHandler trafficPhasesHandler)
+		public SimpleDynamicTrafficLightsHandler(ICarRepository carRepository, TrafficPhasesHandler trafficPhasesHandler)
 		{
-			_intersection = intersection;
 			_carRepository = carRepository;
 			_trafficPhasesHandler = trafficPhasesHandler;
 		}
@@ -45,6 +43,11 @@ namespace TrafficSimulator.Application.Handlers.Lights
 			// TODO: Finish implementation
 
 			return UnitResult.Success<Error>();
+		}
+
+		public void LoadIntersection(Intersection intersection)
+		{
+			_trafficPhasesHandler.LoadIntersection(intersection);
 		}
 	}
 }

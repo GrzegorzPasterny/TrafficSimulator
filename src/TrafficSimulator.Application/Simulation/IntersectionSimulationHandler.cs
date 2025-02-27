@@ -53,6 +53,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		public UnitResult<Error> LoadIntersection(IntersectionSimulation intersectionSimulation)
 		{
 			_intersectionSimulation = intersectionSimulation;
+			_trafficLightsHandler.LoadIntersection(intersectionSimulation.Intersection);
 
 			return UnitResult.Success<Error>();
 		}
@@ -68,6 +69,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			}
 
 			_intersectionSimulation = simulationResult.Value;
+			_trafficLightsHandler.LoadIntersection(simulationResult.Value.Intersection);
 
 			return UnitResult.Success<Error>();
 		}
