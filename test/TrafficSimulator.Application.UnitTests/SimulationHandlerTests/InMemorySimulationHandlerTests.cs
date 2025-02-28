@@ -88,7 +88,6 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			simulationStartResult.IsSuccess.Should().BeTrue();
 			simulationHandler.SimulationState.SimulationPhase.Should().Be(expectedSimulationPhase);
-			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);
 		}
 
 		[Fact]
@@ -123,7 +122,6 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
 
 			await Task.Delay(200); // Wait for the results
-			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);
 		}
 
 		[Fact]
@@ -165,7 +163,6 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
 
 			await Task.Delay(200); // Wait for the results
-			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);
 		}
 
 		[Fact]
@@ -207,7 +204,6 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
 
 			await Task.Delay(200); // Wait for the results
-			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);
 		}
 
 		[Fact]
@@ -257,7 +253,6 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
 
 			await Task.Delay(200); // Wait for the results
-			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);
 		}
 	}
 }

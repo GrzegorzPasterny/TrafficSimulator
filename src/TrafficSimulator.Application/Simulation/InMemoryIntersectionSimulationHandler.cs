@@ -46,15 +46,15 @@ namespace TrafficSimulator.Application.Simulation
 						_logger.LogInformation("Simulation aborted due to reaching the maximum step amount " +
 							"[StepLimit = {StepLimit}]", _intersectionSimulation.Options.StepLimit);
 
-						_ = Task.Run(() => GatherResults(_stopwatch.ElapsedMilliseconds));
+						await GatherResults(_stopwatch.ElapsedMilliseconds);
 						return;
 					}
 
 					if (_intersectionSimulation.SimulationState.SimulationPhase is SimulationPhase.Finished)
 					{
-						_logger.LogInformation("The simulation has finished");
+						_logger.LogDebug("The simulation has finished");
 
-						_ = Task.Run(() => GatherResults(_stopwatch.ElapsedMilliseconds));
+						await GatherResults(_stopwatch.ElapsedMilliseconds);
 						return;
 					}
 
@@ -67,7 +67,7 @@ namespace TrafficSimulator.Application.Simulation
 					_logger.LogInformation("The simulation has reached timeout [Timeout = {Timeout}]", _intersectionSimulation.Options.Timeout);
 					_intersectionSimulation.SimulationState.SimulationPhase = SimulationPhase.Aborted;
 
-					_ = Task.Run(() => GatherResults(_stopwatch.ElapsedMilliseconds));
+					await GatherResults(_stopwatch.ElapsedMilliseconds);
 				}
 			}
 		}

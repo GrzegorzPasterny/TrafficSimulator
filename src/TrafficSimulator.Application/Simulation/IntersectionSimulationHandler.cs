@@ -50,6 +50,8 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		{
 			_intersectionSimulation = intersectionSimulation;
 			_trafficLightsHandler.LoadIntersection(intersectionSimulation.Intersection);
+			SimulationState.CarGenerators =
+							_intersectionSimulation.Intersection.ObjectLookup.OfType<ICarGenerator>().ToList();
 
 			return UnitResult.Success<Error>();
 		}
@@ -64,10 +66,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 				return simulationResult.FirstError;
 			}
 
-			_intersectionSimulation = simulationResult.Value;
-			_trafficLightsHandler.LoadIntersection(simulationResult.Value.Intersection);
-			SimulationState.CarGenerators =
-				_intersectionSimulation.Intersection.ObjectLookup.OfType<ICarGenerator>().ToList();
+			LoadIntersection(simulationResult.Value);
 
 			return UnitResult.Success<Error>();
 		}
@@ -211,6 +210,8 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			_intersectionSimulation.SimulationResults.CarsPassed = cars.Count();
 			_intersectionSimulation.SimulationResults.TotalCarsIdleTimeMs =
 				cars.Sum(c => c.MovesWhenCarWaited) * _intersectionSimulation.Options.StepTimespan.TotalMilliseconds;
+
+			_logger.LogInformation("SimulationResults = {SimulationResults}", SimulationResults);
 		}
 
 		internal abstract Task SimulationRunner();

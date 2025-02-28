@@ -13,7 +13,7 @@
 			return $"[TotalCalculationTimeMs = {TotalCalculationTimeMs}, " +
 				$"CarsPassed = {CarsPassed}, " +
 				$"SimulationStepsTaken = {SimulationStepsTaken}, " +
-				$"AverageCarIdleTime = {AverageCarIdleTimeMs:F2}, " +
+				$"AverageCarIdleTimeMs = {AverageCarIdleTimeMs:F2}, " +
 				$"TotalCarsIdleTimeMs = {TotalCarsIdleTimeMs:F1}]";
 		}
 	}

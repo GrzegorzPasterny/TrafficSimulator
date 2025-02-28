@@ -35,7 +35,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 				_trafficPhasesHandler.SetPhase(_circularListForTrafficPhases.Current);
 			}
 
-			_logger.LogInformation("Traffic Lights initial phase set [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
+			_logger.LogTrace("Traffic Lights initial phase set [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
 		}
 
 		public Task<UnitResult<Error>> SetLights(TimeSpan timeElapsed)
@@ -56,7 +56,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 
 				CurrentPhaseTime = TimeSpan.Zero;
 
-				_logger.LogInformation("Traffic Lights phase changed [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
+				_logger.LogTrace("Traffic Lights phase changed [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
 			}
 
 			return Task.FromResult(UnitResult.Success<Error>());

@@ -94,8 +94,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			simulationHandler.SimulationState.SimulationPhase.Should().Be(expectedSimulationPhase);
 
-			await Task.Delay(1000);
-			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);
+			await Task.Delay(100);
 		}
 
 		[Fact]
@@ -136,8 +135,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
 
-			await Task.Delay(1000);
-			_logger.LogInformation("SimulationResults = {SimulationResults}", simulationHandler.SimulationResults);
+			await Task.Delay(100);
 		}
 	}
 }
