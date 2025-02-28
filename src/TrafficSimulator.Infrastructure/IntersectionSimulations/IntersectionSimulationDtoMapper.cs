@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using System.Text.Json;
 using TrafficSimulator.Application.CarGenerators;
 using TrafficSimulator.Domain.Commons.Builders;
 using TrafficSimulator.Domain.Commons.Interfaces;
@@ -88,7 +89,7 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 				string fullName = $"{lane.ParentName}.{lane.Name}";
 				InboundLane? inboundLane = intersection.GetObject<InboundLane>(fullName);
 
-				ErrorOr<ICarGenerator?> carGeneratorResult = _carGeneratorFactory.Create(lane.CarGeneratorTypeName, intersection, inboundLane!);
+				ErrorOr<ICarGenerator?> carGeneratorResult = _carGeneratorFactory.Create(lane.CarGeneratorTypeName, lane.CarGeneratorOptions, intersection, inboundLane!);
 
 				if (carGeneratorResult.IsError)
 				{
@@ -176,6 +177,17 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 
 		private InboundLaneDto ToDto(InboundLane lane)
 		{
+			string carGeneratorOptions = string.Empty;
+
+			if (lane.CarGenerator is not null)
+			{
+				carGeneratorOptions = JsonSerializer.Serialize(
+					lane.CarGenerator.Options,
+					lane.CarGenerator.Options.GetType(),
+					new JsonSerializerOptions { WriteIndented = true }
+				);
+			}
+
 			return new InboundLaneDto()
 			{
 				Distance = lane.Distance,
@@ -184,7 +196,8 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 				ParentName = lane.Parent.FullName,
 				LaneTypes = lane.TurnPossibilities.Select(turn => turn.LaneType).ToArray(),
 				ContainsTrafficLights = lane.TurnPossibilities.Any(t => t.ContainsTrafficLights),
-				CarGeneratorTypeName = lane.CarGenerator is null ? string.Empty : lane.CarGenerator.GetType().Name
+				CarGeneratorTypeName = lane.CarGenerator is null ? string.Empty : lane.CarGenerator.GetType().Name,
+				CarGeneratorOptions = carGeneratorOptions,
 			};
 		}
 

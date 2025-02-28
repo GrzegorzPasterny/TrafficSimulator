@@ -1,6 +1,8 @@
-﻿namespace TrafficSimulator.Application.Handlers.CarGenerators
+﻿using TrafficSimulator.Domain.CarGenerators;
+
+namespace TrafficSimulator.Application.Handlers.CarGenerators
 {
-	public class SingleCarGeneratorOptions
+	public class SingleCarGeneratorOptions : CarGeneratorOptions
 	{
 		// TODO: Generator needs to know somehow what simulation step is it in when generating the cars
 		public TimeSpan DelayForGeneratingTheCar { get; set; } = TimeSpan.FromMilliseconds(200);

@@ -6,7 +6,7 @@ using TrafficSimulator.Domain.Models.IntersectionObjects;
 
 namespace TrafficSimulator.Application.Handlers.CarGenerators
 {
-	public class MultipleCarsGenerator : CarGenerator
+	public class MultipleCarsGenerator : CarGenerator<MultipleCarsGeneratorOptions>
 	{
 		public MultipleCarsGeneratorOptions Options { get; } = new();
 		private bool _isGenerationFinished = false;

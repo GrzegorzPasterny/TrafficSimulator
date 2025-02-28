@@ -1,6 +1,8 @@
 ﻿using ErrorOr;
 using MediatR;
+using System.Text.Json;
 using TrafficSimulator.Application.Handlers.CarGenerators;
+using TrafficSimulator.Domain.CarGenerators;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
@@ -27,7 +29,7 @@ namespace TrafficSimulator.Application.CarGenerators
 			_mediator = mediator;
 		}
 
-		public ErrorOr<ICarGenerator?> Create(string carGeneratorType, Intersection root, IntersectionObject parent)
+		public ErrorOr<ICarGenerator?> Create(string carGeneratorType, string carGeneratorOptions, Intersection root, IntersectionObject parent)
 		{
 			ICarGenerator? carGenerator = null;
 
@@ -37,11 +39,20 @@ namespace TrafficSimulator.Application.CarGenerators
 			}
 
 			if (!_generatorTypes.TryGetValue(carGeneratorType, out var generatorType)
-				//|| !_optionsTypes.TryGetValue(typeName, out var optionsType)
+				|| !_optionsTypes.TryGetValue(carGeneratorType, out var optionsType)
 				)
 			{
 				// TODO: Return ApplicationError here
 				throw new Exception($"Unknown CarGenerator type: {carGeneratorType}");
+			}
+
+			// Deserialize options using the correct type
+			var options = (CarGeneratorOptions?)JsonSerializer.Deserialize(carGeneratorOptions, optionsType);
+
+			if (options is null)
+			{
+				// TODO: Return ApplicationError here
+				throw new Exception($"Failed to deserialize options for {carGeneratorType}");
 			}
 
 			carGenerator = (ICarGenerator?)Activator.CreateInstance(generatorType, root, parent, _mediator, null);

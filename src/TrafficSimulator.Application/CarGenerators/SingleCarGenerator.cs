@@ -6,9 +6,8 @@ using TrafficSimulator.Domain.Models.IntersectionObjects;
 
 namespace TrafficSimulator.Application.Handlers.CarGenerators
 {
-	public class SingleCarGenerator : CarGenerator
+	public class SingleCarGenerator : CarGenerator<SingleCarGeneratorOptions>
 	{
-		public SingleCarGeneratorOptions Options { get; } = new();
 		private TimeSpan _simulationTime = TimeSpan.Zero;
 		private bool _isGenerationFinished = false;
 
