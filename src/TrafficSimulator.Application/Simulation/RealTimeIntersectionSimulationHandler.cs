@@ -15,12 +15,11 @@ namespace TrafficSimulator.Application.Simulation
 		private CancellationTokenSource? _cancellationTokenSource;
 
 		public RealTimeIntersectionSimulationHandler(
-			ICarGeneratorRepository carGeneratorRepository,
 			ICarRepository carRepository,
 			ITrafficLightsHandler trafficLightsHandler,
 			ISimulationSetupRepository simulationSetupRepository,
 			ILogger<RealTimeIntersectionSimulationHandler> logger)
-			: base(carGeneratorRepository, carRepository, trafficLightsHandler, simulationSetupRepository, logger)
+			: base(carRepository, trafficLightsHandler, simulationSetupRepository, logger)
 		{
 			_logger = logger;
 		}

@@ -12,12 +12,11 @@ namespace TrafficSimulator.Application.Simulation
 		private Stopwatch? _stopwatch;
 
 		public InMemoryIntersectionSimulationHandler(
-			ICarGeneratorRepository carGeneratorRepository,
 			ICarRepository carRepository,
 			ITrafficLightsHandler trafficLightsHandler,
 			ISimulationSetupRepository simulationSetupRepository,
 			ILogger<InMemoryIntersectionSimulationHandler> logger)
-			: base(carGeneratorRepository, carRepository, trafficLightsHandler, simulationSetupRepository, logger)
+			: base(carRepository, trafficLightsHandler, simulationSetupRepository, logger)
 		{
 			_logger = logger;
 		}

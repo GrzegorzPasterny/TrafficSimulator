@@ -14,24 +14,20 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 	public abstract class IntersectionSimulationHandler : ISimulationHandler
 	{
 		internal IntersectionSimulation? _intersectionSimulation;
-		internal ICarGeneratorRepository _carGeneratorRepository;
 		internal readonly ICarRepository _carRepository;
 		private readonly ITrafficLightsHandler _trafficLightsHandler;
 		private readonly ISimulationSetupRepository _simulationSetupRepository;
 		internal readonly ILogger<IntersectionSimulationHandler> _logger;
-		private List<ICarGenerator>? _carGenerators;
 
 		public SimulationState SimulationState => _intersectionSimulation!.SimulationState;
 		public SimulationResults SimulationResults => _intersectionSimulation!.SimulationResults!;
 
 		public IntersectionSimulationHandler(
-			ICarGeneratorRepository carGeneratorRepository,
 			ICarRepository carRepository,
 			ITrafficLightsHandler trafficLightsHandler,
 			ISimulationSetupRepository simulationSetupRepository,
 			ILogger<IntersectionSimulationHandler> logger)
 		{
-			_carGeneratorRepository = carGeneratorRepository;
 			_carRepository = carRepository;
 			_trafficLightsHandler = trafficLightsHandler;
 			_simulationSetupRepository = simulationSetupRepository;
@@ -70,6 +66,8 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 			_intersectionSimulation = simulationResult.Value;
 			_trafficLightsHandler.LoadIntersection(simulationResult.Value.Intersection);
+			SimulationState.CarGenerators =
+				_intersectionSimulation.Intersection.ObjectLookup.OfType<ICarGenerator>().ToList();
 
 			return UnitResult.Success<Error>();
 		}
@@ -90,8 +88,6 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 			_intersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.InProgress;
 
-			_carGenerators = (await _carGeneratorRepository.GetCarGeneratorsAsync()).ToList();
-
 			try
 			{
 				// What I thought, but it looks like it is all wrong:
@@ -109,11 +105,9 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			}
 		}
 
-		internal async Task<bool> AllCarGeneratorsFinished(SimulationState simulationState)
+		internal bool AllCarGeneratorsFinished()
 		{
-			simulationState.CarGenerators = (await _carGeneratorRepository.GetCarGeneratorsAsync()).ToList();
-
-			return simulationState.CarGenerators.All(carGenerator => carGenerator.IsGenerationFinished);
+			return SimulationState.CarGenerators.All(carGenerator => carGenerator.IsGenerationFinished);
 		}
 
 		internal async Task<bool> AllCarsFinished(SimulationState simulationState)
@@ -143,7 +137,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			}
 			else
 			{
-				bool allCarGeneratorsFinished = await AllCarGeneratorsFinished(_intersectionSimulation!.SimulationState);
+				bool allCarGeneratorsFinished = AllCarGeneratorsFinished();
 
 				if (allCarGeneratorsFinished)
 				{
@@ -179,7 +173,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 		private async Task GenerateNewCars()
 		{
-			foreach (ICarGenerator carGenerator in _carGenerators)
+			foreach (ICarGenerator carGenerator in SimulationState.CarGenerators)
 			{
 				if (carGenerator.IsGenerationFinished == false)
 				{

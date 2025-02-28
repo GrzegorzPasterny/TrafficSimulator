@@ -26,7 +26,6 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 		internal readonly ILogger<RealTimeSimulationHandlerTests> _logger;
 		internal readonly ILoggerFactory _loggerFactory;
 		internal readonly IMediator _mediator;
-		internal readonly ICarGeneratorRepository _carGeneratorRepository;
 		internal readonly ICarRepository _carRepository;
 
 		public RealTimeSimulationHandlerTests(ITestOutputHelper testOutputHelper)
@@ -51,7 +50,6 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			_logger = _loggerFactory.CreateLogger<RealTimeSimulationHandlerTests>();
 
-			_carGeneratorRepository = provider.GetRequiredService<ICarGeneratorRepository>();
 			_carRepository = provider.GetRequiredService<ICarRepository>();
 		}
 
@@ -74,13 +72,12 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			ICarGenerator carGenerator = new SingleCarGenerator(intersection, inboundLane, _mediator);
 
 			inboundLane.CarGenerator = carGenerator;
-			await _carGeneratorRepository.AddCarGeneratorAsync(carGenerator);
 
 			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
 			trafficPhasesHandler.SetPhase(trafficLightsPhaseName);
 
 			using ISimulationHandler simulationHandler =
-				new RealTimeIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, new NullTrafficLightsHandler(), null, _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
+				new RealTimeIntersectionSimulationHandler(_carRepository, new NullTrafficLightsHandler(), null, _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
@@ -116,14 +113,13 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			ICarGenerator carGenerator = new SingleCarGenerator(intersection, inboundLane, _mediator);
 
 			inboundLane.CarGenerator = carGenerator;
-			await _carGeneratorRepository.AddCarGeneratorAsync(carGenerator);
 
 			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
 
 			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 
 			using ISimulationHandler simulationHandler =
-				new RealTimeIntersectionSimulationHandler(_carGeneratorRepository, _carRepository, trafficLightsHandler, null, _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
+				new RealTimeIntersectionSimulationHandler(_carRepository, trafficLightsHandler, null, _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
