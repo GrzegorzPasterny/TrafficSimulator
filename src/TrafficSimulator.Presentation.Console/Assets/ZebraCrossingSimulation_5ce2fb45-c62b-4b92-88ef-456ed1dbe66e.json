@@ -7,7 +7,7 @@
         "InboundLanes": [
           {
             "TurnPossibilities": null,
-            "CarGeneratorTypeName": "",
+            "CarGeneratorTypeName": "SingleCarGenerator",
             "CarGeneratorOptions": null,
             "LaneTypes": [
               0
@@ -35,7 +35,7 @@
         "InboundLanes": [
           {
             "TurnPossibilities": null,
-            "CarGeneratorTypeName": "",
+            "CarGeneratorTypeName": "SingleCarGenerator",
             "CarGeneratorOptions": null,
             "LaneTypes": [
               0

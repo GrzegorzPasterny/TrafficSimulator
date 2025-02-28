@@ -1,8 +1,11 @@
 ﻿using ErrorOr;
 using FluentAssertions;
+using MediatR;
+using TrafficSimulator.Application.Handlers.CarGenerators;
 using TrafficSimulator.Application.UnitTests.Commons;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Builders;
+using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Simulation;
@@ -36,6 +39,46 @@ namespace TrafficSimulator.Tests.Commons.Assets
 
 				return new IntersectionSimulation(intersection, id, "ZebraCrossingSimulation");
 			}
+		}
+
+		public static IntersectionSimulation ZebraCrossingOnOneLaneRoadEastWestWithCarGenerators(ISender mediator)
+		{
+			ErrorOr<Intersection> intersectionResult =
+			IntersectionBuilder.Create("ZebraCrossing")
+			.AddIntersectionCore()
+			.AddLanesCollection(WorldDirection.East)
+			.AddInboundLane(WorldDirection.East, LaneTypeHelper.Straight())
+			.AddOutboundLane(WorldDirection.East)
+			.AddLanesCollection(WorldDirection.West)
+			.AddInboundLane(WorldDirection.West, LaneTypeHelper.Straight())
+			.AddOutboundLane(WorldDirection.West)
+			.Build();
+			intersectionResult.IsError.Should().BeFalse();
+
+			Intersection intersection = intersectionResult.Value;
+
+			InboundLane westInboundLane = intersection.LanesCollection!
+			.Find(l => l.WorldDirection == WorldDirection.West)!
+			.InboundLanes!
+			.First();
+
+			InboundLane eastInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.East)!
+				.InboundLanes!
+				.First();
+
+			ICarGenerator westLaneCarGenerator = new SingleCarGenerator(intersection, westInboundLane, mediator);
+			westInboundLane.CarGenerator = westLaneCarGenerator;
+
+			ICarGenerator eastLaneCarGenerator = new SingleCarGenerator(intersection, eastInboundLane, mediator);
+			eastInboundLane.CarGenerator = eastLaneCarGenerator;
+
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.AllLightsGreen(intersection));
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.AllLightsRed(intersection));
+
+			Guid id = Guid.Parse("5ce2fb45-c62b-4b92-88ef-456ed1dbe66e");
+
+			return new IntersectionSimulation(intersection, id, "ZebraCrossingSimulation");
 		}
 
 		public static IntersectionSimulation ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLights

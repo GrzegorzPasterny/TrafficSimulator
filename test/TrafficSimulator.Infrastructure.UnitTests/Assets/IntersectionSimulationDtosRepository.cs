@@ -48,7 +48,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 											LaneType.Straight
 										],
 										ContainsTrafficLights = true,
-										CarGeneratorTypeName = "",
+										CarGeneratorTypeName = "SingleCarGenerator",
 									}
 								],
 								OutboundLanes = [
@@ -77,7 +77,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 											LaneType.Straight
 										],
 										ContainsTrafficLights = true,
-										CarGeneratorTypeName = "",
+										CarGeneratorTypeName = "SingleCarGenerator",
 									}
 								],
 								OutboundLanes = [

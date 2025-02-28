@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using TrafficSimulator.Application.CarGenerators;
 using TrafficSimulator.Domain.Simulation;
 using TrafficSimulator.Infrastructure.IntersectionSimulations;
 using TrafficSimulator.Infrastructure.IntersectionSimulations.Persistence;
@@ -29,8 +30,10 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 		public void SaveIntersectionSimulationToJson_ShouldProduceFileOnTheDisc(IntersectionSimulation intersectionSimulation)
 		{
 			// Arrange
+			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
+
 			JsonSimulationSetupRepository jsonSimulationSetupRepository =
-				new JsonSimulationSetupRepository(new IntersectionSimulationDtoMapper());
+				new JsonSimulationSetupRepository(new IntersectionSimulationDtoMapper(carGeneratorFactory));
 
 			// Act
 			jsonSimulationSetupRepository.Save(intersectionSimulation).IsSuccess.Should().BeTrue();
@@ -47,9 +50,10 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 		{
 			// Arrange
 			var intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
 
 			JsonSimulationSetupRepository jsonSimulationSetupRepository =
-				new JsonSimulationSetupRepository(new IntersectionSimulationDtoMapper());
+				new JsonSimulationSetupRepository(new IntersectionSimulationDtoMapper(carGeneratorFactory));
 
 			// Save a test simulation to the file system
 			jsonSimulationSetupRepository.Save(intersectionSimulation);
@@ -60,6 +64,5 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 			// Assert
 			result.IsError.Should().BeFalse();
 		}
-
 	}
 }

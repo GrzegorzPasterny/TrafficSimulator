@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using FluentAssertions;
+using TrafficSimulator.Application.CarGenerators;
 using TrafficSimulator.Domain.Simulation;
 using TrafficSimulator.Infrastructure.DTOs;
 using TrafficSimulator.Infrastructure.IntersectionSimulations;
@@ -15,9 +16,11 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 		public void MapFromDomainToDto_GivenZebraCrossing_ShouldProduceDtosAsExpected()
 		{
 			// Arrange
-			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper();
+			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
 
-			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper(carGeneratorFactory);
+
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWestWithCarGenerators(null);
 
 			// Act
 			ErrorOr<IntersectionSimulationDto> intersectionSimulationDto = mapper.ToDto(intersectionSimulation);
@@ -32,7 +35,9 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 		public void MapFromDtoToDomain_GivenZebraCrossingDto_ShouldProduceDomainObjectsAsExpected()
 		{
 			// Arrange
-			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper();
+			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
+
+			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper(carGeneratorFactory);
 
 			IntersectionSimulationDto intersectionSimulationDto = IntersectionSimulationDtosRepository.ZebraCrossingOnOneLaneRoadEastWest;
 
@@ -56,8 +61,8 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 		public void MapFromDtoToDomainAndBackToDto_GivenZebraCrossingDto_DtosObjectsShouldBeTheSame()
 		{
 			// Arrange
-			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper();
-
+			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
+			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper(carGeneratorFactory);
 			IntersectionSimulationDto intersectionSimulationDto = IntersectionSimulationDtosRepository.ZebraCrossingOnOneLaneRoadEastWest;
 
 			// Act
@@ -76,8 +81,10 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 		public void LoadAllIntersectionSimulations_ShouldReturnListOfSimulations_WhenFilesExist()
 		{
 			// Arrange
+			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
+			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper(carGeneratorFactory);
 			JsonSimulationSetupRepository jsonSimulationSetupRepository =
-				new JsonSimulationSetupRepository(new IntersectionSimulationDtoMapper());
+				new JsonSimulationSetupRepository(mapper);
 
 			// Ensure the directory is empty by deleting any existing files
 			var directoryPath = jsonSimulationSetupRepository.Options.DirectoryPath;

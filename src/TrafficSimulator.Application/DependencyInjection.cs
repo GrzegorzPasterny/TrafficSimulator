@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TrafficSimulator.Application.CarGenerators;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.Lights;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
@@ -16,6 +17,7 @@ namespace TrafficSimulator.Application
 			});
 
 			services.AddScoped<TrafficPhasesHandler>();
+			services.AddSingleton<CarGeneratorFactory>();
 			services.AddScoped<ITrafficLightsHandler, SimpleSequentialTrafficLightsHandler>();
 			services.AddScoped<ISimulationHandler, InMemoryIntersectionSimulationHandler>();
 

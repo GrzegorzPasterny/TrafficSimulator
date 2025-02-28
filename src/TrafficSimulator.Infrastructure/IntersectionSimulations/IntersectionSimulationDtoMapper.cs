@@ -1,5 +1,7 @@
 ﻿using ErrorOr;
+using TrafficSimulator.Application.CarGenerators;
 using TrafficSimulator.Domain.Commons.Builders;
+using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.IntersectionProperties;
@@ -11,6 +13,13 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 {
 	public class IntersectionSimulationDtoMapper : ISimulationSetupMapper
 	{
+		private readonly CarGeneratorFactory _carGeneratorFactory;
+
+		public IntersectionSimulationDtoMapper(CarGeneratorFactory carGeneratorFactory)
+		{
+			_carGeneratorFactory = carGeneratorFactory;
+		}
+
 		public ErrorOr<IntersectionSimulation> ToDomain(IntersectionSimulationDto intersectionSimulationDto)
 		{
 			IntersectionDto intersectionDto = intersectionSimulationDto.Intersection;
@@ -73,6 +82,22 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 					}).ToList()
 				});
 			});
+
+			intersectionDto.LanesCollection.ForEach(lanes => lanes.InboundLanes.ForEach(lane =>
+			{
+				string fullName = $"{lane.ParentName}.{lane.Name}";
+				InboundLane? inboundLane = intersection.GetObject<InboundLane>(fullName);
+
+				ErrorOr<ICarGenerator?> carGeneratorResult = _carGeneratorFactory.Create(lane.CarGeneratorTypeName, intersection, inboundLane!);
+
+				if (carGeneratorResult.IsError)
+				{
+					// TODO: Handle
+					throw new Exception();
+				}
+
+				inboundLane.CarGenerator = carGeneratorResult.Value;
+			}));
 
 			return intersectionSimulation;
 		}
