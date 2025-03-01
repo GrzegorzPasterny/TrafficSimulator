@@ -3,8 +3,10 @@ using ErrorOr;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using TrafficSimulator.Application.Cars.GetCars;
+using TrafficSimulator.Application.Cars.MoveCar;
 using TrafficSimulator.Application.Commons;
 using TrafficSimulator.Application.Commons.Interfaces;
+using TrafficSimulator.Application.SimulationSetup.LoadSimulation;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
@@ -58,17 +60,17 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			return UnitResult.Success<Error>();
 		}
 
-		public UnitResult<Error> LoadIntersection(string identifier)
+		public async Task<UnitResult<Error>> LoadIntersection(string identifier)
 		{
-			ErrorOr<IntersectionSimulation> simulationResult = _simulationSetupRepository.Load(identifier);
+			ErrorOr<IntersectionSimulation> intersectionSimulationResult = await _sender.Send(new LoadSimulationCommand(identifier));
 
-			if (simulationResult.IsError)
+			if (intersectionSimulationResult.IsError)
 			{
 				// TODO: Combine Errors
-				return simulationResult.FirstError;
+				return intersectionSimulationResult.FirstError;
 			}
 
-			LoadIntersection(simulationResult.Value);
+			LoadIntersection(intersectionSimulationResult.Value);
 
 			return UnitResult.Success<Error>();
 		}
@@ -188,13 +190,9 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			return _trafficLightsHandler.SetLights(_intersectionSimulation!.Options.StepTimespan);
 		}
 
-		private async Task MoveCars()
+		private Task MoveCars()
 		{
-			IEnumerable<Car> cars = await _sender.Send(new GetCarsCommand());
-			foreach (var car in cars)
-			{
-				car.Move(_intersectionSimulation!.Options.StepTimespan, cars);
-			}
+			return _sender.Send(new MoveAllCarsCommand(_intersectionSimulation!.Options.StepTimespan));
 		}
 
 		internal async Task GatherResults(long elapsedMilliseconds)

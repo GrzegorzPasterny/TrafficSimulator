@@ -17,7 +17,7 @@ public interface ISimulationHandler : IDisposable
 	/// </summary>
 	/// <param name="identifier">Simulation configuration id, or filePath</param>
 	/// <returns></returns>
-	UnitResult<Error> LoadIntersection(string identifier);
+	Task<UnitResult<Error>> LoadIntersection(string identifier);
 
 	Task<UnitResult<Error>> Start();
 
