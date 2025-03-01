@@ -4,9 +4,13 @@
       "commandName": "Project",
       "commandLineArgs": "-h"
     },
-    "Console Run": {
+    "Console RunFork": {
       "commandName": "Project",
-      "commandLineArgs": "Run -f \"Assets/ForkSimulation_641c2b72-da21-424e-8b43-3b339415013b.json\""
+      "commandLineArgs": "Run -f \"Assets/ForkSimulation_741c2b72-da21-424e-8b43-3b339415013b.json\""
+    },
+    "Console Run3Ways": {
+      "commandName": "Project",
+      "commandLineArgs": "Run -f \"Assets/NormalThreeStreetsSimulation_1dac5dbe-1d37-4289-928d-dd9798bf3007.json\""
     }
   }
 }

@@ -125,68 +125,11 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 		}
 
 		[Fact]
-		public async Task RunSimulation_GivenForkIntersection_GivenOneCar_GivenSimpleTrafficHandler_CarShouldPassTheIntersectionAsExpected()
-		{
-			// Arrange
-			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLights;
-			Intersection intersection = intersectionSimulation.Intersection;
-
-			InboundLane westInboundLane = intersection.LanesCollection!
-				.Find(l => l.WorldDirection == WorldDirection.West)!
-				.InboundLanes!
-				.First();
-
-			InboundLane eastInboundLane = intersection.LanesCollection!
-				.Find(l => l.WorldDirection == WorldDirection.East)!
-				.InboundLanes!
-				.First();
-
-			ICarGenerator westLaneCarGenerator = new SingleCarGenerator(intersection, westInboundLane, _mediator);
-			westInboundLane.CarGenerator = westLaneCarGenerator;
-
-			ICarGenerator eastLaneCarGenerator = new SingleCarGenerator(intersection, eastInboundLane, _mediator);
-			eastInboundLane.CarGenerator = eastLaneCarGenerator;
-
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
-
-			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
-
-			using ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_carRepository, trafficLightsHandler, null, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
-
-			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
-
-			UnitResult<Error> simulationStartResult = await simulationHandler.Start();
-
-			simulationStartResult.IsSuccess.Should().BeTrue();
-
-			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
-
-			await Task.Delay(200); // Wait for the results
-		}
-
-		[Fact]
 		public async Task RunSimulation_GivenForkIntersection_GivenMultipleCars_GivenSimpleTrafficHandler_CarShouldPassTheIntersectionAsExpected()
 		{
 			// Arrange
-			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLights;
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLightsWithMultipleCarGenerators(_mediator);
 			Intersection intersection = intersectionSimulation.Intersection;
-
-			InboundLane westInboundLane = intersection.LanesCollection!
-				.Find(l => l.WorldDirection == WorldDirection.West)!
-				.InboundLanes!
-				.First();
-
-			InboundLane eastInboundLane = intersection.LanesCollection!
-				.Find(l => l.WorldDirection == WorldDirection.East)!
-				.InboundLanes!
-				.First();
-
-			ICarGenerator westLaneCarGenerator = new MultipleCarsGenerator(intersection, westInboundLane, _mediator);
-			westInboundLane.CarGenerator = westLaneCarGenerator;
-
-			ICarGenerator eastLaneCarGenerator = new MultipleCarsGenerator(intersection, eastInboundLane, _mediator);
-			eastInboundLane.CarGenerator = eastLaneCarGenerator;
 
 			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
 
@@ -210,32 +153,8 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 		public async Task RunSimulation_GivenThreeDirectionIntersection_GivenMultipleCars_GivenSimpleTrafficHandler_CarShouldPassTheIntersectionAsExpected()
 		{
 			// Arrange
-			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ThreeDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLights;
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ThreeDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLightsWithCarGenerators(_mediator);
 			Intersection intersection = intersectionSimulation.Intersection;
-
-			InboundLane eastInboundLane = intersection.LanesCollection!
-				.Find(l => l.WorldDirection == WorldDirection.East)!
-				.InboundLanes!
-				.First();
-
-			InboundLane southInboundLane = intersection.LanesCollection!
-				.Find(l => l.WorldDirection == WorldDirection.South)!
-				.InboundLanes!
-				.First();
-
-			InboundLane westInboundLane = intersection.LanesCollection!
-				.Find(l => l.WorldDirection == WorldDirection.West)!
-				.InboundLanes!
-				.First();
-
-			ICarGenerator eastLaneCarGenerator = new MultipleCarsGenerator(intersection, eastInboundLane, _mediator);
-			eastInboundLane.CarGenerator = eastLaneCarGenerator;
-
-			ICarGenerator southLaneCarGenerator = new MultipleCarsGenerator(intersection, southInboundLane, _mediator);
-			southInboundLane.CarGenerator = southLaneCarGenerator;
-
-			ICarGenerator westLaneCarGenerator = new MultipleCarsGenerator(intersection, westInboundLane, _mediator);
-			westInboundLane.CarGenerator = westLaneCarGenerator;
 
 			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
 

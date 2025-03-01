@@ -108,6 +108,47 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			}
 		}
 
+		public static IntersectionSimulation ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLightsWithMultipleCarGenerators(ISender mediator)
+		{
+			ErrorOr<Intersection> intersectionResult =
+			IntersectionBuilder.Create("Fork")
+			.AddIntersectionCore()
+			.AddLanesCollection(WorldDirection.East)
+			.AddInboundLane(WorldDirection.East, LaneTypeHelper.Right())
+			.AddLanesCollection(WorldDirection.West)
+			.AddInboundLane(WorldDirection.West, LaneTypeHelper.Left())
+			.AddLanesCollection(WorldDirection.North)
+			.AddOutboundLane(WorldDirection.North)
+			.Build();
+
+			intersectionResult.IsError.Should().BeFalse();
+
+			Intersection intersection = intersectionResult.Value;
+
+			InboundLane westInboundLane = intersection.LanesCollection!
+			.Find(l => l.WorldDirection == WorldDirection.West)!
+			.InboundLanes!
+			.First();
+
+			InboundLane eastInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.East)!
+				.InboundLanes!
+				.First();
+
+			ICarGenerator westLaneCarGenerator = new MultipleCarsGenerator(intersection, westInboundLane, mediator);
+			westInboundLane.CarGenerator = westLaneCarGenerator;
+
+			ICarGenerator eastLaneCarGenerator = new MultipleCarsGenerator(intersection, eastInboundLane, mediator);
+			eastInboundLane.CarGenerator = eastLaneCarGenerator;
+
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
+
+			Guid id = Guid.Parse("741c2b72-da21-424e-8b43-3b339415013b");
+
+			return new IntersectionSimulation(intersection, id, "ForkSimulation");
+		}
+
 		public static IntersectionSimulation ThreeDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLights
 		{
 			get
@@ -137,6 +178,58 @@ namespace TrafficSimulator.Tests.Commons.Assets
 
 				return new IntersectionSimulation(intersection, id, "NormalThreeStreetsSimulation");
 			}
+		}
+
+		public static IntersectionSimulation ThreeDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLightsWithCarGenerators(ISender mediator)
+		{
+			ErrorOr<Intersection> intersectionResult =
+			IntersectionBuilder.Create("NormalThreeStreets")
+			.AddIntersectionCore()
+			.AddLanesCollection(WorldDirection.East)
+			.AddInboundLane(WorldDirection.East, LaneTypeHelper.StraightAndLeft())
+			.AddOutboundLane(WorldDirection.East)
+			.AddLanesCollection(WorldDirection.South)
+			.AddInboundLane(WorldDirection.South, LaneTypeHelper.LeftAndRight())
+			.AddOutboundLane(WorldDirection.South)
+			.AddLanesCollection(WorldDirection.West)
+			.AddInboundLane(WorldDirection.West, LaneTypeHelper.StraightAndRight())
+			.AddOutboundLane(WorldDirection.West)
+			.Build();
+
+			intersectionResult.IsError.Should().BeFalse();
+			Intersection intersection = intersectionResult.Value;
+
+			InboundLane eastInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.East)!
+				.InboundLanes!
+				.First();
+
+			InboundLane southInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.South)!
+				.InboundLanes!
+				.First();
+
+			InboundLane westInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.West)!
+				.InboundLanes!
+				.First();
+
+			ICarGenerator eastLaneCarGenerator = new MultipleCarsGenerator(intersection, eastInboundLane, mediator);
+			eastInboundLane.CarGenerator = eastLaneCarGenerator;
+
+			ICarGenerator southLaneCarGenerator = new MultipleCarsGenerator(intersection, southInboundLane, mediator);
+			southInboundLane.CarGenerator = southLaneCarGenerator;
+
+			ICarGenerator westLaneCarGenerator = new MultipleCarsGenerator(intersection, westInboundLane, mediator);
+
+			westInboundLane.CarGenerator = westLaneCarGenerator;
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.South));
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
+
+			Guid id = Guid.Parse("1dac5dbe-1d37-4289-928d-dd9798bf3007");
+
+			return new IntersectionSimulation(intersection, id, "NormalThreeStreetsSimulation");
 		}
 	}
 }

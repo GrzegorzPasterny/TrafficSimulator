@@ -8,7 +8,6 @@ namespace TrafficSimulator.Domain.Handlers.CarGenerators
 {
 	public class MultipleCarsGenerator : CarGenerator<MultipleCarsGeneratorOptions>
 	{
-		public MultipleCarsGeneratorOptions Options { get; } = new();
 		private bool _isGenerationFinished = false;
 		private TimeSpan _simulationTime = TimeSpan.Zero;
 		private TimeSpan _timeFromLastGeneration = TimeSpan.Zero;

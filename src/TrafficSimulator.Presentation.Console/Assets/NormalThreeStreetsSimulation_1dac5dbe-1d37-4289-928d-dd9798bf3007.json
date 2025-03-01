@@ -1,19 +1,21 @@
 {
-  "Id": "0dac5dbe-1d37-4289-928d-dd9798bf3007",
+  "Id": "1dac5dbe-1d37-4289-928d-dd9798bf3007",
   "Name": "NormalThreeStreetsSimulation",
   "Intersection": {
     "LanesCollection": [
       {
         "InboundLanes": [
           {
-            "TurnPossibilities": null,
-            "CarGeneratorTypeName": "SingleCarGenerator",
-            "CarGeneratorOptions": null,
+            "CarGeneratorTypeName": "MultipleCarsGenerator",
             "LaneTypes": [
               0,
               2
             ],
             "ContainsTrafficLights": true,
+            "CarGeneratorOptions": {
+              "AmountOfCarsToGenerate": 3,
+              "DelayBetweenCarGeneration": "00:00:00.5000000"
+            },
             "WorldDirection": 3,
             "Distance": 10,
             "Name": "InboundLane",
@@ -35,14 +37,16 @@
       {
         "InboundLanes": [
           {
-            "TurnPossibilities": null,
-            "CarGeneratorTypeName": "SingleCarGenerator",
-            "CarGeneratorOptions": null,
+            "CarGeneratorTypeName": "MultipleCarsGenerator",
             "LaneTypes": [
               2,
               1
             ],
             "ContainsTrafficLights": true,
+            "CarGeneratorOptions": {
+              "AmountOfCarsToGenerate": 3,
+              "DelayBetweenCarGeneration": "00:00:00.5000000"
+            },
             "WorldDirection": 2,
             "Distance": 10,
             "Name": "InboundLane",
@@ -64,14 +68,16 @@
       {
         "InboundLanes": [
           {
-            "TurnPossibilities": null,
-            "CarGeneratorTypeName": "SingleCarGenerator",
-            "CarGeneratorOptions": null,
+            "CarGeneratorTypeName": "MultipleCarsGenerator",
             "LaneTypes": [
               0,
               1
             ],
             "ContainsTrafficLights": true,
+            "CarGeneratorOptions": {
+              "AmountOfCarsToGenerate": 3,
+              "DelayBetweenCarGeneration": "00:00:00.5000000"
+            },
             "WorldDirection": 1,
             "Distance": 10,
             "Name": "InboundLane",

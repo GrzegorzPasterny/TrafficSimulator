@@ -1,115 +1,119 @@
 {
-  "Id": "5ce2fb45-c62b-4b92-88ef-456ed1dbe66e",
-  "Name": "ZebraCrossingSimulation",
+  "Id": "741c2b72-da21-424e-8b43-3b339415013b",
+  "Name": "ForkSimulation",
   "Intersection": {
     "LanesCollection": [
       {
         "InboundLanes": [
           {
-            "TurnPossibilities": null,
-            "CarGeneratorTypeName": "SingleCarGenerator",
-            "CarGeneratorOptions": null,
+            "CarGeneratorTypeName": "MultipleCarsGenerator",
             "LaneTypes": [
-              0
+              1
             ],
             "ContainsTrafficLights": true,
+            "CarGeneratorOptions": {
+              "AmountOfCarsToGenerate": 3,
+              "DelayBetweenCarGeneration": "00:00:00.5000000"
+            },
             "WorldDirection": 3,
             "Distance": 10,
             "Name": "InboundLane",
-            "ParentName": ".ZebraCrossing.Lanes.East"
+            "ParentName": ".Fork.Lanes.East"
           }
         ],
-        "OutboundLanes": [
-          {
-            "WorldDirection": 3,
-            "Distance": 10,
-            "Name": "OutboundLane",
-            "ParentName": ".ZebraCrossing.Lanes.East"
-          }
-        ],
+        "OutboundLanes": [],
         "WorldDirection": 3,
         "Name": "Lanes.East",
-        "ParentName": ".ZebraCrossing"
+        "ParentName": ".Fork"
       },
       {
         "InboundLanes": [
           {
-            "TurnPossibilities": null,
-            "CarGeneratorTypeName": "SingleCarGenerator",
-            "CarGeneratorOptions": null,
+            "CarGeneratorTypeName": "MultipleCarsGenerator",
             "LaneTypes": [
-              0
+              2
             ],
             "ContainsTrafficLights": true,
+            "CarGeneratorOptions": {
+              "AmountOfCarsToGenerate": 3,
+              "DelayBetweenCarGeneration": "00:00:00.5000000"
+            },
             "WorldDirection": 1,
             "Distance": 10,
             "Name": "InboundLane",
-            "ParentName": ".ZebraCrossing.Lanes.West"
+            "ParentName": ".Fork.Lanes.West"
           }
         ],
-        "OutboundLanes": [
-          {
-            "WorldDirection": 1,
-            "Distance": 10,
-            "Name": "OutboundLane",
-            "ParentName": ".ZebraCrossing.Lanes.West"
-          }
-        ],
+        "OutboundLanes": [],
         "WorldDirection": 1,
         "Name": "Lanes.West",
-        "ParentName": ".ZebraCrossing"
+        "ParentName": ".Fork"
+      },
+      {
+        "InboundLanes": [],
+        "OutboundLanes": [
+          {
+            "WorldDirection": 0,
+            "Distance": 10,
+            "Name": "OutboundLane",
+            "ParentName": ".Fork.Lanes.North"
+          }
+        ],
+        "WorldDirection": 0,
+        "Name": "Lanes.North",
+        "ParentName": ".Fork"
       }
     ],
     "IntersectionCore": {
       "Distance": 10,
       "Name": "IntersectionCore",
-      "ParentName": ".ZebraCrossing"
+      "ParentName": ".Fork"
     },
     "TrafficPhases": [
       {
-        "Name": "AllGreen",
+        "Name": "GreenForEastOnly",
         "TrafficLightsAssignments": [
           {
-            "InboundLaneName": ".ZebraCrossing.Lanes.East.InboundLane",
+            "InboundLaneName": ".Fork.Lanes.East.InboundLane",
             "TurnPossibility": {
-              "LaneType": 0,
+              "LaneType": 1,
               "ContainsTrafficLights": true
             },
             "TrafficLightState": 1
           },
           {
-            "InboundLaneName": ".ZebraCrossing.Lanes.West.InboundLane",
+            "InboundLaneName": ".Fork.Lanes.West.InboundLane",
             "TurnPossibility": {
-              "LaneType": 0,
+              "LaneType": 2,
               "ContainsTrafficLights": true
             },
-            "TrafficLightState": 1
+            "TrafficLightState": 3
           }
         ]
       },
       {
-        "Name": "AllRed",
+        "Name": "GreenForWestOnly",
         "TrafficLightsAssignments": [
           {
-            "InboundLaneName": ".ZebraCrossing.Lanes.East.InboundLane",
+            "InboundLaneName": ".Fork.Lanes.East.InboundLane",
             "TurnPossibility": {
-              "LaneType": 0,
+              "LaneType": 1,
               "ContainsTrafficLights": true
             },
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".ZebraCrossing.Lanes.West.InboundLane",
+            "InboundLaneName": ".Fork.Lanes.West.InboundLane",
             "TurnPossibility": {
-              "LaneType": 0,
+              "LaneType": 2,
               "ContainsTrafficLights": true
             },
-            "TrafficLightState": 3
+            "TrafficLightState": 1
           }
         ]
       }
     ],
-    "Name": "ZebraCrossing",
+    "Name": "Fork",
     "ParentName": ""
   },
   "Options": {

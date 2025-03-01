@@ -25,7 +25,15 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 			};
 			yield return new object[]
 			{
+				IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLightsWithMultipleCarGenerators(null)
+			};
+			yield return new object[]
+			{
 				IntersectionsRepository.ThreeDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLights
+			};
+			yield return new object[]
+			{
+				IntersectionsRepository.ThreeDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLightsWithCarGenerators(null)
 			};
 		}
 
