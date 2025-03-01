@@ -1,13 +1,12 @@
 ﻿using ErrorOr;
 using MediatR;
 using System.Text.Json;
-using TrafficSimulator.Application.Handlers.CarGenerators;
-using TrafficSimulator.Domain.CarGenerators;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
+using TrafficSimulator.Domain.Handlers.CarGenerators;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 
-namespace TrafficSimulator.Application.CarGenerators
+namespace TrafficSimulator.Domain.CarGenerators
 {
 	public class CarGeneratorFactory
 	{

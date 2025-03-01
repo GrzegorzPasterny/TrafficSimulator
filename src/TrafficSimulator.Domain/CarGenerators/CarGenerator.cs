@@ -1,14 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
 using MediatR;
-using TrafficSimulator.Application.Cars.AddCar;
 using TrafficSimulator.Domain.CarGenerators;
+using TrafficSimulator.Domain.CarGenerators.DomainEvents;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models.Agents;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 
-namespace TrafficSimulator.Application.Handlers.CarGenerators
+namespace TrafficSimulator.Domain.Handlers.CarGenerators
 {
 	public abstract class CarGenerator<TOptions> : IntersectionObject, ICarGenerator
 		where TOptions : CarGeneratorOptions, new()
@@ -32,7 +32,7 @@ namespace TrafficSimulator.Application.Handlers.CarGenerators
 		{
 			Car car = new Car((InboundLane)Parent!);
 
-			var command = new AddCarCommand(car);
+			var command = new AddCarCommandDomainEvent(car);
 
 			await _mediator.Send(command);
 		}

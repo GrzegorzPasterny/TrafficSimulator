@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Cars\GetCars\**" />
+    <Compile Remove="Cars\GetCar\**" />
+    <EmbeddedResource Remove="Cars\GetCars\**" />
+    <EmbeddedResource Remove="Cars\GetCar\**" />
+    <None Remove="Cars\GetCars\**" />
+    <None Remove="Cars\GetCar\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CSharpFunctionalExtensions" Version="3.4.3" />
     <PackageReference Include="ErrorOr" Version="2.0.1" />
     <PackageReference Include="MediatR" Version="12.4.1" />
@@ -16,11 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TrafficSimulator.Domain\TrafficSimulator.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Cars\GetCar\" />
-    <Folder Include="Cars\GetCars\" />
   </ItemGroup>
 
 </Project>

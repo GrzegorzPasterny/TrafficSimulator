@@ -1,11 +1,11 @@
 ﻿using ErrorOr;
 using FluentAssertions;
 using MediatR;
-using TrafficSimulator.Application.Handlers.CarGenerators;
 using TrafficSimulator.Application.UnitTests.Commons;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Builders;
 using TrafficSimulator.Domain.Commons.Interfaces;
+using TrafficSimulator.Domain.Handlers.CarGenerators;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Simulation;

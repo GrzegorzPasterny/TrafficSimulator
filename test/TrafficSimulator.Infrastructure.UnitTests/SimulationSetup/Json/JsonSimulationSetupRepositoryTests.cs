@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using TrafficSimulator.Application.CarGenerators;
+using TrafficSimulator.Domain.CarGenerators;
 using TrafficSimulator.Domain.Simulation;
 using TrafficSimulator.Infrastructure.IntersectionSimulations;
 using TrafficSimulator.Infrastructure.IntersectionSimulations.Persistence;

@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using FluentAssertions;
-using TrafficSimulator.Application.CarGenerators;
+using TrafficSimulator.Domain.CarGenerators;
 using TrafficSimulator.Domain.Simulation;
 using TrafficSimulator.Infrastructure.DTOs;
 using TrafficSimulator.Infrastructure.IntersectionSimulations;

@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using System.Text.Json;
-using TrafficSimulator.Application.CarGenerators;
+using TrafficSimulator.Domain.CarGenerators;
 using TrafficSimulator.Domain.Commons.Builders;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;

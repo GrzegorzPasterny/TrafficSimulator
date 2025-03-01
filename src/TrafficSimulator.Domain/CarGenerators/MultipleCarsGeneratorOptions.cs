@@ -1,6 +1,6 @@
 ﻿using TrafficSimulator.Domain.CarGenerators;
 
-namespace TrafficSimulator.Application.Handlers.CarGenerators
+namespace TrafficSimulator.Domain.Handlers.CarGenerators
 {
 	public class MultipleCarsGeneratorOptions : CarGeneratorOptions
 	{

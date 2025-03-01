@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Moq;
 using TrafficSimulator.Application.Cars.AddCar;
-using TrafficSimulator.Application.Handlers.CarGenerators;
 using TrafficSimulator.Domain.Commons;
+using TrafficSimulator.Domain.Handlers.CarGenerators;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Simulation;
 using TrafficSimulator.Tests.Commons.Assets;
