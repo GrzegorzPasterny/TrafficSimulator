@@ -77,7 +77,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			trafficPhasesHandler.SetPhase(trafficLightsPhaseName);
 
 			using ISimulationHandler simulationHandler =
-				new RealTimeIntersectionSimulationHandler(_carRepository, new NullTrafficLightsHandler(), null, _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
+				new RealTimeIntersectionSimulationHandler(_mediator, new NullTrafficLightsHandler(), null, _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
@@ -118,7 +118,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 
 			using ISimulationHandler simulationHandler =
-				new RealTimeIntersectionSimulationHandler(_carRepository, trafficLightsHandler, null, _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
+				new RealTimeIntersectionSimulationHandler(_mediator, trafficLightsHandler, null, _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 

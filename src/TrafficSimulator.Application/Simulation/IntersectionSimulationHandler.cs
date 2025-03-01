@@ -1,6 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
+using MediatR;
 using Microsoft.Extensions.Logging;
+using TrafficSimulator.Application.Cars.GetCars;
 using TrafficSimulator.Application.Commons;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Domain.Commons;
@@ -14,7 +16,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 	public abstract class IntersectionSimulationHandler : ISimulationHandler
 	{
 		internal IntersectionSimulation? _intersectionSimulation;
-		internal readonly ICarRepository _carRepository;
+		private readonly ISender _sender;
 		private readonly ITrafficLightsHandler _trafficLightsHandler;
 		private readonly ISimulationSetupRepository _simulationSetupRepository;
 		internal readonly ILogger<IntersectionSimulationHandler> _logger;
@@ -23,12 +25,12 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		public SimulationResults SimulationResults => _intersectionSimulation!.SimulationResults!;
 
 		public IntersectionSimulationHandler(
-			ICarRepository carRepository,
+			ISender sender,
 			ITrafficLightsHandler trafficLightsHandler,
 			ISimulationSetupRepository simulationSetupRepository,
 			ILogger<IntersectionSimulationHandler> logger)
 		{
-			_carRepository = carRepository;
+			_sender = sender;
 			_trafficLightsHandler = trafficLightsHandler;
 			_simulationSetupRepository = simulationSetupRepository;
 			_logger = logger;
@@ -111,7 +113,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 		internal async Task<bool> AllCarsFinished(SimulationState simulationState)
 		{
-			simulationState.Cars = (await _carRepository.GetCarsAsync()).ToList();
+			simulationState.Cars = (await _sender.Send(new GetCarsCommand())).ToList();
 
 			if (simulationState.Cars.Count == 0)
 			{
@@ -188,7 +190,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 		private async Task MoveCars()
 		{
-			IEnumerable<Car> cars = await _carRepository.GetCarsAsync();
+			IEnumerable<Car> cars = await _sender.Send(new GetCarsCommand());
 			foreach (var car in cars)
 			{
 				car.Move(_intersectionSimulation!.Options.StepTimespan, cars);
@@ -205,7 +207,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			_intersectionSimulation!.SimulationResults.TotalCalculationTimeMs = elapsedMilliseconds;
 			_intersectionSimulation!.SimulationResults.SimulationStepsTaken = _intersectionSimulation.SimulationState.StepsCount;
 
-			List<Car> cars = (await _carRepository.GetCarsAsync()).ToList();
+			List<Car> cars = (await _sender.Send(new GetCarsCommand())).ToList();
 
 			_intersectionSimulation.SimulationResults.CarsPassed = cars.Count();
 			_intersectionSimulation.SimulationResults.TotalCarsIdleTimeMs =

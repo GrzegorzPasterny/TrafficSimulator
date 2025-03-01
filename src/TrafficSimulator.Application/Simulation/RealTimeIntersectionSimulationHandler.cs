@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.Simulation;
@@ -15,11 +16,11 @@ namespace TrafficSimulator.Application.Simulation
 		private CancellationTokenSource? _cancellationTokenSource;
 
 		public RealTimeIntersectionSimulationHandler(
-			ICarRepository carRepository,
+			ISender sender,
 			ITrafficLightsHandler trafficLightsHandler,
 			ISimulationSetupRepository simulationSetupRepository,
 			ILogger<RealTimeIntersectionSimulationHandler> logger)
-			: base(carRepository, trafficLightsHandler, simulationSetupRepository, logger)
+			: base(sender, trafficLightsHandler, simulationSetupRepository, logger)
 		{
 			_logger = logger;
 		}
