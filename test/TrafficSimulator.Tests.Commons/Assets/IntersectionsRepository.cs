@@ -76,7 +76,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			intersection.TrafficPhases.Add(TrafficPhasesRespository.AllLightsGreen(intersection));
 			intersection.TrafficPhases.Add(TrafficPhasesRespository.AllLightsRed(intersection));
 
-			Guid id = Guid.Parse("5ce2fb45-c62b-4b92-88ef-456ed1dbe66e");
+			Guid id = Guid.Parse("6ce2fb45-c62b-4b92-88ef-456ed1dbe66e");
 
 			return new IntersectionSimulation(intersection, id, "ZebraCrossingSimulation");
 		}

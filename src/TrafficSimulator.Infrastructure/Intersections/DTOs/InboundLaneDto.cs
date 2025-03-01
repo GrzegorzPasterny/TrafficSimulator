@@ -1,4 +1,5 @@
-﻿using TrafficSimulator.Domain.Models;
+﻿using System.Text.Json;
+using TrafficSimulator.Domain.Models;
 
 namespace TrafficSimulator.Infrastructure.DTOs
 {
@@ -11,6 +12,6 @@ namespace TrafficSimulator.Infrastructure.DTOs
 		/// <summary>
 		/// Options for <see cref="CarGeneratorTypeName"/> saved in json format
 		/// </summary>
-		public string CarGeneratorOptions { get; set; }
+		public JsonElement CarGeneratorOptions { get; set; }
 	}
 }

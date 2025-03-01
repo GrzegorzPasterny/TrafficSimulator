@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Moq;
-using TrafficSimulator.Application.Cars.AddCar;
+using TrafficSimulator.Domain.CarGenerators.DomainEvents;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Handlers.CarGenerators;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
@@ -33,7 +33,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.CarGeneratorsTests
 			}
 
 			// Assert
-			mediatorMock.Verify(m => m.Send(It.IsAny<AddCarCommand>(), It.IsAny<CancellationToken>()), Times.Once);
+			mediatorMock.Verify(m => m.Send(It.IsAny<AddCarCommandDomainEvent>(), It.IsAny<CancellationToken>()), Times.Once);
 		}
 	}
 }

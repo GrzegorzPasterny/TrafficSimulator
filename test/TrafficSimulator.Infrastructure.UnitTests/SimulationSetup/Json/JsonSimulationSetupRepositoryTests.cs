@@ -17,6 +17,10 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 			};
 			yield return new object[]
 			{
+				IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWestWithCarGenerators(null)
+			};
+			yield return new object[]
+			{
 				IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLights
 			};
 			yield return new object[]

@@ -33,7 +33,7 @@ public class CarGeneratorFactoryTests
 		var optionsJson = JsonSerializer.Serialize(options);
 
 		// Act
-		var result = _factory.Create(nameof(SingleCarGenerator), optionsJson, _root, _parent);
+		var result = _factory.Create(nameof(SingleCarGenerator), JsonSerializer.Deserialize<JsonElement>(optionsJson), _root, _parent);
 
 		// Assert
 		Assert.False(result.IsError);
@@ -48,7 +48,7 @@ public class CarGeneratorFactoryTests
 		var optionsJson = JsonSerializer.Serialize(options);
 
 		// Act
-		var result = _factory.Create(nameof(MultipleCarsGenerator), optionsJson, _root, _parent);
+		var result = _factory.Create(nameof(MultipleCarsGenerator), JsonSerializer.Deserialize<JsonElement>(optionsJson), _root, _parent);
 
 		// Assert
 		Assert.False(result.IsError);
@@ -59,8 +59,12 @@ public class CarGeneratorFactoryTests
 	public void Create_ShouldReturnNullValue_WhenCarGeneratorTypeIsNullOrEmpty()
 	{
 		// Act
-		var result1 = _factory.Create(null!, "{}", _root, _parent);
-		var result2 = _factory.Create("", "{}", _root, _parent);
+		CarGeneratorOptions options = new CarGeneratorOptions();
+		var optionsJson = JsonSerializer.Serialize(options);
+
+
+		var result1 = _factory.Create(null!, JsonSerializer.Deserialize<JsonElement>(optionsJson), _root, _parent);
+		var result2 = _factory.Create("", JsonSerializer.Deserialize<JsonElement>(optionsJson), _root, _parent);
 
 		// Assert
 		result1.IsError.Should().BeFalse();
@@ -73,25 +77,12 @@ public class CarGeneratorFactoryTests
 	[Fact]
 	public void Create_ShouldThrowException_WhenCarGeneratorTypeIsUnknown()
 	{
-		// Act & Assert
-		var ex = Assert.Throws<Exception>(() => _factory.Create("UnknownGenerator", "{}", _root, _parent));
-		Assert.Contains("Unknown CarGenerator type", ex.Message);
-	}
-
-	[Fact]
-	public void Create_ShouldThrowException_WhenOptionsJsonIsInvalid()
-	{
 		// Arrange
-		var invalidJson = "{ invalid_json }";
+		CarGeneratorOptions options = new CarGeneratorOptions();
+		var optionsJson = JsonSerializer.Serialize(options);
 
 		// Act & Assert
-		var ex = Assert.Throws<JsonException>(() => _factory.Create(nameof(SingleCarGenerator), invalidJson, _root, _parent));
-	}
-
-	[Fact]
-	public void Create_ShouldThrowException_WhenOptionsJsonIsEmpty()
-	{
-		// Act & Assert
-		var ex = Assert.Throws<JsonException>(() => _factory.Create(nameof(SingleCarGenerator), "", _root, _parent));
+		var ex = Assert.Throws<Exception>(() => _factory.Create("UnknownGenerator", JsonSerializer.Deserialize<JsonElement>(optionsJson), _root, _parent));
+		Assert.Contains("Unknown CarGenerator type", ex.Message);
 	}
 }

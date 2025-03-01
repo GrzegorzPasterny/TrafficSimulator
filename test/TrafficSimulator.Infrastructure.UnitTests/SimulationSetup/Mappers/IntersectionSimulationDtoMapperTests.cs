@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using FluentAssertions;
+using System.Text.Json;
 using TrafficSimulator.Domain.CarGenerators;
 using TrafficSimulator.Domain.Simulation;
 using TrafficSimulator.Infrastructure.DTOs;
@@ -27,8 +28,10 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 
 			// Assert
 			intersectionSimulationDto.IsError.Should().BeFalse();
-			intersectionSimulationDto.Value.Should().BeEquivalentTo(IntersectionSimulationDtosRepository.ZebraCrossingOnOneLaneRoadEastWest,
-				options => options.Excluding(x => x.Id));
+			intersectionSimulationDto.Value.Should().BeEquivalentTo(IntersectionSimulationDtosRepository.ZebraCrossingOnOneLaneRoadEastWestWithCarGenerators,
+				options => options
+					.Using<JsonElement>(ctx => ctx.Subject.ToString().Should().Be(ctx.Expectation.ToString())) // Compare JSON content
+					.WhenTypeIs<JsonElement>());
 		}
 
 		[Fact]
@@ -74,7 +77,10 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 
 			// Assert
 			intersectionSimulationDto2Result.IsError.Should().BeFalse();
-			intersectionSimulationDto2Result.Value.Should().BeEquivalentTo(intersectionSimulationDto);
+			intersectionSimulationDto2Result.Value.Should().BeEquivalentTo(intersectionSimulationDto,
+				options => options
+					.Using<JsonElement>(ctx => ctx.Subject.ToString().Should().Be(ctx.Expectation.ToString())) // Compare JSON content
+					.WhenTypeIs<JsonElement>());
 		}
 
 		[Fact]

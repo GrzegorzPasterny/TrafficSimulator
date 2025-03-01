@@ -187,6 +187,13 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 					new JsonSerializerOptions { WriteIndented = true }
 				);
 			}
+			else
+			{
+				carGeneratorOptions = JsonSerializer.Serialize(
+					new CarGeneratorOptions(),
+					new JsonSerializerOptions { WriteIndented = true }
+				);
+			}
 
 			return new InboundLaneDto()
 			{
@@ -197,7 +204,7 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 				LaneTypes = lane.TurnPossibilities.Select(turn => turn.LaneType).ToArray(),
 				ContainsTrafficLights = lane.TurnPossibilities.Any(t => t.ContainsTrafficLights),
 				CarGeneratorTypeName = lane.CarGenerator is null ? string.Empty : lane.CarGenerator.GetType().Name,
-				CarGeneratorOptions = carGeneratorOptions,
+				CarGeneratorOptions = JsonSerializer.Deserialize<JsonElement>(carGeneratorOptions),
 			};
 		}
 

@@ -28,7 +28,7 @@ namespace TrafficSimulator.Domain.CarGenerators
 			_mediator = mediator;
 		}
 
-		public ErrorOr<ICarGenerator?> Create(string carGeneratorType, string carGeneratorOptions, Intersection root, IntersectionObject parent)
+		public ErrorOr<ICarGenerator?> Create(string carGeneratorType, JsonElement carGeneratorOptions, Intersection root, IntersectionObject parent)
 		{
 			ICarGenerator? carGenerator = null;
 

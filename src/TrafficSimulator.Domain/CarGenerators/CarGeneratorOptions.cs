@@ -1,6 +1,6 @@
 ﻿namespace TrafficSimulator.Domain.CarGenerators
 {
-	public abstract class CarGeneratorOptions
+	public class CarGeneratorOptions
 	{
 	}
 }
