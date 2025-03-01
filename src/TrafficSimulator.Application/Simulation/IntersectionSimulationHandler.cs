@@ -20,7 +20,6 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		internal IntersectionSimulation? _intersectionSimulation;
 		private readonly ISender _sender;
 		private readonly ITrafficLightsHandler _trafficLightsHandler;
-		private readonly ISimulationSetupRepository _simulationSetupRepository;
 		internal readonly ILogger<IntersectionSimulationHandler> _logger;
 
 		public SimulationState SimulationState => _intersectionSimulation!.SimulationState;
@@ -29,12 +28,10 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		public IntersectionSimulationHandler(
 			ISender sender,
 			ITrafficLightsHandler trafficLightsHandler,
-			ISimulationSetupRepository simulationSetupRepository,
 			ILogger<IntersectionSimulationHandler> logger)
 		{
 			_sender = sender;
 			_trafficLightsHandler = trafficLightsHandler;
-			_simulationSetupRepository = simulationSetupRepository;
 			_logger = logger;
 		}
 

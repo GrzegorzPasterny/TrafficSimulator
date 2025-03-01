@@ -15,9 +15,8 @@ namespace TrafficSimulator.Application.Simulation
 		public InMemoryIntersectionSimulationHandler(
 			ISender sender,
 			ITrafficLightsHandler trafficLightsHandler,
-			ISimulationSetupRepository simulationSetupRepository,
 			ILogger<InMemoryIntersectionSimulationHandler> logger)
-			: base(sender, trafficLightsHandler, simulationSetupRepository, logger)
+			: base(sender, trafficLightsHandler, logger)
 		{
 			_logger = logger;
 		}
