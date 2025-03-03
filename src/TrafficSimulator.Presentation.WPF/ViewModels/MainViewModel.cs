@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TrafficSimulator.Application.Commons.Interfaces;
+using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Presentation.WPF.Helpers;
 
@@ -20,6 +21,11 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 		[ObservableProperty]
 		private ObservableCollection<TrafficElement> trafficElements = new();
+
+		[ObservableProperty]
+		// TODO: I do not need collection here -> switch to variable
+		private ObservableCollection<IntersectionElement> _intersectionElement = new();
+
 		public ICommand LoadSimulationCommand { get; }
 
 		public MainViewModel(ISimulationHandler simulationHandler, ILogger<MainViewModel> logger)
@@ -57,7 +63,58 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 			Intersection intersection = _simulationHandler.IntersectionSimulation!.Intersection;
 
-			//DrawIntersection();
+			DrawIntersection(intersection);
+		}
+
+		private void DrawIntersection(Intersection intersection)
+		{
+			TrafficElements.Clear();
+
+			AddIntersectionCore(intersection);
+		}
+
+		private void AddIntersectionCore(Intersection intersection)
+		{
+			int northLanes = GetAmountOfLanes(intersection, WorldDirection.North);
+			int southLanes = GetAmountOfLanes(intersection, WorldDirection.South);
+			int westLanes = GetAmountOfLanes(intersection, WorldDirection.West);
+			int eastLanes = GetAmountOfLanes(intersection, WorldDirection.East);
+
+			int maxVerticalLanesAmount = Math.Max(northLanes, southLanes);
+			int maxHorizontalLanesAmount = Math.Max(westLanes, eastLanes);
+
+			new IntersectionCoreElement()
+			{
+				Height = maxVerticalLanesAmount * CanvasOptions.LaneWidth,
+				Width = maxHorizontalLanesAmount * CanvasOptions.LaneWidth,
+			};
+		}
+
+		private int GetAmountOfLanes(Intersection intersection, WorldDirection worldDirection)
+		{
+			Lanes? lanes = intersection.LanesCollection.FirstOrDefault(lanes => lanes.WorldDirection == worldDirection);
+
+			if (lanes == null)
+			{
+				return 0;
+			}
+
+			if (lanes.InboundLanes is null && lanes.OutboundLanes is null)
+			{
+				return 0;
+			}
+
+			if (lanes.InboundLanes is null)
+			{
+				return lanes.OutboundLanes!.Count;
+			}
+
+			if (lanes.OutboundLanes is null)
+			{
+				return lanes.InboundLanes!.Count;
+			}
+
+			return lanes.InboundLanes.Count + lanes.OutboundLanes.Count;
 		}
 
 		private void LoadDummyIntersection()
@@ -106,5 +163,17 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			Height = height;
 			Color = color;
 		}
+	}
+
+	public class IntersectionElement
+	{
+		public IntersectionCoreElement IntersectionCoreElement { get; set; }
+	}
+
+	public class IntersectionCoreElement
+	{
+		public int Height { get; set; }
+		public int Width { get; set; }
+
 	}
 }
