@@ -15,7 +15,6 @@
             <Button Content="Load Simulation" Command="{Binding LoadSimulationCommand}" Width="200" Margin="10" HorizontalAlignment="Left"/>
 
             <Canvas Name="SimulationCanvas" Width="600" Height="600" Background="LightGray">
-                <ItemsControl ItemsSource="{Binding IntersectionElements}"/>
             </Canvas>
         </StackPanel>
     </Grid>
