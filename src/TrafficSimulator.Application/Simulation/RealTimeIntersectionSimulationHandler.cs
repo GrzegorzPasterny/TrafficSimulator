@@ -35,7 +35,7 @@ namespace TrafficSimulator.Application.Simulation
 			_stopwatch = Stopwatch.StartNew();
 
 			// Define a cancellation token for timeout
-			_cancellationTokenSource = new CancellationTokenSource(_intersectionSimulation!.Options.Timeout);
+			_cancellationTokenSource = new CancellationTokenSource(IntersectionSimulation!.Options.Timeout);
 			var cancellationToken = _cancellationTokenSource.Token;
 
 			_timer.Elapsed += async (s, e) =>
@@ -43,9 +43,9 @@ namespace TrafficSimulator.Application.Simulation
 				if (cancellationToken.IsCancellationRequested)
 				{
 					_logger.LogWarning("Simulation aborted due to timeout [TimeLimit = {TimeLimit} ms]",
-						_intersectionSimulation!.Options.Timeout);
+						IntersectionSimulation!.Options.Timeout);
 
-					_intersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.Aborted;
+					IntersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.Aborted;
 					_ = Task.Run(() => GatherResults(_stopwatch.ElapsedMilliseconds));
 
 					CleanupTimer();
@@ -56,12 +56,12 @@ namespace TrafficSimulator.Application.Simulation
 
 				await DetermineState();
 
-				if (_intersectionSimulation!.SimulationState.StepsCount >= _intersectionSimulation.Options.StepLimit)
+				if (IntersectionSimulation!.SimulationState.StepsCount >= IntersectionSimulation.Options.StepLimit)
 				{
-					_intersectionSimulation.SimulationState.SimulationPhase = SimulationPhase.Aborted;
+					IntersectionSimulation.SimulationState.SimulationPhase = SimulationPhase.Aborted;
 
 					_logger.LogInformation("Simulation aborted due to reaching the maximum step amount " +
-						"[StepLimit = {StepLimit}]", _intersectionSimulation.Options.StepLimit);
+						"[StepLimit = {StepLimit}]", IntersectionSimulation.Options.StepLimit);
 
 					_ = Task.Run(() => GatherResults(_stopwatch!.ElapsedMilliseconds));
 
@@ -69,7 +69,7 @@ namespace TrafficSimulator.Application.Simulation
 					return;
 				}
 
-				if (_intersectionSimulation.SimulationState.SimulationPhase is SimulationPhase.Finished)
+				if (IntersectionSimulation.SimulationState.SimulationPhase is SimulationPhase.Finished)
 				{
 					_logger.LogInformation("The simulation has finished");
 

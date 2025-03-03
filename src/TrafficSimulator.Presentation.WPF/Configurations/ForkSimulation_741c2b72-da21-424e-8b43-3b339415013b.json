@@ -1,0 +1,125 @@
+{
+  "Id": "741c2b72-da21-424e-8b43-3b339415013b",
+  "Name": "ForkSimulation",
+  "Intersection": {
+    "LanesCollection": [
+      {
+        "InboundLanes": [
+          {
+            "CarGeneratorTypeName": "MultipleCarsGenerator",
+            "LaneTypes": [
+              1
+            ],
+            "ContainsTrafficLights": true,
+            "CarGeneratorOptions": {
+              "AmountOfCarsToGenerate": 3,
+              "DelayBetweenCarGeneration": "00:00:00.5000000"
+            },
+            "WorldDirection": 3,
+            "Distance": 10,
+            "Name": "InboundLane",
+            "ParentName": ".Fork.Lanes.East"
+          }
+        ],
+        "OutboundLanes": [],
+        "WorldDirection": 3,
+        "Name": "Lanes.East",
+        "ParentName": ".Fork"
+      },
+      {
+        "InboundLanes": [
+          {
+            "CarGeneratorTypeName": "MultipleCarsGenerator",
+            "LaneTypes": [
+              2
+            ],
+            "ContainsTrafficLights": true,
+            "CarGeneratorOptions": {
+              "AmountOfCarsToGenerate": 3,
+              "DelayBetweenCarGeneration": "00:00:00.5000000"
+            },
+            "WorldDirection": 1,
+            "Distance": 10,
+            "Name": "InboundLane",
+            "ParentName": ".Fork.Lanes.West"
+          }
+        ],
+        "OutboundLanes": [],
+        "WorldDirection": 1,
+        "Name": "Lanes.West",
+        "ParentName": ".Fork"
+      },
+      {
+        "InboundLanes": [],
+        "OutboundLanes": [
+          {
+            "WorldDirection": 0,
+            "Distance": 10,
+            "Name": "OutboundLane",
+            "ParentName": ".Fork.Lanes.North"
+          }
+        ],
+        "WorldDirection": 0,
+        "Name": "Lanes.North",
+        "ParentName": ".Fork"
+      }
+    ],
+    "IntersectionCore": {
+      "Distance": 10,
+      "Name": "IntersectionCore",
+      "ParentName": ".Fork"
+    },
+    "TrafficPhases": [
+      {
+        "Name": "GreenForEastOnly",
+        "TrafficLightsAssignments": [
+          {
+            "InboundLaneName": ".Fork.Lanes.East.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 1,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 1
+          },
+          {
+            "InboundLaneName": ".Fork.Lanes.West.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 2,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          }
+        ]
+      },
+      {
+        "Name": "GreenForWestOnly",
+        "TrafficLightsAssignments": [
+          {
+            "InboundLaneName": ".Fork.Lanes.East.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 1,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 3
+          },
+          {
+            "InboundLaneName": ".Fork.Lanes.West.InboundLane",
+            "TurnPossibility": {
+              "LaneType": 2,
+              "ContainsTrafficLights": true
+            },
+            "TrafficLightState": 1
+          }
+        ]
+      }
+    ],
+    "Name": "Fork",
+    "ParentName": ""
+  },
+  "Options": {
+    "MinimalDistanceBetweenTheCars": 1,
+    "StepTimespanMs": 100,
+    "TimeoutMs": 5000,
+    "StepLimit": 1000
+  }
+}

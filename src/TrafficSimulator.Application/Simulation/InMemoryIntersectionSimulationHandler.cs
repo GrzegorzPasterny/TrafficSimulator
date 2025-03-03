@@ -30,7 +30,7 @@ namespace TrafficSimulator.Application.Simulation
 		{
 			_stopwatch = Stopwatch.StartNew();
 
-			using (CancellationTokenSource cts = new(_intersectionSimulation!.Options.Timeout))
+			using (CancellationTokenSource cts = new(IntersectionSimulation!.Options.Timeout))
 			{
 				while (cts.IsCancellationRequested is false)
 				{
@@ -39,18 +39,18 @@ namespace TrafficSimulator.Application.Simulation
 
 					await DetermineState();
 
-					if (_intersectionSimulation.SimulationState.StepsCount >= _intersectionSimulation.Options.StepLimit)
+					if (IntersectionSimulation.SimulationState.StepsCount >= IntersectionSimulation.Options.StepLimit)
 					{
-						_intersectionSimulation.SimulationState.SimulationPhase = SimulationPhase.Aborted;
+						IntersectionSimulation.SimulationState.SimulationPhase = SimulationPhase.Aborted;
 
 						_logger.LogInformation("Simulation aborted due to reaching the maximum step amount " +
-							"[StepLimit = {StepLimit}]", _intersectionSimulation.Options.StepLimit);
+							"[StepLimit = {StepLimit}]", IntersectionSimulation.Options.StepLimit);
 
 						await GatherResults(_stopwatch.ElapsedMilliseconds);
 						return;
 					}
 
-					if (_intersectionSimulation.SimulationState.SimulationPhase is SimulationPhase.Finished)
+					if (IntersectionSimulation.SimulationState.SimulationPhase is SimulationPhase.Finished)
 					{
 						_logger.LogDebug("The simulation has finished");
 
@@ -64,8 +64,8 @@ namespace TrafficSimulator.Application.Simulation
 
 				if (cts.IsCancellationRequested)
 				{
-					_logger.LogInformation("The simulation has reached timeout [Timeout = {Timeout}]", _intersectionSimulation.Options.Timeout);
-					_intersectionSimulation.SimulationState.SimulationPhase = SimulationPhase.Aborted;
+					_logger.LogInformation("The simulation has reached timeout [Timeout = {Timeout}]", IntersectionSimulation.Options.Timeout);
+					IntersectionSimulation.SimulationState.SimulationPhase = SimulationPhase.Aborted;
 
 					await GatherResults(_stopwatch.ElapsedMilliseconds);
 				}

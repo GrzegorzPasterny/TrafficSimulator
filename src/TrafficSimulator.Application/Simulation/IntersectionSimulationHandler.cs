@@ -17,13 +17,13 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 {
 	public abstract class IntersectionSimulationHandler : ISimulationHandler
 	{
-		internal IntersectionSimulation? _intersectionSimulation;
+		public IntersectionSimulation? IntersectionSimulation { get; internal set; }
 		private readonly ISender _sender;
 		private readonly ITrafficLightsHandler _trafficLightsHandler;
 		internal readonly ILogger<IntersectionSimulationHandler> _logger;
 
-		public SimulationState SimulationState => _intersectionSimulation!.SimulationState;
-		public SimulationResults SimulationResults => _intersectionSimulation!.SimulationResults!;
+		public SimulationState SimulationState => IntersectionSimulation!.SimulationState;
+		public SimulationResults SimulationResults => IntersectionSimulation!.SimulationResults!;
 
 		public IntersectionSimulationHandler(
 			ISender sender,
@@ -37,9 +37,9 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 		public UnitResult<Error> Abort()
 		{
-			if (_intersectionSimulation!.SimulationState.SimulationPhase is SimulationPhase.Finished)
+			if (IntersectionSimulation!.SimulationState.SimulationPhase is SimulationPhase.Finished)
 			{
-				return DomainErrors.SimulationStateChange(_intersectionSimulation!.SimulationState.SimulationPhase, SimulationPhase.Finished);
+				return DomainErrors.SimulationStateChange(IntersectionSimulation!.SimulationState.SimulationPhase, SimulationPhase.Finished);
 			}
 
 			// TODO: Cancel the simulation
@@ -49,10 +49,10 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 		public UnitResult<Error> LoadIntersection(IntersectionSimulation intersectionSimulation)
 		{
-			_intersectionSimulation = intersectionSimulation;
+			IntersectionSimulation = intersectionSimulation;
 			_trafficLightsHandler.LoadIntersection(intersectionSimulation.Intersection);
 			SimulationState.CarGenerators =
-							_intersectionSimulation.Intersection.ObjectLookup.OfType<ICarGenerator>().ToList();
+							IntersectionSimulation.Intersection.ObjectLookup.OfType<ICarGenerator>().ToList();
 
 			return UnitResult.Success<Error>();
 		}
@@ -81,12 +81,12 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		/// </remarks>
 		public async Task<UnitResult<Error>> Start()
 		{
-			if (_intersectionSimulation!.SimulationState.SimulationPhase != SimulationPhase.NotStarted)
+			if (IntersectionSimulation!.SimulationState.SimulationPhase != SimulationPhase.NotStarted)
 			{
-				return DomainErrors.SimulationStateChange(_intersectionSimulation!.SimulationState.SimulationPhase, SimulationPhase.InProgress);
+				return DomainErrors.SimulationStateChange(IntersectionSimulation!.SimulationState.SimulationPhase, SimulationPhase.InProgress);
 			}
 
-			_intersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.InProgress;
+			IntersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.InProgress;
 
 			try
 			{
@@ -126,13 +126,13 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		{
 			bool allCarsFinished;
 
-			if (_intersectionSimulation!.SimulationState.SimulationPhase is SimulationPhase.InProgressCarGenerationFinished)
+			if (IntersectionSimulation!.SimulationState.SimulationPhase is SimulationPhase.InProgressCarGenerationFinished)
 			{
-				allCarsFinished = await AllCarsFinished(_intersectionSimulation!.SimulationState);
+				allCarsFinished = await AllCarsFinished(IntersectionSimulation!.SimulationState);
 
 				if (allCarsFinished)
 				{
-					_intersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.Finished;
+					IntersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.Finished;
 				}
 			}
 			else
@@ -141,18 +141,18 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 				if (allCarGeneratorsFinished)
 				{
-					_intersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.InProgressCarGenerationFinished;
+					IntersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.InProgressCarGenerationFinished;
 				}
 
-				allCarsFinished = await AllCarsFinished(_intersectionSimulation!.SimulationState);
+				allCarsFinished = await AllCarsFinished(IntersectionSimulation!.SimulationState);
 
 				if (allCarGeneratorsFinished && allCarsFinished)
 				{
-					_intersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.Finished;
+					IntersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.Finished;
 				}
 			}
 
-			_logger.LogTrace("[SimulationState = {SimulationState}]", _intersectionSimulation!.SimulationState);
+			_logger.LogTrace("[SimulationState = {SimulationState}]", IntersectionSimulation!.SimulationState);
 		}
 
 		internal async Task PerformSimulationStep()
@@ -164,8 +164,8 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			await MoveCars();
 
 			// update metrics
-			_intersectionSimulation!.SimulationState.StepsCount++;
-			_intersectionSimulation!.SimulationState.ElapsedTime = _intersectionSimulation.Options.StepTimespan * _intersectionSimulation!.SimulationState.StepsCount;
+			IntersectionSimulation!.SimulationState.StepsCount++;
+			IntersectionSimulation!.SimulationState.ElapsedTime = IntersectionSimulation.Options.StepTimespan * IntersectionSimulation!.SimulationState.StepsCount;
 
 			// TODO: Add car collision check
 			// TODO: Cars need to wait in the queue when car is in front of them and also when Traffic light is orange, or red
@@ -177,36 +177,36 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			{
 				if (carGenerator.IsGenerationFinished == false)
 				{
-					await carGenerator.Generate(_intersectionSimulation!.Options.StepTimespan);
+					await carGenerator.Generate(IntersectionSimulation!.Options.StepTimespan);
 				}
 			}
 		}
 
 		private Task SetTrafficLights()
 		{
-			return _trafficLightsHandler.SetLights(_intersectionSimulation!.Options.StepTimespan);
+			return _trafficLightsHandler.SetLights(IntersectionSimulation!.Options.StepTimespan);
 		}
 
 		private Task MoveCars()
 		{
-			return _sender.Send(new MoveAllCarsCommand(_intersectionSimulation!.Options.StepTimespan));
+			return _sender.Send(new MoveAllCarsCommand(IntersectionSimulation!.Options.StepTimespan));
 		}
 
 		internal async Task GatherResults(long elapsedMilliseconds)
 		{
-			if (_intersectionSimulation!.SimulationResults is null)
+			if (IntersectionSimulation!.SimulationResults is null)
 			{
-				_intersectionSimulation.SimulationResults = new SimulationResults();
+				IntersectionSimulation.SimulationResults = new SimulationResults();
 			}
 
-			_intersectionSimulation!.SimulationResults.TotalCalculationTimeMs = elapsedMilliseconds;
-			_intersectionSimulation!.SimulationResults.SimulationStepsTaken = _intersectionSimulation.SimulationState.StepsCount;
+			IntersectionSimulation!.SimulationResults.TotalCalculationTimeMs = elapsedMilliseconds;
+			IntersectionSimulation!.SimulationResults.SimulationStepsTaken = IntersectionSimulation.SimulationState.StepsCount;
 
 			List<Car> cars = (await _sender.Send(new GetCarsCommand())).ToList();
 
-			_intersectionSimulation.SimulationResults.CarsPassed = cars.Count();
-			_intersectionSimulation.SimulationResults.TotalCarsIdleTimeMs =
-				cars.Sum(c => c.MovesWhenCarWaited) * _intersectionSimulation.Options.StepTimespan.TotalMilliseconds;
+			IntersectionSimulation.SimulationResults.CarsPassed = cars.Count();
+			IntersectionSimulation.SimulationResults.TotalCarsIdleTimeMs =
+				cars.Sum(c => c.MovesWhenCarWaited) * IntersectionSimulation.Options.StepTimespan.TotalMilliseconds;
 
 			_logger.LogInformation("SimulationResults = {SimulationResults}", SimulationResults);
 		}

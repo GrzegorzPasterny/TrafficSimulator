@@ -9,6 +9,7 @@ public interface ISimulationHandler : IDisposable
 {
 	SimulationState SimulationState { get; }
 	SimulationResults SimulationResults { get; }
+	IntersectionSimulation? IntersectionSimulation { get; }
 
 	UnitResult<Error> LoadIntersection(IntersectionSimulation intersectionSimulation);
 
