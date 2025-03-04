@@ -164,5 +164,28 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
 		}
+
+		[Fact]
+		public async Task RunSimulation_GivenFourDirectionIntersection_GivenMultipleCars_GivenSimpleTrafficHandler_CarShouldPassTheIntersectionAsExpected()
+		{
+			// Arrange
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.FourDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLightsWithCarGenerators(_mediator);
+			Intersection intersection = intersectionSimulation.Intersection;
+
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
+
+			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
+
+			using ISimulationHandler simulationHandler =
+				new InMemoryIntersectionSimulationHandler(_mediator, trafficLightsHandler, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+
+			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
+
+			UnitResult<Error> simulationStartResult = await simulationHandler.Start();
+
+			simulationStartResult.IsSuccess.Should().BeTrue();
+
+			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
+		}
 	}
 }

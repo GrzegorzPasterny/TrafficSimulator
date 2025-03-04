@@ -33,6 +33,9 @@
     <None Update="Configurations\ForkSimulation_741c2b72-da21-424e-8b43-3b339415013b.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Configurations\NormalFourStreetsSimulation_f004abcd-1d37-4289-928d-dd9798bf3007.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Configurations\NormalThreeStreetsSimulation_1dac5dbe-1d37-4289-928d-dd9798bf3007.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -231,5 +231,69 @@ namespace TrafficSimulator.Tests.Commons.Assets
 
 			return new IntersectionSimulation(intersection, id, "NormalThreeStreetsSimulation");
 		}
+
+		public static IntersectionSimulation FourDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLightsWithCarGenerators(ISender mediator)
+		{
+			ErrorOr<Intersection> intersectionResult =
+			IntersectionBuilder.Create("NormalFourStreets")
+			.AddIntersectionCore()
+			.AddLanesCollection(WorldDirection.North)
+			.AddInboundLane(WorldDirection.North, LaneTypeHelper.StraightLeftAndRight())
+			.AddOutboundLane(WorldDirection.North)
+			.AddLanesCollection(WorldDirection.East)
+			.AddInboundLane(WorldDirection.East, LaneTypeHelper.StraightLeftAndRight())
+			.AddOutboundLane(WorldDirection.East)
+			.AddLanesCollection(WorldDirection.South)
+			.AddInboundLane(WorldDirection.South, LaneTypeHelper.StraightLeftAndRight())
+			.AddOutboundLane(WorldDirection.South)
+			.AddLanesCollection(WorldDirection.West)
+			.AddInboundLane(WorldDirection.West, LaneTypeHelper.StraightLeftAndRight())
+			.AddOutboundLane(WorldDirection.West)
+			.Build();
+
+			intersectionResult.IsError.Should().BeFalse();
+			Intersection intersection = intersectionResult.Value;
+
+			InboundLane northInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.North)!
+				.InboundLanes!
+				.First();
+
+			InboundLane eastInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.East)!
+				.InboundLanes!
+				.First();
+
+			InboundLane southInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.South)!
+				.InboundLanes!
+				.First();
+
+			InboundLane westInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.West)!
+				.InboundLanes!
+				.First();
+
+			ICarGenerator northLaneCarGenerator = new MultipleCarsGenerator(intersection, eastInboundLane, mediator);
+			northInboundLane.CarGenerator = northLaneCarGenerator;
+
+			ICarGenerator eastLaneCarGenerator = new MultipleCarsGenerator(intersection, eastInboundLane, mediator);
+			eastInboundLane.CarGenerator = eastLaneCarGenerator;
+
+			ICarGenerator southLaneCarGenerator = new MultipleCarsGenerator(intersection, southInboundLane, mediator);
+			southInboundLane.CarGenerator = southLaneCarGenerator;
+
+			ICarGenerator westLaneCarGenerator = new MultipleCarsGenerator(intersection, westInboundLane, mediator);
+
+			westInboundLane.CarGenerator = westLaneCarGenerator;
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.North));
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.South));
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
+
+			Guid id = Guid.Parse("f004abcd-1d37-4289-928d-dd9798bf3007");
+
+			return new IntersectionSimulation(intersection, id, "NormalFourStreetsSimulation");
+		}
 	}
 }
