@@ -70,8 +70,14 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 			AddIntersectionCore(intersection);
 			AddLanes(intersection, _tempIntersectionElement.IntersectionCoreElement);
+			AddTrafficLights(intersection, _tempIntersectionElement.IntersectionCoreElement);
 
 			IntersectionElement = _tempIntersectionElement;
+		}
+
+		private void AddTrafficLights(Intersection intersection, IntersectionCoreElement intersectionCoreElement)
+		{
+			// TODO: Implement (Maybe implementation will not be needed)
 		}
 
 		private void AddIntersectionCore(Intersection intersection)

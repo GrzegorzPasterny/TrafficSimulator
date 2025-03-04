@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Presentation.WPF.ViewModels;
 using TrafficSimulator.Presentation.WPF.ViewModels.IntersectionElements;
 
@@ -21,8 +22,6 @@ public partial class MainWindow : Window
 		DataContext = mainViewModel;
 		_mainViewModel = mainViewModel;
 		_mainViewModel.PropertyChanged += ViewModel_PropertyChanged;
-		//DrawDummyIntersection();
-		//DrawIntersection();
 	}
 
 	private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -67,176 +66,97 @@ public partial class MainWindow : Window
 	{
 		foreach (var laneElement in laneElements)
 		{
+			Rectangle laneRectangle = new();
+
 			switch (laneElement.WorldDirection)
 			{
-				case Domain.Commons.WorldDirection.North:
-					Rectangle northlaneRectangle = new Rectangle()
-					{
-						Width = laneElement.Width,
-						Height = SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY,
-						Fill = Brushes.Black,
-						Stroke = Brushes.White,
-					};
+				case WorldDirection.North:
+					laneRectangle.Width = laneElement.Width;
+					laneRectangle.Height = SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY;
+					laneRectangle.Fill = Brushes.Black;
+					laneRectangle.Stroke = Brushes.White;
 
-					Canvas.SetTop(northlaneRectangle, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY);
-					Canvas.SetLeft(northlaneRectangle, SimulationCanvas.ActualWidth / 2 - laneElement.AnchorPointX);
+					if (laneElement.Inbound)
+						laneRectangle.Fill = Brushes.Chocolate;
 
-					SimulationCanvas.Children.Add(northlaneRectangle);
+					if (laneElement.Inbound)
+						AddTrafficLights(laneElement.AnchorPointX, laneElement.AnchorPointY, laneElement.Width, WorldDirection.North);
+
+					Canvas.SetTop(laneRectangle, 0);
+					Canvas.SetLeft(laneRectangle, SimulationCanvas.ActualWidth / 2 + laneElement.AnchorPointX);
 					break;
-				case Domain.Commons.WorldDirection.East:
-					Rectangle eastLaneRectangle = new Rectangle()
-					{
-						Width = SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointX,
-						Height = laneElement.Width,
-						Fill = Brushes.Black,
-						Stroke = Brushes.White,
-					};
+				case WorldDirection.East:
+					laneRectangle.Width = SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointX;
+					laneRectangle.Height = laneElement.Width;
+					laneRectangle.Fill = Brushes.Black;
+					laneRectangle.Stroke = Brushes.White;
 
-					Canvas.SetTop(eastLaneRectangle, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY);
-					Canvas.SetLeft(eastLaneRectangle, laneElement.AnchorPointX + SimulationCanvas.ActualWidth / 2);
+					if (laneElement.Inbound)
+						laneRectangle.Fill = Brushes.Chocolate;
 
-					SimulationCanvas.Children.Add(eastLaneRectangle);
+					Canvas.SetTop(laneRectangle, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY);
+					Canvas.SetLeft(laneRectangle, laneElement.AnchorPointX + SimulationCanvas.ActualWidth / 2);
 					break;
-				case Domain.Commons.WorldDirection.South:
-					Rectangle southlaneRectangle = new Rectangle()
-					{
-						Width = laneElement.Width,
-						Height = SimulationCanvas.ActualHeight / 2 + laneElement.AnchorPointY,
-						Fill = Brushes.Black,
-						Stroke = Brushes.White,
-					};
+				case WorldDirection.South:
+					laneRectangle.Width = laneElement.Width;
+					laneRectangle.Height = SimulationCanvas.ActualHeight / 2 + laneElement.AnchorPointY;
+					laneRectangle.Fill = Brushes.Black;
+					laneRectangle.Stroke = Brushes.White;
 
-					Canvas.SetTop(southlaneRectangle, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY);
-					Canvas.SetLeft(southlaneRectangle, laneElement.AnchorPointX + SimulationCanvas.ActualWidth / 2 - laneElement.Width);
+					if (laneElement.Inbound)
+						laneRectangle.Fill = Brushes.Chocolate;
 
-					SimulationCanvas.Children.Add(southlaneRectangle);
+					Canvas.SetTop(laneRectangle, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY);
+					Canvas.SetLeft(laneRectangle, laneElement.AnchorPointX + SimulationCanvas.ActualWidth / 2 - laneElement.Width);
 					break;
-				case Domain.Commons.WorldDirection.West:
-					Rectangle westLaneRectangle = new Rectangle()
-					{
-						Width = SimulationCanvas.ActualHeight / 2 + laneElement.AnchorPointX,
-						Height = laneElement.Width,
-						Fill = Brushes.Black,
-						Stroke = Brushes.White,
-					};
+				case WorldDirection.West:
+					laneRectangle.Width = SimulationCanvas.ActualHeight / 2 + laneElement.AnchorPointX;
+					laneRectangle.Height = laneElement.Width;
+					laneRectangle.Fill = Brushes.Black;
+					laneRectangle.Stroke = Brushes.White;
 
-					Canvas.SetTop(westLaneRectangle, SimulationCanvas.ActualHeight / 2 + laneElement.AnchorPointY);
-					Canvas.SetLeft(westLaneRectangle, 0);
+					if (laneElement.Inbound)
+						laneRectangle.Fill = Brushes.Chocolate;
 
-					SimulationCanvas.Children.Add(westLaneRectangle);
+					Canvas.SetTop(laneRectangle, SimulationCanvas.ActualHeight / 2 + laneElement.AnchorPointY);
+					Canvas.SetLeft(laneRectangle, 0);
 					break;
 				default:
 					break;
 			}
 
+			SimulationCanvas.Children.Add(laneRectangle);
 		}
 	}
 
-	//private void DrawIntersection()
-	//{
-	//	SimulationCanvas.Children.Clear();
-
-	//	foreach (var element in _mainViewModel.TrafficElements)
-	//	{
-	//		UIElement uiElement = null;
-
-	//		switch (element.Type)
-	//		{
-	//			case TrafficElementType.IntersectionCore:
-	//				uiElement = new Rectangle
-	//				{
-	//					Width = element.Width,
-	//					Height = element.Height,
-	//					Fill = (Brush)new BrushConverter().ConvertFromString(element.Color)
-	//				};
-	//				break;
-
-	//			case TrafficElementType.Lane:
-	//				uiElement = new Rectangle
-	//				{
-	//					Width = element.Width,
-	//					Height = element.Height,
-	//					Fill = (Brush)new BrushConverter().ConvertFromString(element.Color)
-	//				};
-	//				break;
-
-	//			case TrafficElementType.TrafficLight:
-	//				uiElement = new Ellipse
-	//				{
-	//					Width = element.Width,
-	//					Height = element.Height,
-	//					Fill = (Brush)new BrushConverter().ConvertFromString(element.Color)
-	//				};
-	//				break;
-	//		}
-
-	//		if (uiElement != null)
-	//		{
-	//			Canvas.SetLeft(uiElement, element.X);
-	//			Canvas.SetTop(uiElement, element.Y);
-	//			SimulationCanvas.Children.Add(uiElement);
-	//		}
-	//	}
-	//}
-
-	private void DrawDummyIntersection()
+	private void AddTrafficLights(double anchorPointX, double anchorPointY, int laneWidth, WorldDirection worldDirection)
 	{
-		SimulationCanvas.Children.Clear();
-
-		// Draw Intersection Core (Gray Square)
-		var intersectionCore = new Rectangle
+		Ellipse ellipse = new Ellipse()
 		{
-			Width = 100,
-			Height = 100,
-			Fill = Brushes.DarkGray
+			Height = laneWidth / 2,
+			Width = laneWidth / 2,
+			Fill = Brushes.Red,
 		};
-		Canvas.SetLeft(intersectionCore, 250);
-		Canvas.SetTop(intersectionCore, 250);
-		SimulationCanvas.Children.Add(intersectionCore);
 
-		// Draw Inbound Lanes
-		DrawLane(300, 0, 300, 250, Brushes.Black); // North
-		DrawLane(300, 600, 300, 350, Brushes.Black); // South
-		DrawLane(600, 300, 350, 300, Brushes.Black); // East
-		DrawLane(0, 300, 250, 300, Brushes.Black); // West
-
-		// Draw Outbound Lanes
-		DrawLane(300, 100, 300, 250, Brushes.Gray); // North
-		DrawLane(300, 500, 300, 350, Brushes.Gray); // South
-		DrawLane(500, 300, 350, 300, Brushes.Gray); // East
-		DrawLane(100, 300, 250, 300, Brushes.Gray); // West
-
-		// Draw Traffic Lights
-		DrawTrafficLight(290, 230); // North
-		DrawTrafficLight(290, 370); // South
-		DrawTrafficLight(370, 290); // East
-		DrawTrafficLight(230, 290); // West
-	}
-
-	private void DrawLane(double x1, double y1, double x2, double y2, Brush color)
-	{
-		var laneLine = new Line
+		switch (worldDirection)
 		{
-			Stroke = color,
-			StrokeThickness = 6,
-			X1 = x1,
-			Y1 = y1,
-			X2 = x2,
-			Y2 = y2
-		};
-		SimulationCanvas.Children.Add(laneLine);
-	}
+			case WorldDirection.North:
+				Canvas.SetTop(ellipse, SimulationCanvas.ActualHeight / 2 - anchorPointY - laneWidth / 2 + ellipse.Height / 2);
+				Canvas.SetLeft(ellipse, SimulationCanvas.ActualWidth / 2 + anchorPointX + laneWidth / 2 - ellipse.Width / 2);
+				break;
+			case WorldDirection.West:
+				break;
+			case WorldDirection.South:
+				break;
+			case WorldDirection.East:
+				break;
+			default:
+				break;
+		}
 
-	private void DrawTrafficLight(double left, double top)
-	{
-		var trafficLight = new Ellipse
-		{
-			Width = 20,
-			Height = 20,
-			Fill = Brushes.Red
-		};
-		Canvas.SetLeft(trafficLight, left);
-		Canvas.SetTop(trafficLight, top);
-		SimulationCanvas.Children.Add(trafficLight);
+		// Bring to front
+		Panel.SetZIndex(ellipse, 100);
+
+		SimulationCanvas.Children.Add(ellipse);
 	}
 }
