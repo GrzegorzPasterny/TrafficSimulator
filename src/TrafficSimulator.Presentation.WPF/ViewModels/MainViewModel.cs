@@ -94,12 +94,102 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 		private void AddLanes(Intersection intersection, IntersectionCoreElement intersectionCoreElement)
 		{
-			int northLanes = GetAmountOfLanes(intersection, WorldDirection.North);
-			int southLanes = GetAmountOfLanes(intersection, WorldDirection.South);
-			int westLanes = GetAmountOfLanes(intersection, WorldDirection.West);
-			int eastLanes = GetAmountOfLanes(intersection, WorldDirection.East);
+			AddNorthLanes(intersection, intersectionCoreElement);
+			AddEastLanes(intersection, intersectionCoreElement);
+		}
 
+		private void AddEastLanes(Intersection intersection, IntersectionCoreElement intersectionCoreElement)
+		{
+			Lanes eastLanes = intersection.LanesCollection.Single(lanes => lanes.WorldDirection == WorldDirection.East);
 
+			int eastLanesProcessed = 0;
+
+			foreach (InboundLane lane in eastLanes.InboundLanes)
+			{
+				double leftEdge = intersectionCoreElement.Width / 2;
+				double firstLaneFromTheLeft = leftEdge - CanvasOptions.LaneWidth / 2;
+				double currentLanePositionFromTheLeft = firstLaneFromTheLeft - CanvasOptions.LaneWidth * eastLanesProcessed;
+
+				LaneElement laneElement = new LaneElement()
+				{
+					Inbound = true,
+					Width = CanvasOptions.LaneWidth,
+					WorldDirection = WorldDirection.East,
+					StartPointY = currentLanePositionFromTheLeft,
+					StartPointX = intersectionCoreElement.Width / 2
+				};
+
+				_tempIntersectionElement.LaneElements.Add(laneElement);
+
+				eastLanesProcessed++;
+			}
+
+			foreach (OutboundLane outboundLane in eastLanes.OutboundLanes)
+			{
+				double leftEdge = intersectionCoreElement.Width / 2;
+				double firstLaneFromTheLeft = leftEdge - CanvasOptions.LaneWidth / 2;
+				double currentLanePositionFromTheLeft = firstLaneFromTheLeft - CanvasOptions.LaneWidth * eastLanesProcessed;
+
+				LaneElement laneElement = new LaneElement()
+				{
+					Inbound = false,
+					Width = CanvasOptions.LaneWidth,
+					WorldDirection = WorldDirection.East,
+					StartPointY = currentLanePositionFromTheLeft,
+					StartPointX = intersectionCoreElement.Width / 2
+				};
+
+				_tempIntersectionElement.LaneElements.Add(laneElement);
+
+				eastLanesProcessed++;
+			}
+		}
+
+		private void AddNorthLanes(Intersection intersection, IntersectionCoreElement intersectionCoreElement)
+		{
+			Lanes northLanes = intersection.LanesCollection.Single(lanes => lanes.WorldDirection == WorldDirection.North);
+
+			int northLanesProcessed = 0;
+
+			foreach (InboundLane lane in northLanes.InboundLanes)
+			{
+				double leftEdge = -intersectionCoreElement.Width / 2;
+				double firstLaneFromTheLeft = leftEdge + CanvasOptions.LaneWidth / 2;
+				double currentLanePositionFromTheLeft = firstLaneFromTheLeft + CanvasOptions.LaneWidth * northLanesProcessed;
+
+				LaneElement laneElement = new LaneElement()
+				{
+					Inbound = true,
+					Width = CanvasOptions.LaneWidth,
+					WorldDirection = WorldDirection.North,
+					StartPointY = intersectionCoreElement.Height / 2,
+					StartPointX = currentLanePositionFromTheLeft
+				};
+
+				_tempIntersectionElement.LaneElements.Add(laneElement);
+
+				northLanesProcessed++;
+			}
+
+			foreach (OutboundLane outboundLane in northLanes.OutboundLanes)
+			{
+				double leftEdge = -intersectionCoreElement.Width / 2;
+				double firstLaneFromTheLeft = leftEdge + CanvasOptions.LaneWidth / 2;
+				double currentLanePositionFromTheLeft = firstLaneFromTheLeft + CanvasOptions.LaneWidth * northLanesProcessed;
+
+				LaneElement laneElement = new LaneElement()
+				{
+					Inbound = false,
+					Width = CanvasOptions.LaneWidth,
+					WorldDirection = WorldDirection.North,
+					StartPointY = intersectionCoreElement.Height / 2,
+					StartPointX = currentLanePositionFromTheLeft
+				};
+
+				_tempIntersectionElement.LaneElements.Add(laneElement);
+
+				northLanesProcessed++;
+			}
 		}
 
 		private int GetAmountOfLanes(Intersection intersection, WorldDirection worldDirection)

@@ -13,12 +13,12 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 		/// <summary>
 		/// Collection of lanes from left to right that approach the intersection
 		/// </summary>
-		public List<InboundLane>? InboundLanes { get; set; } = new();
+		public List<InboundLane> InboundLanes { get; set; } = [];
 
 		/// <summary>
 		/// Collection of lanes from left to right that exits the intersection
 		/// </summary>
-		public List<OutboundLane>? OutboundLanes { get; set; } = new();
+		public List<OutboundLane> OutboundLanes { get; set; } = [];
 
 		public WorldDirection WorldDirection { get; }
 
