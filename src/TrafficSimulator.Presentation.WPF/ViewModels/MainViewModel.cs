@@ -3,12 +3,12 @@ using CommunityToolkit.Mvvm.Input;
 using CSharpFunctionalExtensions;
 using ErrorOr;
 using Microsoft.Extensions.Logging;
-using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Presentation.WPF.Helpers;
+using TrafficSimulator.Presentation.WPF.ViewModels.IntersectionElements;
 
 namespace TrafficSimulator.Presentation.WPF.ViewModels
 {
@@ -20,11 +20,9 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		public IntersectionElementsOptions CanvasOptions { get; } = new();
 
 		[ObservableProperty]
-		private ObservableCollection<TrafficElement> trafficElements = new();
+		private IntersectionElement _intersectionElement = new();
 
-		[ObservableProperty]
-		// TODO: I do not need collection here -> switch to variable
-		private ObservableCollection<IntersectionElement> _intersectionElement = new();
+		private IntersectionElement _tempIntersectionElement = new();
 
 		public ICommand LoadSimulationCommand { get; }
 
@@ -68,9 +66,12 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 		private void DrawIntersection(Intersection intersection)
 		{
-			TrafficElements.Clear();
+			_tempIntersectionElement = new IntersectionElement();
 
 			AddIntersectionCore(intersection);
+			AddLanes(intersection, _tempIntersectionElement.IntersectionCoreElement);
+
+			IntersectionElement = _tempIntersectionElement;
 		}
 
 		private void AddIntersectionCore(Intersection intersection)
@@ -80,14 +81,25 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			int westLanes = GetAmountOfLanes(intersection, WorldDirection.West);
 			int eastLanes = GetAmountOfLanes(intersection, WorldDirection.East);
 
-			int maxVerticalLanesAmount = Math.Max(northLanes, southLanes);
-			int maxHorizontalLanesAmount = Math.Max(westLanes, eastLanes);
+			int maxVerticalLanesAmount = new[] { northLanes, southLanes, 1 }.Max();
+			int maxHorizontalLanesAmount = new[] { westLanes, eastLanes, 1 }.Max();
 
-			new IntersectionCoreElement()
-			{
-				Height = maxVerticalLanesAmount * CanvasOptions.LaneWidth,
-				Width = maxHorizontalLanesAmount * CanvasOptions.LaneWidth,
-			};
+			_tempIntersectionElement.IntersectionCoreElement =
+				new IntersectionCoreElement()
+				{
+					Height = maxVerticalLanesAmount * CanvasOptions.LaneWidth,
+					Width = maxHorizontalLanesAmount * CanvasOptions.LaneWidth,
+				};
+		}
+
+		private void AddLanes(Intersection intersection, IntersectionCoreElement intersectionCoreElement)
+		{
+			int northLanes = GetAmountOfLanes(intersection, WorldDirection.North);
+			int southLanes = GetAmountOfLanes(intersection, WorldDirection.South);
+			int westLanes = GetAmountOfLanes(intersection, WorldDirection.West);
+			int eastLanes = GetAmountOfLanes(intersection, WorldDirection.East);
+
+
 		}
 
 		private int GetAmountOfLanes(Intersection intersection, WorldDirection worldDirection)
@@ -119,61 +131,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 		private void LoadDummyIntersection()
 		{
-			TrafficElements.Clear();
 
-			// Intersection Core
-			TrafficElements.Add(new TrafficElement(TrafficElementType.IntersectionCore, 250, 250, 100, 100, "DarkGray"));
-
-			// Inbound Lanes
-			TrafficElements.Add(new TrafficElement(TrafficElementType.Lane, 300, 0, 6, 250, "Black")); // North
-			TrafficElements.Add(new TrafficElement(TrafficElementType.Lane, 300, 350, 6, 250, "Black")); // South
-			TrafficElements.Add(new TrafficElement(TrafficElementType.Lane, 350, 300, 250, 6, "Black")); // East
-			TrafficElements.Add(new TrafficElement(TrafficElementType.Lane, 0, 300, 250, 6, "Black")); // West
-
-			// Traffic Lights
-			TrafficElements.Add(new TrafficElement(TrafficElementType.TrafficLight, 290, 230, 20, 20, "Red")); // North
-			TrafficElements.Add(new TrafficElement(TrafficElementType.TrafficLight, 290, 370, 20, 20, "Red")); // South
-			TrafficElements.Add(new TrafficElement(TrafficElementType.TrafficLight, 370, 290, 20, 20, "Red")); // East
-			TrafficElements.Add(new TrafficElement(TrafficElementType.TrafficLight, 230, 290, 20, 20, "Red")); // West
 		}
-	}
-
-	public enum TrafficElementType
-	{
-		IntersectionCore,
-		Lane,
-		TrafficLight
-	}
-
-	public class TrafficElement
-	{
-		public TrafficElementType Type { get; }
-		public double X { get; }
-		public double Y { get; }
-		public double Width { get; }
-		public double Height { get; }
-		public string Color { get; }
-
-		public TrafficElement(TrafficElementType type, double x, double y, double width, double height, string color)
-		{
-			Type = type;
-			X = x;
-			Y = y;
-			Width = width;
-			Height = height;
-			Color = color;
-		}
-	}
-
-	public class IntersectionElement
-	{
-		public IntersectionCoreElement IntersectionCoreElement { get; set; }
-	}
-
-	public class IntersectionCoreElement
-	{
-		public int Height { get; set; }
-		public int Width { get; set; }
-
 	}
 }

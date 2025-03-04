@@ -1,8 +1,10 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using TrafficSimulator.Presentation.WPF.ViewModels;
+using TrafficSimulator.Presentation.WPF.ViewModels.IntersectionElements;
 
 namespace TrafficSimulator.Presentation.WPF.Views;
 
@@ -18,57 +20,92 @@ public partial class MainWindow : Window
 		InitializeComponent();
 		DataContext = mainViewModel;
 		_mainViewModel = mainViewModel;
-
+		_mainViewModel.PropertyChanged += ViewModel_PropertyChanged;
 		//DrawDummyIntersection();
-		DrawIntersection();
+		//DrawIntersection();
 	}
 
-	private void DrawIntersection()
+	private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
-		SimulationCanvas.Children.Clear();
-
-		foreach (var element in _mainViewModel.TrafficElements)
+		if (e.PropertyName == nameof(MainViewModel.IntersectionElement))
 		{
-			UIElement uiElement = null;
-
-			switch (element.Type)
-			{
-				case TrafficElementType.IntersectionCore:
-					uiElement = new Rectangle
-					{
-						Width = element.Width,
-						Height = element.Height,
-						Fill = (Brush)new BrushConverter().ConvertFromString(element.Color)
-					};
-					break;
-
-				case TrafficElementType.Lane:
-					uiElement = new Rectangle
-					{
-						Width = element.Width,
-						Height = element.Height,
-						Fill = (Brush)new BrushConverter().ConvertFromString(element.Color)
-					};
-					break;
-
-				case TrafficElementType.TrafficLight:
-					uiElement = new Ellipse
-					{
-						Width = element.Width,
-						Height = element.Height,
-						Fill = (Brush)new BrushConverter().ConvertFromString(element.Color)
-					};
-					break;
-			}
-
-			if (uiElement != null)
-			{
-				Canvas.SetLeft(uiElement, element.X);
-				Canvas.SetTop(uiElement, element.Y);
-				SimulationCanvas.Children.Add(uiElement);
-			}
+			DrawIntersection(_mainViewModel.IntersectionElement);
 		}
 	}
+
+	private void DrawIntersection(IntersectionElement intersectionElement)
+	{
+		DrawIntersectionCore(intersectionElement.IntersectionCoreElement);
+	}
+
+	private void DrawIntersectionCore(IntersectionCoreElement intersectionCoreElement)
+	{
+		if (intersectionCoreElement is null)
+		{
+			return;
+		}
+
+		Rectangle intersectionCore = new Rectangle()
+		{
+			Height = intersectionCoreElement.Height,
+			Width = intersectionCoreElement.Width,
+			Fill = Brushes.Gray,
+			Stroke = Brushes.Black,
+			StrokeThickness = 2
+		};
+
+		Canvas.SetTop(intersectionCore, SimulationCanvas.ActualHeight / 2);
+		Canvas.SetLeft(intersectionCore, SimulationCanvas.ActualWidth / 2);
+
+		SimulationCanvas.Children.Add(intersectionCore);
+	}
+
+	//private void DrawIntersection()
+	//{
+	//	SimulationCanvas.Children.Clear();
+
+	//	foreach (var element in _mainViewModel.TrafficElements)
+	//	{
+	//		UIElement uiElement = null;
+
+	//		switch (element.Type)
+	//		{
+	//			case TrafficElementType.IntersectionCore:
+	//				uiElement = new Rectangle
+	//				{
+	//					Width = element.Width,
+	//					Height = element.Height,
+	//					Fill = (Brush)new BrushConverter().ConvertFromString(element.Color)
+	//				};
+	//				break;
+
+	//			case TrafficElementType.Lane:
+	//				uiElement = new Rectangle
+	//				{
+	//					Width = element.Width,
+	//					Height = element.Height,
+	//					Fill = (Brush)new BrushConverter().ConvertFromString(element.Color)
+	//				};
+	//				break;
+
+	//			case TrafficElementType.TrafficLight:
+	//				uiElement = new Ellipse
+	//				{
+	//					Width = element.Width,
+	//					Height = element.Height,
+	//					Fill = (Brush)new BrushConverter().ConvertFromString(element.Color)
+	//				};
+	//				break;
+	//		}
+
+	//		if (uiElement != null)
+	//		{
+	//			Canvas.SetLeft(uiElement, element.X);
+	//			Canvas.SetTop(uiElement, element.Y);
+	//			SimulationCanvas.Children.Add(uiElement);
+	//		}
+	//	}
+	//}
 
 	private void DrawDummyIntersection()
 	{
