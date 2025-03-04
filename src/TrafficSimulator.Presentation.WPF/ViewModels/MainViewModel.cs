@@ -96,74 +96,33 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		{
 			AddNorthLanes(intersection, intersectionCoreElement);
 			AddEastLanes(intersection, intersectionCoreElement);
-		}
-
-		private void AddEastLanes(Intersection intersection, IntersectionCoreElement intersectionCoreElement)
-		{
-			Lanes eastLanes = intersection.LanesCollection.Single(lanes => lanes.WorldDirection == WorldDirection.East);
-
-			int eastLanesProcessed = 0;
-
-			foreach (InboundLane lane in eastLanes.InboundLanes)
-			{
-				double leftEdge = intersectionCoreElement.Width / 2;
-				double firstLaneFromTheLeft = leftEdge - CanvasOptions.LaneWidth / 2;
-				double currentLanePositionFromTheLeft = firstLaneFromTheLeft - CanvasOptions.LaneWidth * eastLanesProcessed;
-
-				LaneElement laneElement = new LaneElement()
-				{
-					Inbound = true,
-					Width = CanvasOptions.LaneWidth,
-					WorldDirection = WorldDirection.East,
-					StartPointY = currentLanePositionFromTheLeft,
-					StartPointX = intersectionCoreElement.Width / 2
-				};
-
-				_tempIntersectionElement.LaneElements.Add(laneElement);
-
-				eastLanesProcessed++;
-			}
-
-			foreach (OutboundLane outboundLane in eastLanes.OutboundLanes)
-			{
-				double leftEdge = intersectionCoreElement.Width / 2;
-				double firstLaneFromTheLeft = leftEdge - CanvasOptions.LaneWidth / 2;
-				double currentLanePositionFromTheLeft = firstLaneFromTheLeft - CanvasOptions.LaneWidth * eastLanesProcessed;
-
-				LaneElement laneElement = new LaneElement()
-				{
-					Inbound = false,
-					Width = CanvasOptions.LaneWidth,
-					WorldDirection = WorldDirection.East,
-					StartPointY = currentLanePositionFromTheLeft,
-					StartPointX = intersectionCoreElement.Width / 2
-				};
-
-				_tempIntersectionElement.LaneElements.Add(laneElement);
-
-				eastLanesProcessed++;
-			}
+			AddSouthLanes(intersection, intersectionCoreElement);
+			AddWestLanes(intersection, intersectionCoreElement);
 		}
 
 		private void AddNorthLanes(Intersection intersection, IntersectionCoreElement intersectionCoreElement)
 		{
-			Lanes northLanes = intersection.LanesCollection.Single(lanes => lanes.WorldDirection == WorldDirection.North);
+			Lanes? northLanes = intersection.LanesCollection.FirstOrDefault(lanes => lanes.WorldDirection == WorldDirection.North);
+
+			if (northLanes is null)
+			{
+				return;
+			}
 
 			int northLanesProcessed = 0;
 
 			foreach (InboundLane lane in northLanes.InboundLanes)
 			{
 				double leftEdge = -intersectionCoreElement.Width / 2;
-				double firstLaneFromTheLeft = leftEdge + CanvasOptions.LaneWidth / 2;
-				double currentLanePositionFromTheLeft = firstLaneFromTheLeft + CanvasOptions.LaneWidth * northLanesProcessed;
+				double currentLanePositionFromTheLeft = leftEdge + CanvasOptions.LaneWidth * northLanesProcessed;
 
 				LaneElement laneElement = new LaneElement()
 				{
 					Inbound = true,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.North,
-					StartPointY = intersectionCoreElement.Height / 2,
-					StartPointX = currentLanePositionFromTheLeft
+					AnchorPointY = intersectionCoreElement.Height / 2,
+					AnchorPointX = currentLanePositionFromTheLeft
 				};
 
 				_tempIntersectionElement.LaneElements.Add(laneElement);
@@ -174,21 +133,170 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			foreach (OutboundLane outboundLane in northLanes.OutboundLanes)
 			{
 				double leftEdge = -intersectionCoreElement.Width / 2;
-				double firstLaneFromTheLeft = leftEdge + CanvasOptions.LaneWidth / 2;
-				double currentLanePositionFromTheLeft = firstLaneFromTheLeft + CanvasOptions.LaneWidth * northLanesProcessed;
+				double currentLanePositionFromTheLeft = leftEdge + CanvasOptions.LaneWidth * northLanesProcessed;
 
 				LaneElement laneElement = new LaneElement()
 				{
 					Inbound = false,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.North,
-					StartPointY = intersectionCoreElement.Height / 2,
-					StartPointX = currentLanePositionFromTheLeft
+					AnchorPointY = intersectionCoreElement.Height / 2,
+					AnchorPointX = currentLanePositionFromTheLeft
 				};
 
 				_tempIntersectionElement.LaneElements.Add(laneElement);
 
 				northLanesProcessed++;
+			}
+		}
+
+		private void AddEastLanes(Intersection intersection, IntersectionCoreElement intersectionCoreElement)
+		{
+			Lanes? eastLanes = intersection.LanesCollection.FirstOrDefault(lanes => lanes.WorldDirection == WorldDirection.East);
+
+			if (eastLanes is null)
+			{
+				return;
+			}
+
+			int eastLanesProcessed = 0;
+
+			foreach (InboundLane lane in eastLanes.InboundLanes)
+			{
+				double leftEdge = intersectionCoreElement.Width / 2;
+				double currentLanePositionFromTheLeft = leftEdge - CanvasOptions.LaneWidth * eastLanesProcessed;
+
+				LaneElement laneElement = new LaneElement()
+				{
+					Inbound = true,
+					Width = CanvasOptions.LaneWidth,
+					WorldDirection = WorldDirection.East,
+					AnchorPointY = currentLanePositionFromTheLeft,
+					AnchorPointX = intersectionCoreElement.Width / 2
+				};
+
+				_tempIntersectionElement.LaneElements.Add(laneElement);
+
+				eastLanesProcessed++;
+			}
+
+			foreach (OutboundLane outboundLane in eastLanes.OutboundLanes)
+			{
+				double leftEdge = intersectionCoreElement.Width / 2;
+				double currentLanePositionFromTheLeft = leftEdge - CanvasOptions.LaneWidth * eastLanesProcessed;
+
+				LaneElement laneElement = new LaneElement()
+				{
+					Inbound = false,
+					Width = CanvasOptions.LaneWidth,
+					WorldDirection = WorldDirection.East,
+					AnchorPointY = currentLanePositionFromTheLeft,
+					AnchorPointX = intersectionCoreElement.Width / 2
+				};
+
+				_tempIntersectionElement.LaneElements.Add(laneElement);
+
+				eastLanesProcessed++;
+			}
+		}
+
+		private void AddSouthLanes(Intersection intersection, IntersectionCoreElement intersectionCoreElement)
+		{
+			Lanes? southLanes = intersection.LanesCollection.FirstOrDefault(lanes => lanes.WorldDirection == WorldDirection.South);
+
+			if (southLanes is null)
+			{
+				return;
+			}
+
+			int southLanesProcessed = 0;
+
+			foreach (InboundLane lane in southLanes.InboundLanes)
+			{
+				double leftEdge = intersectionCoreElement.Width / 2;
+				double currentLanePositionFromTheLeft = leftEdge - CanvasOptions.LaneWidth * southLanesProcessed;
+
+				LaneElement laneElement = new LaneElement()
+				{
+					Inbound = true,
+					Width = CanvasOptions.LaneWidth,
+					WorldDirection = WorldDirection.South,
+					AnchorPointY = -intersectionCoreElement.Width / 2,
+					AnchorPointX = currentLanePositionFromTheLeft
+				};
+
+				_tempIntersectionElement.LaneElements.Add(laneElement);
+
+				southLanesProcessed++;
+			}
+
+			foreach (OutboundLane outboundLane in southLanes.OutboundLanes)
+			{
+				double leftEdge = intersectionCoreElement.Width / 2;
+				double currentLanePositionFromTheLeft = leftEdge - CanvasOptions.LaneWidth * southLanesProcessed;
+
+				LaneElement laneElement = new LaneElement()
+				{
+					Inbound = false,
+					Width = CanvasOptions.LaneWidth,
+					WorldDirection = WorldDirection.South,
+					AnchorPointY = -intersectionCoreElement.Width / 2,
+					AnchorPointX = currentLanePositionFromTheLeft
+				};
+
+				_tempIntersectionElement.LaneElements.Add(laneElement);
+
+				southLanesProcessed++;
+			}
+		}
+
+		private void AddWestLanes(Intersection intersection, IntersectionCoreElement intersectionCoreElement)
+		{
+			Lanes? westLanes = intersection.LanesCollection.FirstOrDefault(lanes => lanes.WorldDirection == WorldDirection.West);
+
+			if (westLanes is null)
+			{
+				return;
+			}
+
+			int westLanesProcessed = 0;
+
+			foreach (InboundLane lane in westLanes.InboundLanes)
+			{
+				double leftEdge = -intersectionCoreElement.Width / 2;
+				double currentLanePositionFromTheLeft = leftEdge + CanvasOptions.LaneWidth * westLanesProcessed;
+
+				LaneElement laneElement = new LaneElement()
+				{
+					Inbound = true,
+					Width = CanvasOptions.LaneWidth,
+					WorldDirection = WorldDirection.West,
+					AnchorPointY = currentLanePositionFromTheLeft,
+					AnchorPointX = -intersectionCoreElement.Width / 2
+				};
+
+				_tempIntersectionElement.LaneElements.Add(laneElement);
+
+				westLanesProcessed++;
+			}
+
+			foreach (OutboundLane outboundLane in westLanes.OutboundLanes)
+			{
+				double leftEdge = -intersectionCoreElement.Width / 2;
+				double currentLanePositionFromTheLeft = leftEdge + CanvasOptions.LaneWidth * westLanesProcessed;
+
+				LaneElement laneElement = new LaneElement()
+				{
+					Inbound = false,
+					Width = CanvasOptions.LaneWidth,
+					WorldDirection = WorldDirection.West,
+					AnchorPointY = currentLanePositionFromTheLeft,
+					AnchorPointX = -intersectionCoreElement.Width / 2
+				};
+
+				_tempIntersectionElement.LaneElements.Add(laneElement);
+
+				westLanesProcessed++;
 			}
 		}
 

@@ -35,7 +35,10 @@ public partial class MainWindow : Window
 
 	private void DrawIntersection(IntersectionElement intersectionElement)
 	{
+		SimulationCanvas.Children.Clear();
+
 		DrawIntersectionCore(intersectionElement.IntersectionCoreElement);
+		DrawLanes(intersectionElement.LaneElements);
 	}
 
 	private void DrawIntersectionCore(IntersectionCoreElement intersectionCoreElement)
@@ -54,10 +57,79 @@ public partial class MainWindow : Window
 			StrokeThickness = 2
 		};
 
-		Canvas.SetTop(intersectionCore, SimulationCanvas.ActualHeight / 2);
-		Canvas.SetLeft(intersectionCore, SimulationCanvas.ActualWidth / 2);
+		Canvas.SetTop(intersectionCore, SimulationCanvas.ActualHeight / 2 - intersectionCoreElement.Height / 2);
+		Canvas.SetLeft(intersectionCore, SimulationCanvas.ActualWidth / 2 - intersectionCoreElement.Width / 2);
 
 		SimulationCanvas.Children.Add(intersectionCore);
+	}
+
+	private void DrawLanes(List<LaneElement> laneElements)
+	{
+		foreach (var laneElement in laneElements)
+		{
+			switch (laneElement.WorldDirection)
+			{
+				case Domain.Commons.WorldDirection.North:
+					Rectangle northlaneRectangle = new Rectangle()
+					{
+						Width = laneElement.Width,
+						Height = SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY,
+						Fill = Brushes.Black,
+						Stroke = Brushes.White,
+					};
+
+					Canvas.SetTop(northlaneRectangle, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY);
+					Canvas.SetLeft(northlaneRectangle, SimulationCanvas.ActualWidth / 2 - laneElement.AnchorPointX);
+
+					SimulationCanvas.Children.Add(northlaneRectangle);
+					break;
+				case Domain.Commons.WorldDirection.East:
+					Rectangle eastLaneRectangle = new Rectangle()
+					{
+						Width = SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointX,
+						Height = laneElement.Width,
+						Fill = Brushes.Black,
+						Stroke = Brushes.White,
+					};
+
+					Canvas.SetTop(eastLaneRectangle, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY);
+					Canvas.SetLeft(eastLaneRectangle, laneElement.AnchorPointX + SimulationCanvas.ActualWidth / 2);
+
+					SimulationCanvas.Children.Add(eastLaneRectangle);
+					break;
+				case Domain.Commons.WorldDirection.South:
+					Rectangle southlaneRectangle = new Rectangle()
+					{
+						Width = laneElement.Width,
+						Height = SimulationCanvas.ActualHeight / 2 + laneElement.AnchorPointY,
+						Fill = Brushes.Black,
+						Stroke = Brushes.White,
+					};
+
+					Canvas.SetTop(southlaneRectangle, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY);
+					Canvas.SetLeft(southlaneRectangle, laneElement.AnchorPointX + SimulationCanvas.ActualWidth / 2 - laneElement.Width);
+
+					SimulationCanvas.Children.Add(southlaneRectangle);
+					break;
+				case Domain.Commons.WorldDirection.West:
+					Rectangle westLaneRectangle = new Rectangle()
+					{
+						Width = SimulationCanvas.ActualHeight / 2 + laneElement.AnchorPointX,
+						Height = laneElement.Width,
+						Fill = Brushes.Black,
+						Stroke = Brushes.White,
+					};
+
+					Canvas.SetTop(westLaneRectangle, SimulationCanvas.ActualHeight / 2 + laneElement.AnchorPointY);
+					Canvas.SetLeft(westLaneRectangle, 0);
+
+					SimulationCanvas.Children.Add(westLaneRectangle);
+					break;
+				default:
+					break;
+			}
+
+		}
 	}
 
 	//private void DrawIntersection()
