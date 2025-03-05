@@ -66,18 +66,15 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 		private void DrawIntersection(Intersection intersection)
 		{
-			_tempIntersectionElement = new IntersectionElement();
+			_tempIntersectionElement = new IntersectionElement()
+			{
+				CarGeneratorsAreaOffset = CanvasOptions.CarGeneratorsAreaOffset
+			};
 
 			AddIntersectionCore(intersection);
 			AddLanes(intersection, _tempIntersectionElement.IntersectionCoreElement);
-			AddTrafficLights(intersection, _tempIntersectionElement.IntersectionCoreElement);
 
 			IntersectionElement = _tempIntersectionElement;
-		}
-
-		private void AddTrafficLights(Intersection intersection, IntersectionCoreElement intersectionCoreElement)
-		{
-			// TODO: Implement (Maybe implementation will not be needed)
 		}
 
 		private void AddIntersectionCore(Intersection intersection)
@@ -125,6 +122,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				LaneElement laneElement = new LaneElement()
 				{
 					Inbound = true,
+					ReferenceLaneId = lane.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.North,
 					AnchorPointY = intersectionCoreElement.Height / 2,
@@ -136,7 +134,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				northLanesProcessed++;
 			}
 
-			foreach (OutboundLane outboundLane in northLanes.OutboundLanes)
+			foreach (OutboundLane lane in northLanes.OutboundLanes)
 			{
 				double leftEdge = -intersectionCoreElement.Width / 2;
 				double currentLanePositionFromTheLeft = leftEdge + CanvasOptions.LaneWidth * northLanesProcessed;
@@ -144,6 +142,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				LaneElement laneElement = new LaneElement()
 				{
 					Inbound = false,
+					ReferenceLaneId = lane.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.North,
 					AnchorPointY = intersectionCoreElement.Height / 2,
@@ -175,6 +174,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				LaneElement laneElement = new LaneElement()
 				{
 					Inbound = true,
+					ReferenceLaneId = lane.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.East,
 					AnchorPointY = currentLanePositionFromTheLeft,
@@ -186,7 +186,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				eastLanesProcessed++;
 			}
 
-			foreach (OutboundLane outboundLane in eastLanes.OutboundLanes)
+			foreach (OutboundLane lane in eastLanes.OutboundLanes)
 			{
 				double leftEdge = intersectionCoreElement.Width / 2;
 				double currentLanePositionFromTheLeft = leftEdge - CanvasOptions.LaneWidth * eastLanesProcessed;
@@ -194,6 +194,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				LaneElement laneElement = new LaneElement()
 				{
 					Inbound = false,
+					ReferenceLaneId = lane.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.East,
 					AnchorPointY = currentLanePositionFromTheLeft,
@@ -225,6 +226,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				LaneElement laneElement = new LaneElement()
 				{
 					Inbound = true,
+					ReferenceLaneId = lane.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.South,
 					AnchorPointY = -intersectionCoreElement.Width / 2,
@@ -236,7 +238,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				southLanesProcessed++;
 			}
 
-			foreach (OutboundLane outboundLane in southLanes.OutboundLanes)
+			foreach (OutboundLane lane in southLanes.OutboundLanes)
 			{
 				double leftEdge = intersectionCoreElement.Width / 2;
 				double currentLanePositionFromTheLeft = leftEdge - CanvasOptions.LaneWidth * southLanesProcessed;
@@ -244,6 +246,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				LaneElement laneElement = new LaneElement()
 				{
 					Inbound = false,
+					ReferenceLaneId = lane.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.South,
 					AnchorPointY = -intersectionCoreElement.Width / 2,
@@ -275,6 +278,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				LaneElement laneElement = new LaneElement()
 				{
 					Inbound = true,
+					ReferenceLaneId = lane.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.West,
 					AnchorPointY = currentLanePositionFromTheLeft,
@@ -286,7 +290,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				westLanesProcessed++;
 			}
 
-			foreach (OutboundLane outboundLane in westLanes.OutboundLanes)
+			foreach (OutboundLane lane in westLanes.OutboundLanes)
 			{
 				double leftEdge = -intersectionCoreElement.Width / 2;
 				double currentLanePositionFromTheLeft = leftEdge + CanvasOptions.LaneWidth * westLanesProcessed;
@@ -294,6 +298,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				LaneElement laneElement = new LaneElement()
 				{
 					Inbound = false,
+					ReferenceLaneId = lane.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.West,
 					AnchorPointY = currentLanePositionFromTheLeft,

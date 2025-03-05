@@ -5,9 +5,9 @@ namespace TrafficSimulator.Domain.Commons
 	public enum WorldDirection
 	{
 		North,
-		West,
-		South,
 		East,
+		South,
+		West,
 	}
 
 	public static class WorldDirectionExtensions
