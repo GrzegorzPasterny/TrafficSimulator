@@ -6,9 +6,11 @@ using Microsoft.Extensions.Logging;
 using System.Windows.Input;
 using System.Windows.Threading;
 using TrafficSimulator.Application.Commons.Interfaces;
+using TrafficSimulator.Application.Simulation;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Domain.Simulation;
 using TrafficSimulator.Presentation.WPF.Helpers;
 using TrafficSimulator.Presentation.WPF.ViewModels.IntersectionElements;
 
@@ -16,9 +18,11 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 {
 	public partial class MainViewModel : ObservableObject
 	{
-		private readonly ISimulationHandler _simulationHandler;
+		private readonly IntersectionSimulationHandlerFactory _intersectionSimulationHandlerFactory;
 		private readonly ILogger<MainViewModel> _logger;
-		private DispatcherTimer _dispatcherTimer;
+		private DispatcherTimer? _dispatcherTimer;
+		private string _simulationMode = SimulationMode.RealTime;
+		private ISimulationHandler _simulationHandler;
 
 		public IntersectionElementsOptions CanvasOptions { get; } = new();
 
@@ -33,13 +37,13 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		public ICommand LoadSimulationCommand { get; }
 		public ICommand StartSimulationCommand { get; }
 
-		public MainViewModel(ISimulationHandler simulationHandler, ILogger<MainViewModel> logger)
+		public MainViewModel(IntersectionSimulationHandlerFactory intersectionSimulationHandlerFactory, ILogger<MainViewModel> logger)
 		{
-			_simulationHandler = simulationHandler;
+			_intersectionSimulationHandlerFactory = intersectionSimulationHandlerFactory;
+			_simulationHandler = intersectionSimulationHandlerFactory.CreateHandler(_simulationMode);
 
 			LoadSimulationCommand = new AsyncRelayCommand(LoadIntersection);
-			StartSimulationCommand = new AsyncRelayCommand(StartSimulation);
-
+			StartSimulationCommand = new AsyncRelayCommand(RunSimulation);
 			_logger = logger;
 			_logger.LogInformation("MainViewModel initialized");
 
@@ -70,11 +74,12 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			DrawIntersection(intersection);
 		}
 
-		private async Task StartSimulation()
+		private async Task RunSimulation()
 		{
 			InitializeTimer(_simulationHandler.IntersectionSimulation.Options.StepTimespan);
 
-			// TODO: Timer should be initialized after this call?
+			_dispatcherTimer!.Start();
+
 			await _simulationHandler.Start();
 
 			while (_simulationHandler.SimulationState.SimulationPhase
@@ -84,9 +89,10 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				await Task.Delay(200);
 			}
 
-			await Task.Delay(200);
+			_dispatcherTimer!.Stop();
+
 			SimulationResults simulationResults = _simulationHandler.SimulationResults;
-			SimulationStepCounter = simulationResults.SimulationStepsTaken;
+
 		}
 
 		private void DrawIntersection(Intersection intersection)
@@ -377,7 +383,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			_dispatcherTimer.Tick += UpdateSimulationStatus;
 		}
 
-		private void UpdateSimulationStatus(object sender, EventArgs e)
+		private void UpdateSimulationStatus(object? sender, EventArgs e)
 		{
 			var status = _simulationHandler.SimulationState;
 

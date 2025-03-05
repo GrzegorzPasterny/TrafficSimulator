@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TrafficSimulator.Domain.CarGenerators;
 
 namespace TrafficSimulator.Domain
 {
@@ -10,6 +11,8 @@ namespace TrafficSimulator.Domain
 			{
 				options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection));
 			});
+
+			services.AddSingleton<CarGeneratorFactory>();
 
 			return services;
 		}
