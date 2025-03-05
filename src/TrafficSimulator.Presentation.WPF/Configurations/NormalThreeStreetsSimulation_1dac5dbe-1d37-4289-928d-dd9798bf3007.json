@@ -16,7 +16,7 @@
               "AmountOfCarsToGenerate": 3,
               "DelayBetweenCarGeneration": "00:00:00.5000000"
             },
-            "WorldDirection": 3,
+            "WorldDirection": 1,
             "Distance": 10,
             "Name": "InboundLane",
             "ParentName": ".NormalThreeStreets.Lanes.East"
@@ -24,13 +24,13 @@
         ],
         "OutboundLanes": [
           {
-            "WorldDirection": 3,
+            "WorldDirection": 1,
             "Distance": 10,
             "Name": "OutboundLane",
             "ParentName": ".NormalThreeStreets.Lanes.East"
           }
         ],
-        "WorldDirection": 3,
+        "WorldDirection": 1,
         "Name": "Lanes.East",
         "ParentName": ".NormalThreeStreets"
       },
@@ -78,7 +78,7 @@
               "AmountOfCarsToGenerate": 3,
               "DelayBetweenCarGeneration": "00:00:00.5000000"
             },
-            "WorldDirection": 1,
+            "WorldDirection": 3,
             "Distance": 10,
             "Name": "InboundLane",
             "ParentName": ".NormalThreeStreets.Lanes.West"
@@ -86,13 +86,13 @@
         ],
         "OutboundLanes": [
           {
-            "WorldDirection": 1,
+            "WorldDirection": 3,
             "Distance": 10,
             "Name": "OutboundLane",
             "ParentName": ".NormalThreeStreets.Lanes.West"
           }
         ],
-        "WorldDirection": 1,
+        "WorldDirection": 3,
         "Name": "Lanes.West",
         "ParentName": ".NormalThreeStreets"
       }

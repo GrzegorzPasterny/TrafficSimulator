@@ -14,7 +14,7 @@
             "CarGeneratorOptions": {
               "DelayForGeneratingTheCar": "00:00:00.2000000"
             },
-            "WorldDirection": 3,
+            "WorldDirection": 1,
             "Distance": 10,
             "Name": "InboundLane",
             "ParentName": ".ZebraCrossing.Lanes.East"
@@ -22,13 +22,13 @@
         ],
         "OutboundLanes": [
           {
-            "WorldDirection": 3,
+            "WorldDirection": 1,
             "Distance": 10,
             "Name": "OutboundLane",
             "ParentName": ".ZebraCrossing.Lanes.East"
           }
         ],
-        "WorldDirection": 3,
+        "WorldDirection": 1,
         "Name": "Lanes.East",
         "ParentName": ".ZebraCrossing"
       },
@@ -43,7 +43,7 @@
             "CarGeneratorOptions": {
               "DelayForGeneratingTheCar": "00:00:00.2000000"
             },
-            "WorldDirection": 1,
+            "WorldDirection": 3,
             "Distance": 10,
             "Name": "InboundLane",
             "ParentName": ".ZebraCrossing.Lanes.West"
@@ -51,13 +51,13 @@
         ],
         "OutboundLanes": [
           {
-            "WorldDirection": 1,
+            "WorldDirection": 3,
             "Distance": 10,
             "Name": "OutboundLane",
             "ParentName": ".ZebraCrossing.Lanes.West"
           }
         ],
-        "WorldDirection": 1,
+        "WorldDirection": 3,
         "Name": "Lanes.West",
         "ParentName": ".ZebraCrossing"
       }

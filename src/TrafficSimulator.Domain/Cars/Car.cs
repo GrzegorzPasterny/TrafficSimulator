@@ -7,7 +7,7 @@ using TrafficSimulator.Domain.Models.IntersectionProperties;
 
 namespace TrafficSimulator.Domain.Models.Agents
 {
-    public class Car : Entity<Guid>
+	public class Car : Entity<Guid>
 	{
 		public readonly InboundLane StartLocation;
 		public readonly List<LocationEntity> DistanceToCover;
@@ -65,7 +65,7 @@ namespace TrafficSimulator.Domain.Models.Agents
 
 			CarTurnType = StartLocation.TurnPossibilities.First().LaneType;
 
-			WorldDirection outboundLaneWorldDirection = ((Lanes)StartLocation.Parent!).WorldDirection.Rotate(CarTurnType);
+			WorldDirection outboundLaneWorldDirection = StartLocation.WorldDirection.Rotate(CarTurnType);
 
 			Lanes? lanes = intersection.LanesCollection.Find(lanes => lanes.WorldDirection == outboundLaneWorldDirection);
 
