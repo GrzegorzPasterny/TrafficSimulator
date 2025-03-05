@@ -4,8 +4,10 @@ using CSharpFunctionalExtensions;
 using ErrorOr;
 using Microsoft.Extensions.Logging;
 using System.Windows.Input;
+using System.Windows.Threading;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Domain.Commons;
+using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Presentation.WPF.Helpers;
 using TrafficSimulator.Presentation.WPF.ViewModels.IntersectionElements;
@@ -16,21 +18,27 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 	{
 		private readonly ISimulationHandler _simulationHandler;
 		private readonly ILogger<MainViewModel> _logger;
+		private DispatcherTimer _dispatcherTimer;
 
 		public IntersectionElementsOptions CanvasOptions { get; } = new();
 
 		[ObservableProperty]
 		private IntersectionElement _intersectionElement = new();
 
+		[ObservableProperty]
+		private int _simulationStepCounter = 0;
+
 		private IntersectionElement _tempIntersectionElement = new();
 
 		public ICommand LoadSimulationCommand { get; }
+		public ICommand StartSimulationCommand { get; }
 
 		public MainViewModel(ISimulationHandler simulationHandler, ILogger<MainViewModel> logger)
 		{
 			_simulationHandler = simulationHandler;
 
-			LoadSimulationCommand = new RelayCommand(LoadIntersection);
+			LoadSimulationCommand = new AsyncRelayCommand(LoadIntersection);
+			StartSimulationCommand = new AsyncRelayCommand(StartSimulation);
 
 			_logger = logger;
 			_logger.LogInformation("MainViewModel initialized");
@@ -38,7 +46,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			LoadDummyIntersection();
 		}
 
-		private void LoadIntersection()
+		private async Task LoadIntersection()
 		{
 			string? jsonConfigurationFile = SimulationConfigurationFileLoader.LoadFromJsonFile();
 
@@ -48,9 +56,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				return;
 			}
 
-			UnitResult<Error> loadIntersectionResult =
-				Task.Run(() => _simulationHandler.LoadIntersection(jsonConfigurationFile))
-				.GetAwaiter().GetResult();
+			UnitResult<Error> loadIntersectionResult = await _simulationHandler.LoadIntersection(jsonConfigurationFile);
 
 			if (loadIntersectionResult.IsFailure)
 			{
@@ -62,6 +68,25 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			Intersection intersection = _simulationHandler.IntersectionSimulation!.Intersection;
 
 			DrawIntersection(intersection);
+		}
+
+		private async Task StartSimulation()
+		{
+			InitializeTimer(_simulationHandler.IntersectionSimulation.Options.StepTimespan);
+
+			// TODO: Timer should be initialized after this call?
+			await _simulationHandler.Start();
+
+			while (_simulationHandler.SimulationState.SimulationPhase
+				is SimulationPhase.InProgress or SimulationPhase.InProgressCarGenerationFinished)
+			{
+
+				await Task.Delay(200);
+			}
+
+			await Task.Delay(200);
+			SimulationResults simulationResults = _simulationHandler.SimulationResults;
+			SimulationStepCounter = simulationResults.SimulationStepsTaken;
 		}
 
 		private void DrawIntersection(Intersection intersection)
@@ -341,6 +366,22 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		private void LoadDummyIntersection()
 		{
 
+		}
+
+		private void InitializeTimer(TimeSpan refreshRate)
+		{
+			_dispatcherTimer = new DispatcherTimer
+			{
+				Interval = refreshRate
+			};
+			_dispatcherTimer.Tick += UpdateSimulationStatus;
+		}
+
+		private void UpdateSimulationStatus(object sender, EventArgs e)
+		{
+			var status = _simulationHandler.SimulationState;
+
+			SimulationStepCounter++;
 		}
 	}
 }
