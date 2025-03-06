@@ -35,6 +35,7 @@ public partial class MainWindow : Window
 
 		if (ellipse.HasNoValue)
 		{
+			// TODO: Handle
 			throw new ArgumentOutOfRangeException();
 		}
 

@@ -115,16 +115,31 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 		internal void NotifyAboutSimulationState()
 		{
-			SimulationStateEventArgs simulationStateEventArgs = new(SimulationState.StepsCount, "test");
+			SimulationStateEventArgs simulationStateEventArgs = new(SimulationState.StepsCount);
+			AddTrafficLightsStatus(simulationStateEventArgs);
+			AddCarsStatus(simulationStateEventArgs);
 
+			SimulationUpdated?.Invoke(this, simulationStateEventArgs);
+		}
+
+		private void AddCarsStatus(SimulationStateEventArgs simulationStateEventArgs)
+		{
+			IEnumerable<Car> cars = _sender.Send(new GetCarsCommand()).GetAwaiter().GetResult();
+
+			foreach (Car car in cars.Where(car => car.HasReachedDestination == false))
+			{
+				simulationStateEventArgs.CarLocations.Add(car.Id, car.CurrentLocation);
+			}
+		}
+
+		private void AddTrafficLightsStatus(SimulationStateEventArgs simulationStateEventArgs)
+		{
 			IEnumerable<TrafficLights> trafficLightsCollection = IntersectionSimulation!.Intersection.ObjectLookup.OfType<TrafficLights>();
 
 			foreach (TrafficLights trafficLights in trafficLightsCollection)
 			{
 				simulationStateEventArgs.TrafficLightsState.Add(trafficLights.Id, trafficLights.TrafficLightState);
 			}
-
-			SimulationUpdated?.Invoke(this, simulationStateEventArgs);
 		}
 
 		internal bool AllCarGeneratorsFinished()
