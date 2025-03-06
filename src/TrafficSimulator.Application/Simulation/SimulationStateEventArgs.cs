@@ -1,10 +1,13 @@
-﻿namespace TrafficSimulator.Application.Simulation
+﻿using TrafficSimulator.Domain.Models.Lights;
+
+namespace TrafficSimulator.Application.Simulation
 {
 	public class SimulationStateEventArgs : EventArgs
 	{
 		public int SimulationStep { get; }
 		public string TrafficLightStatus { get; }
 		//public List<CarData> Cars { get; }
+		public Dictionary<Guid, TrafficLightState> TrafficLightsState { get; } = new();
 
 		public SimulationStateEventArgs(int step, string trafficLightStatus)
 		{

@@ -3,7 +3,7 @@ using ErrorOr;
 using TrafficSimulator.Domain.Cars;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
-using TrafficSimulator.Domain.Models.IntersectionProperties;
+using TrafficSimulator.Domain.Models.Lights;
 
 namespace TrafficSimulator.Domain.Models.Agents
 {
@@ -63,7 +63,8 @@ namespace TrafficSimulator.Domain.Models.Agents
 				// TODO: Handle
 			}
 
-			CarTurnType = StartLocation.TurnPossibilities.First().LaneType;
+			// TODO: Randomize
+			CarTurnType = StartLocation.LaneTypes.First();
 
 			WorldDirection outboundLaneWorldDirection = StartLocation.WorldDirection.Rotate(CarTurnType);
 
@@ -288,9 +289,7 @@ namespace TrafficSimulator.Domain.Models.Agents
 
 		private bool CanCarPassTheTrafficLights()
 		{
-			TurnPossibility turnPossibility = StartLocation.TurnPossibilities.Single(t => t.LaneType == CarTurnType);
-
-			return turnPossibility.TrafficLights!.TrafficLightState == Lights.TrafficLightState.Green;
+			return StartLocation.TrafficLights!.TrafficLightState == TrafficLightState.Green;
 		}
 
 		private bool IsCarAtTrafficLights(double distanceToGo, CarLocation currentLocation)

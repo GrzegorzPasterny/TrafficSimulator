@@ -13,6 +13,7 @@ using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.Agents;
+using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Simulation;
 
 namespace TrafficSimulator.Application.Handlers.Simulation
@@ -115,6 +116,13 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		internal void NotifyAboutSimulationState()
 		{
 			SimulationStateEventArgs simulationStateEventArgs = new(SimulationState.StepsCount, "test");
+
+			IEnumerable<TrafficLights> trafficLightsCollection = IntersectionSimulation!.Intersection.ObjectLookup.OfType<TrafficLights>();
+
+			foreach (TrafficLights trafficLights in trafficLightsCollection)
+			{
+				simulationStateEventArgs.TrafficLightsState.Add(trafficLights.Parent.Id, trafficLights.TrafficLightState);
+			}
 
 			SimulationUpdated?.Invoke(this, simulationStateEventArgs);
 		}

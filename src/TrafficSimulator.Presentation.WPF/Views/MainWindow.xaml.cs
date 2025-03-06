@@ -1,9 +1,12 @@
-﻿using System.ComponentModel;
+﻿using CSharpFunctionalExtensions;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using TrafficSimulator.Domain.Commons;
+using TrafficSimulator.Domain.Models.Lights;
+using TrafficSimulator.Presentation.WPF.Extensions;
 using TrafficSimulator.Presentation.WPF.ViewModels;
 using TrafficSimulator.Presentation.WPF.ViewModels.IntersectionElements;
 
@@ -23,6 +26,19 @@ public partial class MainWindow : Window
 		DataContext = mainViewModel;
 		_mainViewModel = mainViewModel;
 		_mainViewModel.PropertyChanged += ViewModel_PropertyChanged;
+		_mainViewModel.TrafficLightUpdated += UpdateTrafficLights;
+	}
+
+	private void UpdateTrafficLights(Guid guid, TrafficLightState state)
+	{
+		Maybe<Ellipse> ellipse = _trafficLights.TryFind(guid);
+
+		if (ellipse.HasNoValue)
+		{
+			throw new ArgumentOutOfRangeException();
+		}
+
+		ellipse.Value.Fill = state.ToColor();
 	}
 
 	private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)

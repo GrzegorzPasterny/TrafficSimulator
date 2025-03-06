@@ -71,14 +71,18 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 					TrafficLightsAssignments = trafficPhase.TrafficLightsAssignments.Select(light =>
 					{
 						InboundLane? inboundLane = intersection.GetObject<InboundLane>(light.InboundLaneName);
-						TurnPossibility turnPossibility = inboundLane.TurnPossibilities.First(turn => turn.LaneType == light.TurnPossibility.LaneType);
+						LaneType laneType = inboundLane.LaneTypes.First(laneType => laneType == light.TurnPossibility.LaneType);
 
 						return new TurnWithTrafficLight()
 						{
 							InboundLane = inboundLane,
 							TrafficLightState = light.TrafficLightState,
-							TurnPossibility = turnPossibility
-
+							TurnPossibility = new TurnPossibility()
+							{
+								ContainsTrafficLights = inboundLane.ContainsTrafficLights,
+								LaneType = laneType,
+								TrafficLights = inboundLane.TrafficLights
+							}
 						};
 					}).ToList()
 				});
@@ -201,8 +205,8 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 				Name = lane.Name,
 				WorldDirection = lane.WorldDirection,
 				ParentName = lane.Parent.FullName,
-				LaneTypes = lane.TurnPossibilities.Select(turn => turn.LaneType).ToArray(),
-				ContainsTrafficLights = lane.TurnPossibilities.Any(t => t.ContainsTrafficLights),
+				LaneTypes = lane.LaneTypes,
+				ContainsTrafficLights = lane.ContainsTrafficLights,
 				CarGeneratorTypeName = lane.CarGenerator is null ? string.Empty : lane.CarGenerator.GetType().Name,
 				CarGeneratorOptions = JsonSerializer.Deserialize<JsonElement>(carGeneratorOptions),
 			};

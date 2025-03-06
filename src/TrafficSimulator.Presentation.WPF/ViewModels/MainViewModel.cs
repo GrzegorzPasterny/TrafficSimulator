@@ -10,6 +10,7 @@ using TrafficSimulator.Application.Simulation;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Domain.Models.Lights;
 using TrafficSimulator.Domain.Simulation;
 using TrafficSimulator.Presentation.WPF.Helpers;
 using TrafficSimulator.Presentation.WPF.ViewModels.IntersectionElements;
@@ -30,6 +31,8 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 		[ObservableProperty]
 		private IntersectionElement _intersectionElement = new();
+
+		public event Action<Guid, TrafficLightState>? TrafficLightUpdated;
 
 		[ObservableProperty]
 		private int _simulationStepCounter = 0;
@@ -112,6 +115,11 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		private void OnSimulationUpdated(object? sender, SimulationStateEventArgs e)
 		{
 			SimulationStepCounter = e.SimulationStep;
+
+			foreach (KeyValuePair<Guid, TrafficLightState> trafficLights in e.TrafficLightsState)
+			{
+				TrafficLightUpdated?.Invoke(trafficLights.Key, trafficLights.Value);
+			}
 		}
 
 		private void CleanUpTheSimulationData()

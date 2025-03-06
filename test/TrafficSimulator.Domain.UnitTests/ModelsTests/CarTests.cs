@@ -48,7 +48,7 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 			carStartLocation.Should().NotBeNull();
 
 			// Default Traffic Lights are Red, that's why They have to be set to Green
-			carStartLocation!.TurnPossibilities.First().TrafficLights!.SwitchToGreen();
+			carStartLocation!.TrafficLights!.SwitchToGreen();
 
 			Car car = new Car(carStartLocation!);
 			car.MoveVelocity = velocity;
@@ -78,7 +78,7 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 			List<Car> cars = new List<Car>();
 
 			// Make car jam before zebra
-			carStartLocation!.TurnPossibilities.First().TrafficLights!.SwitchToRed();
+			carStartLocation!.TrafficLights!.SwitchToRed();
 
 			// Make 3 cars
 			for (int i = 0; i < 3; i++)
@@ -110,8 +110,7 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 			cars.Select(car => car.CurrentLocation.DistanceLeft).Distinct().Count().Should().Be(cars.Count());
 
 			// Relief the cars
-			carStartLocation!.TurnPossibilities.First().TrafficLights!.SwitchToGreen();
-			_logger.LogInformation("{TurnPossibility}", carStartLocation!.TurnPossibilities.First());
+			carStartLocation!.TrafficLights!.SwitchToGreen();
 
 			moveCount = 0;
 
