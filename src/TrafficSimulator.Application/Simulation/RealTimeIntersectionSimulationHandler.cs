@@ -31,7 +31,7 @@ namespace TrafficSimulator.Application.Simulation
 
 		internal override Task SimulationRunner()
 		{
-			_timer = new System.Timers.Timer(_timeStep.TotalMilliseconds);
+			_timer = new System.Timers.Timer(IntersectionSimulation!.Options.StepTimespan);
 			_stopwatch = Stopwatch.StartNew();
 
 			// Define a cancellation token for timeout

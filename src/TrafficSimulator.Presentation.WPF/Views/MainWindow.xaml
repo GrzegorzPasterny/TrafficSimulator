@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TrafficSimulator.Presentation.WPF.Views"
         mc:Ignorable="d"
-        Title="Traffic Simulator" Height="710" Width="1000">
+        Title="Traffic Simulator" Height="730" Width="Auto">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -40,7 +40,7 @@
                 Width="150" Margin="10"
                 Grid.Column="1"/>
 
-            <TextBlock Text="Step:" 
+            <TextBlock Text="Current step:" 
                    FontSize="18" 
                    VerticalAlignment="Center" 
                    Margin="10"
@@ -85,34 +85,56 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Step:" 
+                        <TextBlock Text="Steps taken:" 
                                    FontSize="18" 
                                    VerticalAlignment="Center" 
                                    Margin="10"
                                    Grid.Row="0"/>
-                        <TextBlock Text="Step:" 
+                        <TextBlock Text="CarsPassed:"  
                                    FontSize="18" 
                                    VerticalAlignment="Center" 
                                    Margin="10"
                                    Grid.Row="1"/>
-                        <TextBlock Text="Step:" 
+                        <TextBlock Text="TotalCarsIdleTimeMs:" 
                                    FontSize="18" 
                                    VerticalAlignment="Center" 
                                    Margin="10"
                                    Grid.Row="2"/>
+                        <TextBlock Text="TimeTakenSeconds:" 
+                                   FontSize="18" 
+                                   VerticalAlignment="Center" 
+                                   Margin="10"
+                                   Grid.Row="3"/>
                     </Grid>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="{Binding SimulationStepCounter}" 
+                        <TextBlock Text="{Binding StepsTaken}" 
                                    FontSize="18" 
                                    VerticalAlignment="Center" 
                                    Margin="10"
-                                   Grid.Column="3"/>
+                                   Grid.Row="0"/>
+                        <TextBlock Text="{Binding CarsPassed}" 
+                                   FontSize="18" 
+                                   VerticalAlignment="Center" 
+                                   Margin="10"
+                                   Grid.Row="1"/>
+                        <TextBlock Text="{Binding TotalCarsIdleTimeMs}" 
+                                   FontSize="18" 
+                                   VerticalAlignment="Center" 
+                                   Margin="10"
+                                   Grid.Row="2"/>
+                        <TextBlock Text="{Binding TimeTakenSeconds}" 
+                                   FontSize="18" 
+                                   VerticalAlignment="Center" 
+                                   Margin="10"
+                                   Grid.Row="3"/>
                     </Grid>
                 </Grid>
             </Grid>

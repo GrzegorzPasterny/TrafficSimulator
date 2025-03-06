@@ -12,5 +12,6 @@ namespace TrafficSimulator.Domain.Commons.Interfaces
 
 		Task<UnitResult<Error>> Generate(TimeSpan timeSpan);
 		bool IsGenerationFinished { get; }
+		void Reset();
 	}
 }

@@ -2,6 +2,7 @@
 using ErrorOr;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using TrafficSimulator.Application.Cars.DeleteCars;
 using TrafficSimulator.Application.Cars.GetCars;
 using TrafficSimulator.Application.Cars.MoveCar;
 using TrafficSimulator.Application.Commons;
@@ -85,6 +86,8 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			{
 				return DomainErrors.SimulationStateChange(IntersectionSimulation!.SimulationState.SimulationPhase, SimulationPhase.InProgress);
 			}
+
+			await _sender.Send(new DeleteCarsCommand());
 
 			IntersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.InProgress;
 

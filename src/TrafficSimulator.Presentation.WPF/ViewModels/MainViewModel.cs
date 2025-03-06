@@ -23,6 +23,8 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		private DispatcherTimer? _dispatcherTimer;
 		private string _simulationMode = SimulationMode.RealTime;
 		private ISimulationHandler _simulationHandler;
+		private IntersectionElement _tempIntersectionElement = new();
+		private IntersectionSimulation? _currentIntersectionSimulation;
 
 		public IntersectionElementsOptions CanvasOptions { get; } = new();
 
@@ -32,7 +34,14 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		[ObservableProperty]
 		private int _simulationStepCounter = 0;
 
-		private IntersectionElement _tempIntersectionElement = new();
+		[ObservableProperty]
+		private double _stepsTaken;
+		[ObservableProperty]
+		private int _carsPassed;
+		[ObservableProperty]
+		private double _totalCarsIdleTimeMs;
+		[ObservableProperty]
+		private double _timeTakenSeconds;
 
 		public ICommand LoadSimulationCommand { get; }
 		public ICommand StartSimulationCommand { get; }
@@ -52,6 +61,8 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 		private async Task LoadIntersection()
 		{
+			CleanUpTheSimulationData();
+
 			string? jsonConfigurationFile = SimulationConfigurationFileLoader.LoadFromJsonFile();
 
 			if (jsonConfigurationFile is null)
@@ -70,12 +81,15 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			}
 
 			Intersection intersection = _simulationHandler.IntersectionSimulation!.Intersection;
+			_currentIntersectionSimulation = _simulationHandler.IntersectionSimulation;
 
 			DrawIntersection(intersection);
 		}
 
 		private async Task RunSimulation()
 		{
+			CleanUpTheSimulationData();
+
 			InitializeTimer(_simulationHandler.IntersectionSimulation.Options.StepTimespan);
 
 			_dispatcherTimer!.Start();
@@ -90,9 +104,30 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			}
 
 			_dispatcherTimer!.Stop();
+			_dispatcherTimer = null;
 
 			SimulationResults simulationResults = _simulationHandler.SimulationResults;
+			StepsTaken = simulationResults.SimulationStepsTaken;
+			CarsPassed = simulationResults.CarsPassed;
+			TotalCarsIdleTimeMs = simulationResults.TotalCarsIdleTimeMs;
+			TimeTakenSeconds = Math.Round(
+				simulationResults.SimulationStepsTaken *
+				_simulationHandler.IntersectionSimulation.Options.StepTimespan.TotalSeconds, 2);
+		}
 
+		private void CleanUpTheSimulationData()
+		{
+			StepsTaken = 0;
+			CarsPassed = 0;
+			TotalCarsIdleTimeMs = 0;
+			TimeTakenSeconds = 0;
+			SimulationStepCounter = 0;
+
+			if (_currentIntersectionSimulation is not null &&
+				_currentIntersectionSimulation.SimulationState.SimulationPhase != SimulationPhase.NotStarted)
+			{
+				_currentIntersectionSimulation.Reset();
+			}
 		}
 
 		private void DrawIntersection(Intersection intersection)

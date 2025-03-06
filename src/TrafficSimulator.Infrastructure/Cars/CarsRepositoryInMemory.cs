@@ -10,7 +10,12 @@ namespace TrafficSimulator.Infrastructure.Cars
 		public Task AddCarAsync(Car car)
 		{
 			Cars.Add(car);
+			return Task.CompletedTask;
+		}
 
+		public Task DeleteAll()
+		{
+			Cars.Clear();
 			return Task.CompletedTask;
 		}
 

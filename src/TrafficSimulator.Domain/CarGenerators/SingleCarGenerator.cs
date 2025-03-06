@@ -40,6 +40,12 @@ namespace TrafficSimulator.Domain.Handlers.CarGenerators
 			return UnitResult.Success<Error>();
 		}
 
+		public override void Reset()
+		{
+			_isGenerationFinished = false;
+			_simulationTime = TimeSpan.Zero;
+		}
+
 		public override string ToString()
 		{
 			return $"[CarsGeneratorName = {Name}, HasFinished = {_isGenerationFinished}]";

@@ -28,6 +28,13 @@ namespace TrafficSimulator.Domain.Handlers.CarGenerators
 
 		public abstract Task<UnitResult<Error>> Generate(TimeSpan timeSpan);
 
+		public override string ToString()
+		{
+			return $"[CarsGeneratorName = {Name}, HasFinished = {IsGenerationFinished}]";
+		}
+
+		public abstract void Reset();
+
 		internal async Task GenerateCar()
 		{
 			Car car = new Car((InboundLane)Parent!);
@@ -35,11 +42,6 @@ namespace TrafficSimulator.Domain.Handlers.CarGenerators
 			var command = new AddCarCommandDomainEvent(car);
 
 			await _mediator.Send(command);
-		}
-
-		public override string ToString()
-		{
-			return $"[CarsGeneratorName = {Name}, HasFinished = {IsGenerationFinished}]";
 		}
 	}
 }
