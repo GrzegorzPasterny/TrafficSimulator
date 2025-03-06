@@ -196,6 +196,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				{
 					Inbound = true,
 					ReferenceLaneId = lane.Id,
+					TrafficLightsId = lane.TrafficLights?.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.North,
 					AnchorPointY = intersectionCoreElement.Height / 2,
@@ -248,6 +249,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				{
 					Inbound = true,
 					ReferenceLaneId = lane.Id,
+					TrafficLightsId = lane.TrafficLights?.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.East,
 					AnchorPointY = currentLanePositionFromTheLeft,
@@ -300,6 +302,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				{
 					Inbound = true,
 					ReferenceLaneId = lane.Id,
+					TrafficLightsId = lane.TrafficLights?.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.South,
 					AnchorPointY = -intersectionCoreElement.Width / 2,
@@ -352,6 +355,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				{
 					Inbound = true,
 					ReferenceLaneId = lane.Id,
+					TrafficLightsId = lane.TrafficLights?.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.West,
 					AnchorPointY = currentLanePositionFromTheLeft,

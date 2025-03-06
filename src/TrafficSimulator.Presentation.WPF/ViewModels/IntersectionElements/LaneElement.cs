@@ -11,5 +11,6 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels.IntersectionElements
 		public bool Inbound { get; set; }
 		public bool CarGenerator { get; set; }
 		public Guid ReferenceLaneId { get; internal set; }
+		public Guid? TrafficLightsId { get; internal set; }
 	}
 }

@@ -38,7 +38,10 @@ public partial class MainWindow : Window
 			throw new ArgumentOutOfRangeException();
 		}
 
-		ellipse.Value.Fill = state.ToColor();
+		Dispatcher.BeginInvoke(() =>
+		{
+			ellipse.Value.Fill = state.ToColor();
+		});
 	}
 
 	private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -191,6 +194,10 @@ public partial class MainWindow : Window
 		Panel.SetZIndex(ellipse, 100);
 
 		SimulationCanvas.Children.Add(ellipse);
-		_trafficLights.Add(laneElement.ReferenceLaneId, ellipse);
+
+		if (laneElement.TrafficLightsId is not null)
+		{
+			_trafficLights.Add((Guid)laneElement.TrafficLightsId!, ellipse);
+		}
 	}
 }

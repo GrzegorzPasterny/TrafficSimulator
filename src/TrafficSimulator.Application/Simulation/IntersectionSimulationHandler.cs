@@ -121,7 +121,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 			foreach (TrafficLights trafficLights in trafficLightsCollection)
 			{
-				simulationStateEventArgs.TrafficLightsState.Add(trafficLights.Parent.Id, trafficLights.TrafficLightState);
+				simulationStateEventArgs.TrafficLightsState.Add(trafficLights.Id, trafficLights.TrafficLightState);
 			}
 
 			SimulationUpdated?.Invoke(this, simulationStateEventArgs);
