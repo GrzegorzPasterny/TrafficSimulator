@@ -7,6 +7,7 @@ using TrafficSimulator.Application.Cars.GetCars;
 using TrafficSimulator.Application.Cars.MoveCar;
 using TrafficSimulator.Application.Commons;
 using TrafficSimulator.Application.Commons.Interfaces;
+using TrafficSimulator.Application.Simulation;
 using TrafficSimulator.Application.SimulationSetup.LoadSimulation;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
@@ -22,6 +23,8 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		private readonly ISender _sender;
 		private readonly ITrafficLightsHandler _trafficLightsHandler;
 		internal readonly ILogger<IntersectionSimulationHandler> _logger;
+
+		public event EventHandler<SimulationStateEventArgs>? SimulationUpdated;
 
 		public SimulationState SimulationState => IntersectionSimulation!.SimulationState;
 		public SimulationResults SimulationResults => IntersectionSimulation!.SimulationResults!;
@@ -88,6 +91,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			}
 
 			await _sender.Send(new DeleteCarsCommand());
+			//_trafficLightsHandler.Set
 
 			IntersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.InProgress;
 
@@ -106,6 +110,13 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 				_logger.LogError("Unhandled Exception occured while running the simulation [Error = {Error}]", ex);
 				return ApplicationErrors.UnhandledSimulationException(ex);
 			}
+		}
+
+		internal void NotifyAboutSimulationState()
+		{
+			SimulationStateEventArgs simulationStateEventArgs = new(SimulationState.StepsCount, "test");
+
+			SimulationUpdated?.Invoke(this, simulationStateEventArgs);
 		}
 
 		internal bool AllCarGeneratorsFinished()
@@ -212,6 +223,8 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 				cars.Sum(c => c.MovesWhenCarWaited) * IntersectionSimulation.Options.StepTimespan.TotalMilliseconds;
 
 			_logger.LogInformation("SimulationResults = {SimulationResults}", SimulationResults);
+
+			NotifyAboutSimulationState();
 		}
 
 		internal abstract Task SimulationRunner();

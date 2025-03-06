@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
+using TrafficSimulator.Application.Simulation;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Simulation;
 
@@ -11,6 +12,8 @@ public interface ISimulationHandler : IDisposable
 	SimulationResults SimulationResults { get; }
 	IntersectionSimulation? IntersectionSimulation { get; }
 
+	event EventHandler<SimulationStateEventArgs> SimulationUpdated;
+
 	UnitResult<Error> LoadIntersection(IntersectionSimulation intersectionSimulation);
 
 	/// <summary>
@@ -21,7 +24,6 @@ public interface ISimulationHandler : IDisposable
 	Task<UnitResult<Error>> LoadIntersection(string identifier);
 
 	Task<UnitResult<Error>> Start();
-
 	UnitResult<Error> Abort();
 
 }

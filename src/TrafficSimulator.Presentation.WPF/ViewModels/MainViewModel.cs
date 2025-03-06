@@ -50,6 +50,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		{
 			_intersectionSimulationHandlerFactory = intersectionSimulationHandlerFactory;
 			_simulationHandler = intersectionSimulationHandlerFactory.CreateHandler(_simulationMode);
+			_simulationHandler.SimulationUpdated += OnSimulationUpdated;
 
 			LoadSimulationCommand = new AsyncRelayCommand(LoadIntersection);
 			StartSimulationCommand = new AsyncRelayCommand(RunSimulation);
@@ -90,10 +91,6 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		{
 			CleanUpTheSimulationData();
 
-			InitializeTimer(_simulationHandler.IntersectionSimulation.Options.StepTimespan);
-
-			_dispatcherTimer!.Start();
-
 			await _simulationHandler.Start();
 
 			while (_simulationHandler.SimulationState.SimulationPhase
@@ -103,9 +100,6 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				await Task.Delay(200);
 			}
 
-			_dispatcherTimer!.Stop();
-			_dispatcherTimer = null;
-
 			SimulationResults simulationResults = _simulationHandler.SimulationResults;
 			StepsTaken = simulationResults.SimulationStepsTaken;
 			CarsPassed = simulationResults.CarsPassed;
@@ -113,6 +107,11 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			TimeTakenSeconds = Math.Round(
 				simulationResults.SimulationStepsTaken *
 				_simulationHandler.IntersectionSimulation.Options.StepTimespan.TotalSeconds, 2);
+		}
+
+		private void OnSimulationUpdated(object? sender, SimulationStateEventArgs e)
+		{
+			SimulationStepCounter = e.SimulationStep;
 		}
 
 		private void CleanUpTheSimulationData()
@@ -407,22 +406,6 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		private void LoadDummyIntersection()
 		{
 
-		}
-
-		private void InitializeTimer(TimeSpan refreshRate)
-		{
-			_dispatcherTimer = new DispatcherTimer
-			{
-				Interval = refreshRate
-			};
-			_dispatcherTimer.Tick += UpdateSimulationStatus;
-		}
-
-		private void UpdateSimulationStatus(object? sender, EventArgs e)
-		{
-			var status = _simulationHandler.SimulationState;
-
-			SimulationStepCounter++;
 		}
 	}
 }

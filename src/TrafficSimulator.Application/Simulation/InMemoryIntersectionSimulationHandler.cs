@@ -39,6 +39,8 @@ namespace TrafficSimulator.Application.Simulation
 
 					await DetermineState();
 
+					NotifyAboutSimulationState();
+
 					if (IntersectionSimulation.SimulationState.StepsCount >= IntersectionSimulation.Options.StepLimit)
 					{
 						IntersectionSimulation.SimulationState.SimulationPhase = SimulationPhase.Aborted;
