@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Simulation;
+using TrafficSimulator.Domain.Cars;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
@@ -33,6 +34,8 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		private IntersectionElement _intersectionElement = new();
 
 		public event Action<Guid, TrafficLightState>? TrafficLightUpdated;
+		public event Action<Guid, CarLocation>? CarLocationUpdated;
+		public event Action? NewSimulationStarted;
 
 		[ObservableProperty]
 		private int _simulationStepCounter = 0;
@@ -94,7 +97,13 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		{
 			CleanUpTheSimulationData();
 
-			await _simulationHandler.Start();
+			UnitResult<Error> startResult = await _simulationHandler.Start();
+
+			if (startResult.IsFailure)
+			{
+				_logger.LogError("Simulation failed to start [ErrorMessage = {ErrorMessage}", startResult.Error);
+				return;
+			}
 
 			while (_simulationHandler.SimulationState.SimulationPhase
 				is SimulationPhase.InProgress or SimulationPhase.InProgressCarGenerationFinished)
@@ -120,10 +129,17 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			{
 				TrafficLightUpdated?.Invoke(trafficLights.Key, trafficLights.Value);
 			}
+
+			foreach (KeyValuePair<Guid, CarLocation> carLocation in e.CarLocations)
+			{
+				CarLocationUpdated?.Invoke(carLocation.Key, carLocation.Value);
+			}
 		}
 
 		private void CleanUpTheSimulationData()
 		{
+			NewSimulationStarted?.Invoke();
+
 			StepsTaken = 0;
 			CarsPassed = 0;
 			TotalCarsIdleTimeMs = 0;

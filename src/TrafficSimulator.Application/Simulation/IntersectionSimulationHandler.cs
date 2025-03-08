@@ -86,6 +86,11 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		/// </remarks>
 		public async Task<UnitResult<Error>> Start()
 		{
+			if (IntersectionSimulation is null)
+			{
+				return ApplicationErrors.IntersectionUninitialized();
+			}
+
 			if (IntersectionSimulation!.SimulationState.SimulationPhase != SimulationPhase.NotStarted)
 			{
 				return DomainErrors.SimulationStateChange(IntersectionSimulation!.SimulationState.SimulationPhase, SimulationPhase.InProgress);

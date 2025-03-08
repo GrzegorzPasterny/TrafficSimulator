@@ -10,7 +10,6 @@ namespace TrafficSimulator.Application.Commons
 
 		internal static Error IntersectionUninitialized()
 			=> Error.NotFound("TrafficSimulator.Application.IntersectionUninitialized",
-				"Intersection object was null");
-
+				"Load the intersection simulation");
 	}
 }
