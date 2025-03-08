@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Serilog.Events;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,6 +10,7 @@ using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.Lights;
 using TrafficSimulator.Presentation.WPF.Extensions;
+using TrafficSimulator.Presentation.WPF.Helpers;
 using TrafficSimulator.Presentation.WPF.ViewModels;
 using TrafficSimulator.Presentation.WPF.ViewModels.IntersectionElements;
 
@@ -20,23 +22,66 @@ namespace TrafficSimulator.Presentation.WPF.Views;
 public partial class MainWindow : Window
 {
 	private readonly MainViewModel _mainViewModel;
-
+	private readonly InMemorySink _inMemorySink;
 	private Rectangle? _intersectionCore;
 	private Dictionary<Guid, Rectangle> _inboundLanes = new();
 	private Dictionary<Guid, Rectangle> _outboundLanes = new();
 
 	private Dictionary<Guid, Ellipse> _trafficLights = [];
 	private Dictionary<Guid, Ellipse> _carLocations = [];
+	private Thread _pollingThreadForLogging;
 
-	public MainWindow(MainViewModel mainViewModel)
+	public MainWindow(MainViewModel mainViewModel, InMemorySink inMemorySink)
 	{
 		InitializeComponent();
 		DataContext = mainViewModel;
 		_mainViewModel = mainViewModel;
+		_inMemorySink = inMemorySink;
 		_mainViewModel.PropertyChanged += DrawIntersection;
 		_mainViewModel.TrafficLightUpdated += UpdateTrafficLights;
 		_mainViewModel.CarLocationUpdated += UpdateCarLocation;
 		_mainViewModel.NewSimulationStarted += ResetSimulation;
+
+		// Set up an ongoing process to update the TextBox or DataGrid
+		_pollingThreadForLogging = new Thread(PollQueueForLogs);
+		_pollingThreadForLogging.IsBackground = true; // Make it a background thread so it terminates when the app closes
+		_pollingThreadForLogging.Start();
+	}
+
+	private void PollQueueForLogs()
+	{
+		while (true)
+		{
+			if (!_inMemorySink.Events.IsEmpty)
+			{
+				if (_inMemorySink.Events.TryDequeue(out LogEvent logEvent))
+				{
+					var logEntry = new
+					{
+						Timestamp = logEvent.Timestamp.ToString("HH:mm:ss.fff"),
+						Level = logEvent.Level.ToString(),
+						Message = logEvent.RenderMessage()
+					};
+
+					if (LogDataGrid.Dispatcher.CheckAccess())
+					{
+						LogDataGrid.Items.Add(logEntry);
+						LogDataGrid.ScrollIntoView(logEntry);
+					}
+					else
+					{
+						LogDataGrid.Dispatcher.Invoke(() =>
+						{
+							LogDataGrid.Items.Add(logEntry);
+							LogDataGrid.ScrollIntoView(logEntry);
+						});
+					}
+				}
+			}
+
+			// Optionally add a small delay to avoid tight looping
+			Thread.Sleep(100); // Sleep for 100ms (adjust based on requirements)
+		}
 	}
 
 	private void ResetSimulation()

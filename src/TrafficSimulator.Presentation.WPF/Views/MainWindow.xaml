@@ -5,15 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TrafficSimulator.Presentation.WPF.Views"
         mc:Ignorable="d"
-        Title="Traffic Simulator" Height="730" Width="Auto">
+        Title="Traffic Simulator" Height="950" Width="Auto">
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <!-- Title -->
             <RowDefinition Height="Auto"/>
             <!-- Buttons and Step Counter -->
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <!-- Simulation Canvas and Results -->
+            <RowDefinition Height="620"/>
+            <!--Logs-->
+            <RowDefinition Height="200"/>
         </Grid.RowDefinitions>
 
         <TextBlock Text="Traffic Simulator" 
@@ -139,7 +141,17 @@
                 </Grid>
             </Grid>
         </Grid>
+        <Grid Grid.Row="3" Margin="10">
+            <DataGrid Name="LogDataGrid" 
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      Height="200">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Timestamp" Binding="{Binding Timestamp}" Width="150"/>
+                    <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="80"/>
+                    <DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
-
-
 </Window>

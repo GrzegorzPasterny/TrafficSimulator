@@ -5,6 +5,7 @@ using System.IO;
 using TrafficSimulator.Application;
 using TrafficSimulator.Domain;
 using TrafficSimulator.Infrastructure.DI;
+using TrafficSimulator.Presentation.WPF.Helpers;
 using TrafficSimulator.Presentation.WPF.ViewModels;
 using TrafficSimulator.Presentation.WPF.Views;
 
@@ -21,11 +22,17 @@ public class Bootstrapper
 			.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
 			.Build();
 
+		InMemorySink inMemorySink = new InMemorySink();
+
 		Log.Logger = new LoggerConfiguration()
 			.ReadFrom.Configuration(configuration)
+			.WriteTo.Sink(inMemorySink)
 			.CreateLogger();
 
 		var services = new ServiceCollection();
+
+		services.AddSingleton<IConfiguration>(configuration);
+		services.AddSingleton(inMemorySink);
 
 		// Register logging
 		services.AddLogging(builder =>
