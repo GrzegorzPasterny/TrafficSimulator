@@ -26,6 +26,8 @@ public partial class MainWindow : Window
 	private Rectangle? _intersectionCore;
 	private Dictionary<Guid, Rectangle> _inboundLanes = new();
 	private Dictionary<Guid, Rectangle> _outboundLanes = new();
+	private Dictionary<WorldDirection, Rectangle> _parkingLots = new();
+	private Dictionary<WorldDirection, int> _numberOfCarsAtTheParkingLot = new();
 
 	private Dictionary<Guid, Ellipse> _trafficLights = [];
 	private Dictionary<Guid, Ellipse> _carLocations = [];
@@ -52,34 +54,31 @@ public partial class MainWindow : Window
 	{
 		while (true)
 		{
-			if (!_inMemorySink.Events.IsEmpty)
+			if (_inMemorySink.Events.TryDequeue(out LogEvent logEvent))
 			{
-				if (_inMemorySink.Events.TryDequeue(out LogEvent logEvent))
+				var logEntry = new
 				{
-					var logEntry = new
-					{
-						Timestamp = logEvent.Timestamp.ToString("HH:mm:ss.fff"),
-						Level = logEvent.Level.ToString(),
-						Message = logEvent.RenderMessage()
-					};
+					Timestamp = logEvent.Timestamp.ToString("HH:mm:ss.fff"),
+					Level = logEvent.Level.ToString(),
+					Message = logEvent.RenderMessage()
+				};
 
-					if (LogDataGrid.Dispatcher.CheckAccess())
+				if (LogDataGrid.Dispatcher.CheckAccess())
+				{
+					LogDataGrid.Items.Add(logEntry);
+					LogDataGrid.ScrollIntoView(logEntry);
+				}
+				else
+				{
+					LogDataGrid.Dispatcher.Invoke(() =>
 					{
 						LogDataGrid.Items.Add(logEntry);
 						LogDataGrid.ScrollIntoView(logEntry);
-					}
-					else
-					{
-						LogDataGrid.Dispatcher.Invoke(() =>
-						{
-							LogDataGrid.Items.Add(logEntry);
-							LogDataGrid.ScrollIntoView(logEntry);
-						});
-					}
+					});
 				}
 			}
 
-			// Optionally add a small delay to avoid tight looping
+			// Delay to avoid tight looping
 			Thread.Sleep(100); // Sleep for 100ms (adjust based on requirements)
 		}
 	}
@@ -113,6 +112,11 @@ public partial class MainWindow : Window
 				}
 				else if (location.Location is OutboundLane)
 				{
+					if (location.DistanceLeft == 0)
+					{
+						ParkCar(car, ((OutboundLane)location.Location).WorldDirection);
+					}
+
 					MoveCarThroughOutboundLane(car, location);
 				}
 			}
@@ -120,9 +124,11 @@ public partial class MainWindow : Window
 			{
 				Ellipse newCar = new()
 				{
-					Fill = Brushes.Blue,
+					Fill = BrushHelper.GetRandomNamedBrush(),
 					Width = _mainViewModel.CanvasOptions.CarWidth,
 					Height = _mainViewModel.CanvasOptions.CarWidth,
+					Stroke = Brushes.Black,
+					StrokeThickness = 1
 				};
 
 				_carLocations.Add(guid, newCar);
@@ -144,6 +150,52 @@ public partial class MainWindow : Window
 				}
 			}
 		});
+	}
+
+	private void ParkCar(Ellipse car, WorldDirection worldDirection)
+	{
+		if (!_parkingLots.TryGetValue(worldDirection, out Rectangle parkingLot))
+		{
+			throw new ArgumentException();
+		}
+
+		if (!_numberOfCarsAtTheParkingLot.TryGetValue(worldDirection, out int numberOfCarsAtParkingLot))
+		{
+			throw new ArgumentException();
+		}
+
+		ParkCarAtParkingLot(car, parkingLot, numberOfCarsAtParkingLot);
+	}
+
+	private void ParkCarAtParkingLot(Ellipse car, Rectangle parkingLot, int numberOfCarsAtParkingLot)
+	{
+		// Get car size (assuming all cars are perfect circles)
+		double carDiameter = car.Width; // Width == Height for circles
+
+		// Get parking lot dimensions and position
+		double lotX = Canvas.GetLeft(parkingLot);
+		double lotY = Canvas.GetTop(parkingLot);
+		double lotWidth = parkingLot.Width;
+		double lotHeight = parkingLot.Height;
+
+		// Calculate number of cars per row based on parking lot width
+		int carsPerRow = (int)(lotWidth / carDiameter);
+		if (carsPerRow == 0) return; // Prevent division by zero
+
+		// Compute row and column for the new car
+		int row = numberOfCarsAtParkingLot / carsPerRow;
+		int col = numberOfCarsAtParkingLot % carsPerRow;
+
+		// Calculate car position (centered within each grid cell)
+		double carX = lotX + col * carDiameter;
+		double carY = lotY + row * carDiameter;
+
+		// Check if the car fits inside the parking lot
+		if (carX + carDiameter <= lotX + lotWidth && carY + carDiameter <= lotY + lotHeight)
+		{
+			Canvas.SetLeft(car, carX);
+			Canvas.SetTop(car, carY);
+		}
 	}
 
 	private void MoveCarThroughInboundLane(Ellipse newCar, CarLocation location)
@@ -301,9 +353,62 @@ public partial class MainWindow : Window
 		_intersectionCore = null;
 		_inboundLanes.Clear();
 		_outboundLanes.Clear();
+		_parkingLots.Clear();
+		_numberOfCarsAtTheParkingLot.Clear();
 
 		DrawIntersectionCore(intersectionElement.IntersectionCoreElement);
 		DrawLanesAndTrafficLights(intersectionElement.LaneElements, intersectionElement.CarGeneratorsAreaOffset);
+		DrawParkingLots(intersectionElement.LaneElements, intersectionElement.CarGeneratorsAreaOffset);
+	}
+
+	private void DrawParkingLots(List<LaneElement> laneElements, int carGeneratorsAreaOffset)
+	{
+		IEnumerable<WorldDirection> outboundLanesWorldDirections = laneElements.Where(lane => !lane.Inbound).Select(lane => lane.WorldDirection).Distinct();
+
+		foreach (WorldDirection worldDirection in outboundLanesWorldDirections)
+		{
+			Rectangle parkingLot = new()
+			{
+				Fill = Brushes.LightGray,
+				Stroke = Brushes.Black,
+				StrokeThickness = 2,
+				Height = carGeneratorsAreaOffset,
+				Width = carGeneratorsAreaOffset,
+			};
+
+			double radius = SimulationCanvas.ActualHeight / 2 - carGeneratorsAreaOffset;
+
+			DrawerHelper.SetRectangleAtAngle(
+				parkingLot,
+				worldDirection.ToDegrees(),
+				radius,
+				SimulationCanvas.ActualWidth,
+				SimulationCanvas.ActualHeight);
+
+			_parkingLots.Add(worldDirection, parkingLot);
+			SimulationCanvas.Children.Add(parkingLot);
+		}
+
+		//DrawNorthParkingLot(carGeneratorsAreaOffset);
+	}
+
+	private void DrawNorthParkingLot(int carGeneratorsAreaOffset)
+	{
+		Rectangle parkingLot = new()
+		{
+			Fill = Brushes.LightGray,
+			Stroke = Brushes.Black,
+			StrokeThickness = 2,
+			Height = carGeneratorsAreaOffset,
+			Width = carGeneratorsAreaOffset,
+		};
+
+		Canvas.SetLeft(parkingLot, SimulationCanvas.ActualWidth / 2);
+		// Margin
+		Canvas.SetTop(parkingLot, 5);
+
+		_parkingLots.Add(WorldDirection.North, parkingLot);
+		SimulationCanvas.Children.Add(parkingLot);
 	}
 
 	private void DrawIntersectionCore(IntersectionCoreElement intersectionCoreElement)
