@@ -32,6 +32,11 @@ namespace TrafficSimulator.Domain.Models.Agents
 
 		public bool HasReachedDestination { get; private set; } = false;
 
+		/// <summary>
+		/// Informs about reaching the destination in a previous step
+		/// </summary>
+		public bool HasJustReachedDestination { get; private set; } = false;
+
 		public LocationEntity? NextLocation
 		{
 			get
@@ -87,6 +92,11 @@ namespace TrafficSimulator.Domain.Models.Agents
 
 		public UnitResult<Error> Move(TimeSpan timeElapsed, IEnumerable<Car> cars, int minimalDistanceBetweenCars = 1)
 		{
+			if (HasJustReachedDestination)
+			{
+				HasJustReachedDestination = false;
+			}
+
 			if (HasReachedDestination)
 			{
 				return DomainErrors.CarHasReachedDestination(Id);
@@ -273,6 +283,7 @@ namespace TrafficSimulator.Domain.Models.Agents
 		{
 			if (CurrentLocation.Location == DistanceToCover.Last() && CurrentLocation.DistanceLeft == 0)
 			{
+				HasJustReachedDestination = true;
 				HasReachedDestination = true;
 				IsCarWaiting = false;
 			}

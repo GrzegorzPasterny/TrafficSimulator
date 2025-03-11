@@ -131,7 +131,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		{
 			IEnumerable<Car> cars = _sender.Send(new GetCarsCommand()).GetAwaiter().GetResult();
 
-			foreach (Car car in cars.Where(car => car.HasReachedDestination == false))
+			foreach (Car car in cars.Where(car => car.HasReachedDestination == false || car.HasJustReachedDestination))
 			{
 				simulationStateEventArgs.CarLocations.Add(car.Id, car.CurrentLocation);
 			}
