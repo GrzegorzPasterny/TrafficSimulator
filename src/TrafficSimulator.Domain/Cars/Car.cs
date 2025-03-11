@@ -15,15 +15,7 @@ namespace TrafficSimulator.Domain.Models.Agents
 
 		public bool IsCarWaiting { get; private set; } = false;
 
-		/// <summary>
-		/// Velocity of the car in units per second when it is moving
-		/// </summary>
-		public int MoveVelocity { get; set; } = 50;
-
-		/// <summary>
-		/// Length of the car
-		/// </summary>
-		public int Length { get; set; } = 2;
+		public CarOptions Options { get; private set; } = new();
 
 		public int MovesSoFar { get; private set; } = 0;
 		public int MovesWhenCarWaited { get; private set; } = 0;
@@ -132,7 +124,7 @@ namespace TrafficSimulator.Domain.Models.Agents
 		/// <returns></returns>
 		private double CalculateDistance(TimeSpan timeElapsed, IEnumerable<Car> cars, int minimalDistanceBetweenCars, out bool moveToNextLocation)
 		{
-			double distanceToGo = MoveVelocity * timeElapsed.TotalSeconds;
+			double distanceToGo = Options.MoveVelocity * timeElapsed.TotalSeconds;
 			moveToNextLocation = false;
 
 			if (IsCarMovingToNextLocation(distanceToGo))
@@ -237,8 +229,8 @@ namespace TrafficSimulator.Domain.Models.Agents
 				return car1.CurrentLocation.CurrentDistance
 					- car2.CurrentLocation.CurrentDistance
 					- minimalDistanceBetweenCars
-					- car1.Length / 2
-					- car2.Length / 2;
+					- car1.Options.Length / 2
+					- car2.Options.Length / 2;
 			}
 
 			// Assuming that cars are in adjacent location
@@ -246,8 +238,8 @@ namespace TrafficSimulator.Domain.Models.Agents
 				car1.CurrentLocation.CurrentDistance
 				+ car2.CurrentLocation.DistanceLeft
 				- minimalDistanceBetweenCars
-				- car1.Length / 2
-				- car2.Length / 2;
+				- car1.Options.Length / 2
+				- car2.Options.Length / 2;
 		}
 
 		private Car? FindCarInFrontOnTheSameLane(IEnumerable<Car> cars)
@@ -315,7 +307,7 @@ namespace TrafficSimulator.Domain.Models.Agents
 				$"HasReachedDestination = {HasReachedDestination}, " +
 				$"Location = {CurrentLocation.Location.Name}, " +
 				$"Distance = {CurrentLocation.CurrentDistance}, " +
-				$"Velocity = {MoveVelocity}, " +
+				$"Velocity = {Options.MoveVelocity}, " +
 				$"IsCarWaiting = {IsCarWaiting}]";
 		}
 	}

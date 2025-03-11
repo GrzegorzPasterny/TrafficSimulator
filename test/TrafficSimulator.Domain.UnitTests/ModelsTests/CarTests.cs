@@ -51,7 +51,7 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 			carStartLocation!.TrafficLights!.SwitchToGreen();
 
 			Car car = new Car(carStartLocation!);
-			car.MoveVelocity = velocity;
+			car.Options.MoveVelocity = velocity;
 			car.DistanceToCover.ForEach(l => l.Distance = locationDistance);
 
 			while (car.HasReachedDestination == false)
