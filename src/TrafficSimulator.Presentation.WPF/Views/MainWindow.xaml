@@ -23,6 +23,8 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
@@ -47,6 +49,16 @@
                    VerticalAlignment="Center" 
                    Margin="5"
                    Grid.Column="3"/>
+            <TextBlock Text="Overall simulation time: " 
+                   FontSize="12" 
+                   VerticalAlignment="Center" 
+                   Margin="5"
+                   Grid.Column="4"/>
+            <TextBlock Text="{Binding ElapsedSimulationTime}" 
+                   FontSize="12" 
+                   VerticalAlignment="Center" 
+                   Margin="5"
+                   Grid.Column="5" />
         </Grid>
 
         <Grid Grid.Row="2" Margin="5">
@@ -63,6 +75,8 @@
 
             <Grid Grid.Column="1" VerticalAlignment="Top">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
@@ -98,7 +112,7 @@
                                    VerticalAlignment="Center" 
                                    Margin="5"
                                    Grid.Row="2"/>
-                        <TextBlock Text="TimeTakenSeconds:" 
+                        <TextBlock Text="CalculationTimeSeconds:" 
                                    FontSize="12" 
                                    VerticalAlignment="Center" 
                                    Margin="5"
@@ -126,11 +140,90 @@
                                    VerticalAlignment="Center" 
                                    Margin="5"
                                    Grid.Row="2"/>
-                        <TextBlock Text="{Binding TimeTakenSeconds}" 
+                        <TextBlock Text="{Binding CalculationTimeSeconds}" 
                                    FontSize="12" 
                                    VerticalAlignment="Center" 
                                    Margin="5"
                                    Grid.Row="3"/>
+                    </Grid>
+                </Grid>
+
+                <TextBlock Text="Options" 
+                       FontSize="16" 
+                       HorizontalAlignment="Center"
+                       Grid.Row="2"/>   
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Simulation name:" 
+                               FontSize="12" 
+                               VerticalAlignment="Center" 
+                               Margin="5"
+                               Grid.Row="0"/>       
+                        <TextBlock Text="Simulation Id:"  
+                               FontSize="12" 
+                               VerticalAlignment="Center" 
+                               Margin="5"
+                               Grid.Row="1"/>
+                        <TextBlock Text="Simulation configuration path:" 
+                               FontSize="12" 
+                               VerticalAlignment="Center" 
+                               Margin="5"
+                               Grid.Row="2"/>
+                        <TextBlock Text="Simulation step (ms):" 
+                               FontSize="12" 
+                               VerticalAlignment="Center" 
+                               Margin="5"
+                               Grid.Row="3"/>
+                        <TextBlock Text="Minimal distance between the cars:" 
+                               FontSize="12" 
+                               VerticalAlignment="Center" 
+                               Margin="5"
+                               Grid.Row="4"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding SimulationName}" 
+                               FontSize="12" 
+                               VerticalAlignment="Center" 
+                               Margin="5"
+                               Grid.Row="0"/>
+                        <TextBlock Text="{Binding SimulationId}" 
+                               FontSize="12" 
+                               VerticalAlignment="Center" 
+                               Margin="5"
+                               Grid.Row="1"/>
+                        <TextBlock Text="{Binding SimulationFilePath}" 
+                               FontSize="12" 
+                               VerticalAlignment="Center" 
+                               Margin="5"
+                               Grid.Row="2"/>
+                        <TextBlock Text="{Binding SimulationTimespanMs}" 
+                               FontSize="12" 
+                               VerticalAlignment="Center" 
+                               Margin="5"
+                               Grid.Row="3"/>
+                        <TextBlock Text="{Binding MinimalDistanceBetweenCars}" 
+                               FontSize="12" 
+                               VerticalAlignment="Center" 
+                               Margin="5"
+                               Grid.Row="4"/>
                     </Grid>
                 </Grid>
             </Grid>

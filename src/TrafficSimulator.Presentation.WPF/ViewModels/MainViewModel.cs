@@ -35,10 +35,16 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 		public event Action<Guid, TrafficLightState>? TrafficLightUpdated;
 		public event Action<Guid, CarLocation>? CarLocationUpdated;
+		public event Action<string> SimulationTimeUpdated;
 		public event Action? NewSimulationStarted;
+
+		private readonly DispatcherTimer _simulationTimer;
+		private DateTime _simulationStartTime;
 
 		[ObservableProperty]
 		private int _simulationStepCounter = 0;
+		[ObservableProperty]
+		private string _elapsedSimulationTime = "00:00:000";
 
 		[ObservableProperty]
 		private double _stepsTaken;
@@ -47,7 +53,18 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		[ObservableProperty]
 		private double _totalCarsIdleTimeMs;
 		[ObservableProperty]
-		private double _timeTakenSeconds;
+		private double _calculationTimeSeconds;
+
+		[ObservableProperty]
+		private string _simulationName;
+		[ObservableProperty]
+		private string _simulationId;
+		[ObservableProperty]
+		private string _simulationFilePath;
+		[ObservableProperty]
+		private int _simulationTimespanMs;
+		[ObservableProperty]
+		private int _minimalDistanceBetweenCars;
 
 		public ICommand LoadSimulationCommand { get; }
 		public ICommand StartSimulationCommand { get; }
@@ -64,6 +81,18 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			_logger.LogInformation("MainViewModel initialized");
 
 			LoadDummyIntersection();
+
+			_simulationTimer = new DispatcherTimer
+			{
+				Interval = TimeSpan.FromMilliseconds(40) // Update every second
+			};
+			_simulationTimer.Tick += SimulationTimerTick;
+		}
+
+		private void SimulationTimerTick(object? sender, EventArgs e)
+		{
+			var elapsed = DateTime.Now - _simulationStartTime;
+			ElapsedSimulationTime = elapsed.ToString(@"mm\:ss\:fff");
 		}
 
 		private async Task LoadIntersection()
@@ -91,17 +120,29 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			_currentIntersectionSimulation = _simulationHandler.IntersectionSimulation;
 
 			DrawIntersection(intersection);
+			UpdateIntersectionOptions(_currentIntersectionSimulation, jsonConfigurationFile);
+		}
+
+		private void UpdateIntersectionOptions(IntersectionSimulation intersectionSimulation, string jsonConfigurationFile)
+		{
+			SimulationName = intersectionSimulation.Name;
+			SimulationId = intersectionSimulation.Id.ToString();
+			SimulationFilePath = jsonConfigurationFile;
+			SimulationTimespanMs = (int)intersectionSimulation.Options.StepTimespan.TotalMilliseconds;
+			MinimalDistanceBetweenCars = intersectionSimulation.Options.MinimalDistanceBetweenTheCars;
 		}
 
 		private async Task RunSimulation()
 		{
 			CleanUpTheSimulationData();
+			StartSimulationTimer();
 
 			UnitResult<Error> startResult = await _simulationHandler.Start();
 
 			if (startResult.IsFailure)
 			{
 				_logger.LogError("Simulation failed to start [ErrorMessage = {ErrorMessage}", startResult.Error);
+				StopSimulationTimer();
 				return;
 			}
 
@@ -116,9 +157,22 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			StepsTaken = simulationResults.SimulationStepsTaken;
 			CarsPassed = simulationResults.CarsPassed;
 			TotalCarsIdleTimeMs = simulationResults.TotalCarsIdleTimeMs;
-			TimeTakenSeconds = Math.Round(
+			CalculationTimeSeconds = Math.Round(
 				simulationResults.SimulationStepsTaken *
 				_simulationHandler.IntersectionSimulation.Options.StepTimespan.TotalSeconds, 2);
+
+			StopSimulationTimer();
+		}
+
+		private void StopSimulationTimer()
+		{
+			_simulationTimer.Stop();
+		}
+
+		private void StartSimulationTimer()
+		{
+			_simulationStartTime = DateTime.Now;
+			_simulationTimer.Start();
 		}
 
 		private void OnSimulationUpdated(object? sender, SimulationStateEventArgs e)
@@ -143,7 +197,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			StepsTaken = 0;
 			CarsPassed = 0;
 			TotalCarsIdleTimeMs = 0;
-			TimeTakenSeconds = 0;
+			CalculationTimeSeconds = 0;
 			SimulationStepCounter = 0;
 
 			if (_currentIntersectionSimulation is not null &&
