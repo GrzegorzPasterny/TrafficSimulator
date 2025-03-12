@@ -3,11 +3,12 @@ using TrafficSimulator.Domain.Commons.Interfaces;
 
 namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
-	public class InboundLane : OutboundLane
+	public class InboundLane : OutboundLane, IEquatable<InboundLane>
 	{
+		// TODO: Pass information about the order number for the lane in the direction. (e.g. second (from left) on the West side of the Intersection)
 		public InboundLane(
 			Intersection root, IntersectionObject? parent, LaneType[] laneTypes, WorldDirection worldDirection,
-			string name = "", bool addTrafficLights = true, int distance = 10)
+			string name = "", bool addTrafficLights = true, int distance = 100)
 			: base(root, parent, worldDirection, name, distance)
 		{
 			LaneTypes = laneTypes;
@@ -28,5 +29,19 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 		public bool ContainsTrafficLights { get; }
 
 		public ICarGenerator? CarGenerator { get; set; }
+
+		public override bool Equals(object? obj)
+		{
+			return obj is InboundLane other && Equals(other);
+		}
+
+		public bool Equals(InboundLane? other)
+		{
+			if (other == null) return false;
+
+			return base.Equals(other)
+				&& ContainsTrafficLights == other.ContainsTrafficLights
+				&& LaneTypes.SequenceEqual(other.LaneTypes);
+		}
 	}
 }

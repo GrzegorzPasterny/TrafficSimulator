@@ -51,7 +51,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 			intersectionSimulation.IsError.Should().BeFalse();
 
 			// This assertion does not entirely work
-			intersectionSimulation.Value.Intersection.Should().BeEquivalentTo(IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest,
+			intersectionSimulation.Value.Should().BeEquivalentTo(IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest,
 				options => options
 					//.ComparingByMembers<IntersectionObject>()
 					//.ComparingByMembers<IntersectionCore>()

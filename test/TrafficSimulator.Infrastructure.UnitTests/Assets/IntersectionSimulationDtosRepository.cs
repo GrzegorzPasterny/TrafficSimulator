@@ -172,8 +172,8 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 					{
 						MinimalDistanceBetweenTheCars = 1,
 						StepLimit = 1000,
-						StepTimespanMs = 100,
-						TimeoutMs = 5000
+						StepTimespanMs = 40,
+						TimeoutMs = 10000
 					},
 					Intersection = new()
 					{
@@ -196,7 +196,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 									{
 										Name = "InboundLane",
 										ParentName = ".ZebraCrossing.Lanes.West",
-										Distance = 10,
+										Distance = 100,
 										WorldDirection = WorldDirection.West,
 										LaneTypes = [
 											LaneType.Straight
@@ -212,7 +212,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 								OutboundLanes = [
 									new OutboundLaneDto()
 									{
-										Distance = 10,
+										Distance = 100,
 										Name = "OutboundLane",
 										ParentName = ".ZebraCrossing.Lanes.West",
 										WorldDirection = WorldDirection.West
@@ -229,7 +229,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 									{
 										Name = "InboundLane",
 										ParentName = ".ZebraCrossing.Lanes.East",
-										Distance = 10,
+										Distance = 100,
 										WorldDirection = WorldDirection.East,
 										LaneTypes = [
 											LaneType.Straight
@@ -245,7 +245,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 								OutboundLanes = [
 									new OutboundLaneDto()
 									{
-										Distance = 10,
+										Distance = 100,
 										Name = "OutboundLane",
 										ParentName = ".ZebraCrossing.Lanes.East",
 										WorldDirection = WorldDirection.East

@@ -50,13 +50,13 @@ namespace TrafficSimulator.Domain.Commons
 		{
 			if (other == null) return false;
 
-			// Compare based on essential properties, avoiding recursive relationships
+			// TODO: Should ID be also used for comparison?
 			return FullName == other.FullName;
 		}
 
 		public override int GetHashCode()
 		{
-			return HashCode.Combine(Id, FullName);
+			return Id.GetHashCode();
 		}
 	}
 }

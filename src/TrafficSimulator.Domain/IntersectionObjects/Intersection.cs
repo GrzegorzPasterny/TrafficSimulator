@@ -3,7 +3,7 @@ using TrafficSimulator.Domain.Models.Lights;
 
 namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
-	public class Intersection : IntersectionObject
+	public class Intersection : IntersectionObject, IEquatable<Intersection>
 	{
 		public List<IntersectionObject> ObjectLookup { get; } = new();
 		public List<Lanes> LanesCollection { get; set; } = new List<Lanes>();
@@ -31,16 +31,16 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 			return ObjectLookup.OfType<T>().FirstOrDefault(predicate);
 		}
 
-		//public override string BuildObjectName()
-		//{
-		//	if (string.IsNullOrWhiteSpace(Parent?.Name))
-		//	{
-		//		return _name;
-		//	}
-		//	else
-		//	{
-		//		return $"{Parent?.Name}.{_name}";
-		//	}
-		//}
+		public override bool Equals(object? obj)
+		{
+			return obj is Intersection other && Equals(other);
+		}
+
+		public bool Equals(Intersection? other)
+		{
+			if (other == null) return false;
+
+			return base.Equals(other);
+		}
 	}
 }

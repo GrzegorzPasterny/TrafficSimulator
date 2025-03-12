@@ -7,7 +7,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
 	// TODO: Make it an interface
 	// TODO: Add NoTrafficLights implementation for intersections without Traffic Lights
-	public class TrafficLights : IntersectionObject
+	public class TrafficLights : IntersectionObject, IEquatable<TrafficLights>
 	{
 		public TrafficLightState TrafficLightState { get; private set; }
 		public bool IsOn { get; private set; } = true;
@@ -78,6 +78,18 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 			IsOn = true;
 			TrafficLightState = Options.InitialState;
 			return UnitResult.Success<Error>();
+		}
+
+		public override bool Equals(object? obj)
+		{
+			return obj is TrafficLights other && Equals(other);
+		}
+
+		public bool Equals(TrafficLights? other)
+		{
+			if (other == null) return false;
+
+			return base.Equals(other);
 		}
 
 		public override string ToString()
