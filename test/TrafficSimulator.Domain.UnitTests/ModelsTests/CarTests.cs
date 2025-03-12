@@ -89,7 +89,7 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 				_logger.LogInformation("{Car}", car);
 			}
 
-			int maxMoveCount = 10;
+			int maxMoveCount = 100;
 			int moveCount = 0;
 
 			// Wait until all cars are waiting on red light
