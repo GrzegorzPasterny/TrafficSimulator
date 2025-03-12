@@ -42,7 +42,7 @@ namespace TrafficSimulator.Domain.Commons.Builders
 			return this;
 		}
 
-		public IntersectionBuilder AddOutboundLane(WorldDirection worldDirection, string name = "", int distance = 10)
+		public IntersectionBuilder AddOutboundLane(WorldDirection worldDirection, string name = "", int distance = 100)
 		{
 			Lanes lanesCollection = _intersection.LanesCollection.Single(l => l.WorldDirection == worldDirection);
 
@@ -58,7 +58,7 @@ namespace TrafficSimulator.Domain.Commons.Builders
 
 		public IntersectionBuilder AddInboundLane(
 			WorldDirection worldDirection, LaneType[] laneTypes, string name = "",
-			bool addTrafficLights = true, int distance = 10)
+			bool addTrafficLights = true, int distance = 100)
 		{
 			Lanes lanesCollection = _intersection.LanesCollection.Single(l => l.WorldDirection == worldDirection);
 

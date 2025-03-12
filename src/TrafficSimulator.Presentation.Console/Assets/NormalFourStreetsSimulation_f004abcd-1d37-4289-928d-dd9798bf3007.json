@@ -15,7 +15,11 @@
             "ContainsTrafficLights": true,
             "CarGeneratorOptions": {
               "AmountOfCarsToGenerate": 3,
-              "DelayBetweenCarGeneration": "00:00:00.5000000"
+              "DelayBetweenCarGeneration": "00:00:00.5000000",
+              "CarOptions": {
+                "MoveVelocity": 50,
+                "Length": 2
+              }
             },
             "WorldDirection": 0,
             "Distance": 10,
@@ -47,7 +51,11 @@
             "ContainsTrafficLights": true,
             "CarGeneratorOptions": {
               "AmountOfCarsToGenerate": 3,
-              "DelayBetweenCarGeneration": "00:00:00.5000000"
+              "DelayBetweenCarGeneration": "00:00:00.5000000",
+              "CarOptions": {
+                "MoveVelocity": 50,
+                "Length": 2
+              }
             },
             "WorldDirection": 1,
             "Distance": 10,
@@ -79,7 +87,11 @@
             "ContainsTrafficLights": true,
             "CarGeneratorOptions": {
               "AmountOfCarsToGenerate": 3,
-              "DelayBetweenCarGeneration": "00:00:00.5000000"
+              "DelayBetweenCarGeneration": "00:00:00.5000000",
+              "CarOptions": {
+                "MoveVelocity": 50,
+                "Length": 2
+              }
             },
             "WorldDirection": 2,
             "Distance": 10,
@@ -111,7 +123,11 @@
             "ContainsTrafficLights": true,
             "CarGeneratorOptions": {
               "AmountOfCarsToGenerate": 3,
-              "DelayBetweenCarGeneration": "00:00:00.5000000"
+              "DelayBetweenCarGeneration": "00:00:00.5000000",
+              "CarOptions": {
+                "MoveVelocity": 50,
+                "Length": 2
+              }
             },
             "WorldDirection": 3,
             "Distance": 10,

@@ -15,10 +15,14 @@
             "ContainsTrafficLights": true,
             "CarGeneratorOptions": {
               "AmountOfCarsToGenerate": 3,
-              "DelayBetweenCarGeneration": "00:00:00.5000000"
+              "DelayBetweenCarGeneration": "00:00:00.5000000",
+              "CarOptions": {
+                "MoveVelocity": 50,
+                "Length": 2
+              }
             },
             "WorldDirection": 0,
-            "Distance": 10,
+            "Distance": 100,
             "Name": "InboundLane",
             "ParentName": ".NormalFourStreets.Lanes.North"
           }
@@ -26,7 +30,7 @@
         "OutboundLanes": [
           {
             "WorldDirection": 0,
-            "Distance": 10,
+            "Distance": 50,
             "Name": "OutboundLane",
             "ParentName": ".NormalFourStreets.Lanes.North"
           }
@@ -47,10 +51,14 @@
             "ContainsTrafficLights": true,
             "CarGeneratorOptions": {
               "AmountOfCarsToGenerate": 3,
-              "DelayBetweenCarGeneration": "00:00:00.5000000"
+              "DelayBetweenCarGeneration": "00:00:00.5000000",
+              "CarOptions": {
+                "MoveVelocity": 30,
+                "Length": 2
+              }
             },
             "WorldDirection": 1,
-            "Distance": 10,
+            "Distance": 100,
             "Name": "InboundLane",
             "ParentName": ".NormalFourStreets.Lanes.East"
           }
@@ -58,7 +66,7 @@
         "OutboundLanes": [
           {
             "WorldDirection": 1,
-            "Distance": 10,
+            "Distance": 50,
             "Name": "OutboundLane",
             "ParentName": ".NormalFourStreets.Lanes.East"
           }
@@ -79,10 +87,14 @@
             "ContainsTrafficLights": true,
             "CarGeneratorOptions": {
               "AmountOfCarsToGenerate": 3,
-              "DelayBetweenCarGeneration": "00:00:00.5000000"
+              "DelayBetweenCarGeneration": "00:00:00.5000000",
+              "CarOptions": {
+                "MoveVelocity": 50,
+                "Length": 2
+              }
             },
             "WorldDirection": 2,
-            "Distance": 10,
+            "Distance": 50,
             "Name": "InboundLane",
             "ParentName": ".NormalFourStreets.Lanes.South"
           }
@@ -90,7 +102,7 @@
         "OutboundLanes": [
           {
             "WorldDirection": 2,
-            "Distance": 10,
+            "Distance": 50,
             "Name": "OutboundLane",
             "ParentName": ".NormalFourStreets.Lanes.South"
           }
@@ -111,10 +123,14 @@
             "ContainsTrafficLights": true,
             "CarGeneratorOptions": {
               "AmountOfCarsToGenerate": 3,
-              "DelayBetweenCarGeneration": "00:00:00.5000000"
+              "DelayBetweenCarGeneration": "00:00:00.5000000",
+              "CarOptions": {
+                "MoveVelocity": 50,
+                "Length": 2
+              }
             },
             "WorldDirection": 3,
-            "Distance": 10,
+            "Distance": 100,
             "Name": "InboundLane",
             "ParentName": ".NormalFourStreets.Lanes.West"
           }
@@ -122,7 +138,7 @@
         "OutboundLanes": [
           {
             "WorldDirection": 3,
-            "Distance": 10,
+            "Distance": 50,
             "Name": "OutboundLane",
             "ParentName": ".NormalFourStreets.Lanes.West"
           }
@@ -548,8 +564,8 @@
   },
   "Options": {
     "MinimalDistanceBetweenTheCars": 1,
-    "StepTimespanMs": 100,
-    "TimeoutMs": 5000,
+    "StepTimespanMs": 40,
+    "TimeoutMs": 10000,
     "StepLimit": 1000
   }
 }
