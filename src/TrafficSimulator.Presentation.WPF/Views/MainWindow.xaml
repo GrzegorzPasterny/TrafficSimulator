@@ -23,6 +23,9 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -38,27 +41,38 @@
                 Width="Auto" Margin="5"
                 Grid.Column="1"/>
 
-            <TextBlock Text="Current step:" 
+            <Button Content="Abort Simulation" 
+                Command="" 
+                Width="Auto" Margin="5"
+                Grid.Column="2"/>
+
+            <ToggleButton Content="Change Mode:"
+                          Width="Auto"
+                          Command="{Binding ChangeSimulationModeCommand}"
+                          Grid.Column="4"
+                />
+
+            <TextBlock Text="{Binding SimulationModeName}" 
                    FontSize="12" 
                    VerticalAlignment="Center" 
                    Margin="5"
-                   Grid.Column="2"/>
+                   Grid.Column="5"/>
 
             <TextBlock Text="{Binding SimulationStepCounter}" 
                    FontSize="12" 
                    VerticalAlignment="Center" 
                    Margin="5"
-                   Grid.Column="3"/>
+                   Grid.Column="6"/>
             <TextBlock Text="Overall simulation time: " 
                    FontSize="12" 
                    VerticalAlignment="Center" 
                    Margin="5"
-                   Grid.Column="4"/>
+                   Grid.Column="7"/>
             <TextBlock Text="{Binding ElapsedSimulationTime}" 
                    FontSize="12" 
                    VerticalAlignment="Center" 
                    Margin="5"
-                   Grid.Column="5" />
+                   Grid.Column="8" />
         </Grid>
 
         <Grid Grid.Row="2" Margin="5">

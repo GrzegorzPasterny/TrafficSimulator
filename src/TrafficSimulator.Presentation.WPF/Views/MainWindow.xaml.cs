@@ -22,7 +22,7 @@ namespace TrafficSimulator.Presentation.WPF.Views;
 public partial class MainWindow : Window
 {
 	private readonly MainViewModel _mainViewModel;
-	private readonly InMemorySink _inMemorySink;
+	private readonly InMemorySerilogSink _inMemorySink;
 	private Rectangle? _intersectionCore;
 	private Dictionary<Guid, Rectangle> _inboundLanes = new();
 	private Dictionary<Guid, Rectangle> _outboundLanes = new();
@@ -33,7 +33,7 @@ public partial class MainWindow : Window
 	private Dictionary<Guid, Ellipse> _carLocations = [];
 	private Thread _pollingThreadForLogging;
 
-	public MainWindow(MainViewModel mainViewModel, InMemorySink inMemorySink)
+	public MainWindow(MainViewModel mainViewModel, InMemorySerilogSink inMemorySink)
 	{
 		InitializeComponent();
 		DataContext = mainViewModel;

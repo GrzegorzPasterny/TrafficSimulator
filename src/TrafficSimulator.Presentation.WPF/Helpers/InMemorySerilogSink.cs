@@ -7,7 +7,7 @@ using System.IO;
 
 namespace TrafficSimulator.Presentation.WPF.Helpers
 {
-	public class InMemorySink : ILogEventSink
+	public class InMemorySerilogSink : ILogEventSink
 	{
 		readonly ITextFormatter _textFormatter = new MessageTemplateTextFormatter("{Timestamp} [{Level}] {Message}{Exception}");
 

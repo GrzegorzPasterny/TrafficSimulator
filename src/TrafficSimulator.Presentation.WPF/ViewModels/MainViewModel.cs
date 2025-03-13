@@ -44,6 +44,9 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		private DateTime _simulationStartTime;
 
 		[ObservableProperty]
+		private string _simulationModeName;
+
+		[ObservableProperty]
 		private int _simulationStepCounter = 0;
 		[ObservableProperty]
 		private string _elapsedSimulationTime = "00:00:000";
@@ -70,6 +73,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 		public ICommand LoadSimulationCommand { get; }
 		public ICommand StartSimulationCommand { get; }
+		public ICommand ChangeSimulationModeCommand { get; }
 
 		public MainViewModel(IntersectionSimulationHandlerFactory intersectionSimulationHandlerFactory, IOptions<SimulationOptions> options, ILogger<MainViewModel> logger)
 		{
@@ -81,6 +85,8 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 			LoadSimulationCommand = new AsyncRelayCommand(LoadIntersection);
 			StartSimulationCommand = new AsyncRelayCommand(RunSimulation);
+			ChangeSimulationModeCommand = new AsyncRelayCommand(ChangeSimulationMode);
+
 			_logger = logger;
 			_logger.LogInformation("MainViewModel initialized");
 
@@ -94,54 +100,9 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			_simulationTimer.Tick += SimulationTimerTick;
 		}
 
-		private void SetSimulationOptions(SimulationOptions options)
+		private Task ChangeSimulationMode()
 		{
-			CanvasOptions.CarGeneratorsAreaOffset = options.CarGenerationAreaSize;
-			CanvasOptions.CarWidth = options.CarSize;
-			_simulationMode = options.SimulationModeType;
-		}
-
-		private void SimulationTimerTick(object? sender, EventArgs e)
-		{
-			var elapsed = DateTime.Now - _simulationStartTime;
-			ElapsedSimulationTime = elapsed.ToString(@"mm\:ss\:fff");
-		}
-
-		private async Task LoadIntersection()
-		{
-			CleanUpTheSimulationData();
-
-			string? jsonConfigurationFile = SimulationConfigurationFileLoader.LoadFromJsonFile();
-
-			if (jsonConfigurationFile is null)
-			{
-				_logger.LogDebug("Attempt to select json configuration file was cancelled");
-				return;
-			}
-
-			UnitResult<Error> loadIntersectionResult = await _simulationHandler.LoadIntersection(jsonConfigurationFile);
-
-			if (loadIntersectionResult.IsFailure)
-			{
-				_logger.LogDebug("Simulation loading failed [Error = {Error}]", loadIntersectionResult.Error);
-				// TODO: Print error to the user
-				return;
-			}
-
-			Intersection intersection = _simulationHandler.IntersectionSimulation!.Intersection;
-			_currentIntersectionSimulation = _simulationHandler.IntersectionSimulation;
-
-			DrawIntersection(intersection);
-			UpdateIntersectionOptions(_currentIntersectionSimulation, jsonConfigurationFile);
-		}
-
-		private void UpdateIntersectionOptions(IntersectionSimulation intersectionSimulation, string jsonConfigurationFile)
-		{
-			SimulationName = intersectionSimulation.Name;
-			SimulationId = intersectionSimulation.Id.ToString();
-			SimulationFilePath = jsonConfigurationFile;
-			SimulationTimespanMs = (int)intersectionSimulation.Options.StepTimespan.TotalMilliseconds;
-			MinimalDistanceBetweenCars = intersectionSimulation.Options.MinimalDistanceBetweenTheCars;
+			throw new NotImplementedException();
 		}
 
 		private async Task RunSimulation()
@@ -217,6 +178,56 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			{
 				_currentIntersectionSimulation.Reset();
 			}
+		}
+
+		private void SetSimulationOptions(SimulationOptions options)
+		{
+			CanvasOptions.CarGeneratorsAreaOffset = options.CarGenerationAreaSize;
+			CanvasOptions.CarWidth = options.CarSize;
+			_simulationMode = options.SimulationModeType;
+		}
+
+		private void SimulationTimerTick(object? sender, EventArgs e)
+		{
+			var elapsed = DateTime.Now - _simulationStartTime;
+			ElapsedSimulationTime = elapsed.ToString(@"mm\:ss\:fff");
+		}
+
+		private async Task LoadIntersection()
+		{
+			CleanUpTheSimulationData();
+
+			string? jsonConfigurationFile = SimulationConfigurationFileLoader.LoadFromJsonFile();
+
+			if (jsonConfigurationFile is null)
+			{
+				_logger.LogDebug("Attempt to select json configuration file was cancelled");
+				return;
+			}
+
+			UnitResult<Error> loadIntersectionResult = await _simulationHandler.LoadIntersection(jsonConfigurationFile);
+
+			if (loadIntersectionResult.IsFailure)
+			{
+				_logger.LogDebug("Simulation loading failed [Error = {Error}]", loadIntersectionResult.Error);
+				// TODO: Print error to the user
+				return;
+			}
+
+			Intersection intersection = _simulationHandler.IntersectionSimulation!.Intersection;
+			_currentIntersectionSimulation = _simulationHandler.IntersectionSimulation;
+
+			DrawIntersection(intersection);
+			UpdateIntersectionOptions(_currentIntersectionSimulation, jsonConfigurationFile);
+		}
+
+		private void UpdateIntersectionOptions(IntersectionSimulation intersectionSimulation, string jsonConfigurationFile)
+		{
+			SimulationName = intersectionSimulation.Name;
+			SimulationId = intersectionSimulation.Id.ToString();
+			SimulationFilePath = jsonConfigurationFile;
+			SimulationTimespanMs = (int)intersectionSimulation.Options.StepTimespan.TotalMilliseconds;
+			MinimalDistanceBetweenCars = intersectionSimulation.Options.MinimalDistanceBetweenTheCars;
 		}
 
 		private void DrawIntersection(Intersection intersection)

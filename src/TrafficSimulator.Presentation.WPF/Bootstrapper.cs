@@ -23,7 +23,7 @@ public class Bootstrapper
 			.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
 			.Build();
 
-		InMemorySink inMemorySink = new InMemorySink();
+		InMemorySerilogSink inMemorySink = new InMemorySerilogSink();
 
 		Log.Logger = new LoggerConfiguration()
 			.ReadFrom.Configuration(configuration)
