@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CSharpFunctionalExtensions;
 using ErrorOr;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Windows.Input;
 using System.Windows.Threading;
 using TrafficSimulator.Application.Commons.Interfaces;
@@ -15,6 +16,7 @@ using TrafficSimulator.Domain.Models.Lights;
 using TrafficSimulator.Domain.Simulation;
 using TrafficSimulator.Presentation.WPF.Helpers;
 using TrafficSimulator.Presentation.WPF.ViewModels.IntersectionElements;
+using TrafficSimulator.Presentation.WPF.ViewModels.SimulationElements;
 
 namespace TrafficSimulator.Presentation.WPF.ViewModels
 {
@@ -23,10 +25,10 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		private readonly IntersectionSimulationHandlerFactory _intersectionSimulationHandlerFactory;
 		private readonly ILogger<MainViewModel> _logger;
 		private DispatcherTimer? _dispatcherTimer;
-		private string _simulationMode = SimulationMode.RealTime;
 		private ISimulationHandler _simulationHandler;
 		private IntersectionElement _tempIntersectionElement = new();
 		private IntersectionSimulation? _currentIntersectionSimulation;
+		private string _simulationMode = SimulationMode.RealTime;
 
 		public IntersectionElementsOptions CanvasOptions { get; } = new();
 
@@ -69,8 +71,10 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		public ICommand LoadSimulationCommand { get; }
 		public ICommand StartSimulationCommand { get; }
 
-		public MainViewModel(IntersectionSimulationHandlerFactory intersectionSimulationHandlerFactory, ILogger<MainViewModel> logger)
+		public MainViewModel(IntersectionSimulationHandlerFactory intersectionSimulationHandlerFactory, IOptions<SimulationOptions> options, ILogger<MainViewModel> logger)
 		{
+			SetSimulationOptions(options.Value);
+
 			_intersectionSimulationHandlerFactory = intersectionSimulationHandlerFactory;
 			_simulationHandler = intersectionSimulationHandlerFactory.CreateHandler(_simulationMode);
 			_simulationHandler.SimulationUpdated += OnSimulationUpdated;
@@ -80,13 +84,21 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			_logger = logger;
 			_logger.LogInformation("MainViewModel initialized");
 
+			// TODO: Implement
 			LoadDummyIntersection();
 
 			_simulationTimer = new DispatcherTimer
 			{
-				Interval = TimeSpan.FromMilliseconds(40) // Update every second
+				Interval = TimeSpan.FromMilliseconds(40)
 			};
 			_simulationTimer.Tick += SimulationTimerTick;
+		}
+
+		private void SetSimulationOptions(SimulationOptions options)
+		{
+			CanvasOptions.CarGeneratorsAreaOffset = options.CarGenerationAreaSize;
+			CanvasOptions.CarWidth = options.CarSize;
+			_simulationMode = options.SimulationModeType;
 		}
 
 		private void SimulationTimerTick(object? sender, EventArgs e)
@@ -264,7 +276,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 				LaneElement laneElement = new LaneElement()
 				{
-					Inbound = true,
+					IsInbound = true,
 					ReferenceLaneId = lane.Id,
 					TrafficLightsId = lane.TrafficLights?.Id,
 					Width = CanvasOptions.LaneWidth,
@@ -285,7 +297,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 				LaneElement laneElement = new LaneElement()
 				{
-					Inbound = false,
+					IsInbound = false,
 					ReferenceLaneId = lane.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.North,
@@ -317,7 +329,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 				LaneElement laneElement = new LaneElement()
 				{
-					Inbound = true,
+					IsInbound = true,
 					ReferenceLaneId = lane.Id,
 					TrafficLightsId = lane.TrafficLights?.Id,
 					Width = CanvasOptions.LaneWidth,
@@ -338,7 +350,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 				LaneElement laneElement = new LaneElement()
 				{
-					Inbound = false,
+					IsInbound = false,
 					ReferenceLaneId = lane.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.East,
@@ -370,7 +382,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 				LaneElement laneElement = new LaneElement()
 				{
-					Inbound = true,
+					IsInbound = true,
 					ReferenceLaneId = lane.Id,
 					TrafficLightsId = lane.TrafficLights?.Id,
 					Width = CanvasOptions.LaneWidth,
@@ -391,7 +403,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 				LaneElement laneElement = new LaneElement()
 				{
-					Inbound = false,
+					IsInbound = false,
 					ReferenceLaneId = lane.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.South,
@@ -423,7 +435,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 				LaneElement laneElement = new LaneElement()
 				{
-					Inbound = true,
+					IsInbound = true,
 					ReferenceLaneId = lane.Id,
 					TrafficLightsId = lane.TrafficLights?.Id,
 					Width = CanvasOptions.LaneWidth,
@@ -444,7 +456,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 				LaneElement laneElement = new LaneElement()
 				{
-					Inbound = false,
+					IsInbound = false,
 					ReferenceLaneId = lane.Id,
 					Width = CanvasOptions.LaneWidth,
 					WorldDirection = WorldDirection.West,

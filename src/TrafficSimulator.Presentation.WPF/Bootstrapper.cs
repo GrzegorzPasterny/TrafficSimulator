@@ -7,6 +7,7 @@ using TrafficSimulator.Domain;
 using TrafficSimulator.Infrastructure.DI;
 using TrafficSimulator.Presentation.WPF.Helpers;
 using TrafficSimulator.Presentation.WPF.ViewModels;
+using TrafficSimulator.Presentation.WPF.ViewModels.SimulationElements;
 using TrafficSimulator.Presentation.WPF.Views;
 
 namespace TrafficSimulator.Presentation.WPF;
@@ -44,6 +45,9 @@ public class Bootstrapper
 		services.AddDomain();
 		services.AddApplication();
 		services.AddInfrastructure();
+
+		services.AddOptions<SimulationOptions>()
+			.BindConfiguration(SimulationOptions.DefaultSectionName);
 
 		// Register ViewModels
 		services.AddSingleton<MainViewModel>();

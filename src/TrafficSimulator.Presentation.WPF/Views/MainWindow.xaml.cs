@@ -371,7 +371,7 @@ public partial class MainWindow : Window
 
 	private void DrawParkingLots(List<LaneElement> laneElements, int carGeneratorsAreaOffset)
 	{
-		IEnumerable<WorldDirection> outboundLanesWorldDirections = laneElements.Where(lane => !lane.Inbound).Select(lane => lane.WorldDirection).Distinct();
+		IEnumerable<WorldDirection> outboundLanesWorldDirections = laneElements.Where(lane => !lane.IsInbound).Select(lane => lane.WorldDirection).Distinct();
 
 		foreach (WorldDirection worldDirection in outboundLanesWorldDirections)
 		{
@@ -384,7 +384,7 @@ public partial class MainWindow : Window
 				Width = carGeneratorsAreaOffset,
 			};
 
-			double radius = SimulationCanvas.ActualHeight / 2 - carGeneratorsAreaOffset;
+			double radius = SimulationCanvas.ActualHeight / 2 - carGeneratorsAreaOffset / 2;
 
 			DrawerHelper.SetRectangleAtAngle(
 				parkingLot,
@@ -430,6 +430,7 @@ public partial class MainWindow : Window
 		foreach (var laneElement in laneElements)
 		{
 			Rectangle laneRectangle = new();
+			SimulationCanvas.Children.Add(laneRectangle);
 
 			switch (laneElement.WorldDirection)
 			{
@@ -439,16 +440,16 @@ public partial class MainWindow : Window
 					laneRectangle.Fill = Brushes.Black;
 					laneRectangle.Stroke = Brushes.White;
 
-					if (laneElement.Inbound)
+					if (laneElement.IsInbound)
 						laneRectangle.Fill = Brushes.Chocolate;
-
-					if (laneElement.Inbound)
-						AddTrafficLights(laneElement!);
 
 					Canvas.SetTop(laneRectangle, carGeneratorsAreaOffset);
 					Canvas.SetLeft(laneRectangle, SimulationCanvas.ActualWidth / 2 + laneElement.AnchorPointX);
 
-					if (laneElement.Inbound)
+					if (laneElement.IsInbound)
+						AddTrafficLights(laneElement);
+
+					if (laneElement.IsInbound)
 					{
 						_inboundLanes.Add(laneElement.ReferenceLaneId, laneRectangle);
 					}
@@ -463,16 +464,16 @@ public partial class MainWindow : Window
 					laneRectangle.Fill = Brushes.Black;
 					laneRectangle.Stroke = Brushes.White;
 
-					if (laneElement.Inbound)
+					if (laneElement.IsInbound)
 						laneRectangle.Fill = Brushes.Chocolate;
-
-					if (laneElement.Inbound)
-						AddTrafficLights(laneElement);
 
 					Canvas.SetTop(laneRectangle, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY);
 					Canvas.SetLeft(laneRectangle, laneElement.AnchorPointX + SimulationCanvas.ActualWidth / 2);
 
-					if (laneElement.Inbound)
+					if (laneElement.IsInbound)
+						AddTrafficLights(laneElement);
+
+					if (laneElement.IsInbound)
 					{
 						_inboundLanes.Add(laneElement.ReferenceLaneId, laneRectangle);
 					}
@@ -487,16 +488,16 @@ public partial class MainWindow : Window
 					laneRectangle.Fill = Brushes.Black;
 					laneRectangle.Stroke = Brushes.White;
 
-					if (laneElement.Inbound)
+					if (laneElement.IsInbound)
 						laneRectangle.Fill = Brushes.Chocolate;
-
-					if (laneElement.Inbound)
-						AddTrafficLights(laneElement);
 
 					Canvas.SetTop(laneRectangle, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY);
 					Canvas.SetLeft(laneRectangle, laneElement.AnchorPointX + SimulationCanvas.ActualWidth / 2 - laneElement.Width);
 
-					if (laneElement.Inbound)
+					if (laneElement.IsInbound)
+						AddTrafficLights(laneElement);
+
+					if (laneElement.IsInbound)
 					{
 						_inboundLanes.Add(laneElement.ReferenceLaneId, laneRectangle);
 					}
@@ -511,16 +512,16 @@ public partial class MainWindow : Window
 					laneRectangle.Fill = Brushes.Black;
 					laneRectangle.Stroke = Brushes.White;
 
-					if (laneElement.Inbound)
+					if (laneElement.IsInbound)
 						laneRectangle.Fill = Brushes.Chocolate;
-
-					if (laneElement.Inbound)
-						AddTrafficLights(laneElement);
 
 					Canvas.SetTop(laneRectangle, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY - laneElement.Width);
 					Canvas.SetLeft(laneRectangle, carGeneratorsAreaOffset);
 
-					if (laneElement.Inbound)
+					if (laneElement.IsInbound)
+						AddTrafficLights(laneElement);
+
+					if (laneElement.IsInbound)
 					{
 						_inboundLanes.Add(laneElement.ReferenceLaneId, laneRectangle);
 					}
@@ -533,7 +534,6 @@ public partial class MainWindow : Window
 					break;
 			}
 
-			SimulationCanvas.Children.Add(laneRectangle);
 		}
 	}
 
@@ -541,28 +541,28 @@ public partial class MainWindow : Window
 	{
 		Ellipse ellipse = new Ellipse()
 		{
-			Height = laneElement.Width / 2,
-			Width = laneElement.Width / 2,
+			Height = laneElement.Width / 1.5,
+			Width = laneElement.Width / 1.5,
 			Fill = Brushes.Red,
 		};
 
 		switch (laneElement.WorldDirection)
 		{
 			case WorldDirection.North:
-				Canvas.SetTop(ellipse, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY - laneElement.Width / 2 + ellipse.Height / 2);
+				Canvas.SetTop(ellipse, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY - ellipse.Height / 2);
 				Canvas.SetLeft(ellipse, SimulationCanvas.ActualWidth / 2 + laneElement.AnchorPointX + laneElement.Width / 2 - ellipse.Width / 2);
 				break;
 			case WorldDirection.East:
 				Canvas.SetTop(ellipse, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY + laneElement.Width / 2 - ellipse.Height / 2);
-				Canvas.SetLeft(ellipse, SimulationCanvas.ActualWidth / 2 + laneElement.AnchorPointX - laneElement.Width / 2 + ellipse.Width / 2);
+				Canvas.SetLeft(ellipse, SimulationCanvas.ActualWidth / 2 + laneElement.AnchorPointX - ellipse.Width / 2);
 				break;
 			case WorldDirection.South:
-				Canvas.SetTop(ellipse, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY - laneElement.Width / 2 + ellipse.Height / 2);
+				Canvas.SetTop(ellipse, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY - ellipse.Height / 2);
 				Canvas.SetLeft(ellipse, SimulationCanvas.ActualWidth / 2 + laneElement.AnchorPointX - laneElement.Width / 2 - ellipse.Width / 2);
 				break;
 			case WorldDirection.West:
 				Canvas.SetTop(ellipse, SimulationCanvas.ActualHeight / 2 - laneElement.AnchorPointY - laneElement.Width / 2 - ellipse.Height / 2);
-				Canvas.SetLeft(ellipse, SimulationCanvas.ActualWidth / 2 + laneElement.AnchorPointX - laneElement.Width / 2 + ellipse.Width / 2);
+				Canvas.SetLeft(ellipse, SimulationCanvas.ActualWidth / 2 + laneElement.AnchorPointX - ellipse.Width / 2);
 				break;
 			default:
 				break;

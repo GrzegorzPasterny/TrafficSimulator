@@ -8,8 +8,8 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels.IntersectionElements
 		public double AnchorPointX { get; set; }
 		public double AnchorPointY { get; set; }
 		public WorldDirection WorldDirection { get; set; }
-		public bool Inbound { get; set; }
-		public bool CarGenerator { get; set; }
+		public bool IsInbound { get; set; }
+		public bool ContainsCarGenerator { get; set; }
 		public Guid ReferenceLaneId { get; internal set; }
 		public Guid? TrafficLightsId { get; internal set; }
 	}
