@@ -10,7 +10,6 @@ namespace TrafficSimulator.Application.Simulation
 	public class RealTimeIntersectionSimulationHandler : IntersectionSimulationHandler
 	{
 		private new readonly ILogger<RealTimeIntersectionSimulationHandler> _logger;
-		private readonly TimeSpan _timeStep = TimeSpan.FromMilliseconds(100);
 		private Stopwatch? _stopwatch;
 		private System.Timers.Timer? _timer;
 		private CancellationTokenSource? _cancellationTokenSource;

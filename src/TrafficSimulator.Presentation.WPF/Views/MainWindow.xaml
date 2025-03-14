@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TrafficSimulator.Presentation.WPF.Views"
         mc:Ignorable="d"
+        WindowStartupLocation="Manual"
+        Left="0" Top="0"
         Title="Traffic Simulator" Height="820" Width="Auto">
     <Grid Margin="5">
         <Grid.RowDefinitions>
@@ -24,7 +26,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="70"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="Auto"/>
@@ -42,22 +44,26 @@
                 Grid.Column="1"/>
 
             <Button Content="Abort Simulation" 
-                Command="" 
+                Command="{Binding AbortSimulationCommand}" 
                 Width="Auto" Margin="5"
                 Grid.Column="2"/>
 
             <ToggleButton Content="Change Mode:"
-                          Width="Auto"
+                          FontSize="12" 
+                          VerticalAlignment="Center" 
+                          Margin="5"
                           Command="{Binding ChangeSimulationModeCommand}"
-                          Grid.Column="4"
-                />
-
+                          Grid.Column="3" />
             <TextBlock Text="{Binding SimulationModeName}" 
                    FontSize="12" 
                    VerticalAlignment="Center" 
                    Margin="5"
+                   Grid.Column="4"/>
+            <TextBlock Text="Step: " 
+                   FontSize="12" 
+                   VerticalAlignment="Center" 
+                   Margin="5"
                    Grid.Column="5"/>
-
             <TextBlock Text="{Binding SimulationStepCounter}" 
                    FontSize="12" 
                    VerticalAlignment="Center" 

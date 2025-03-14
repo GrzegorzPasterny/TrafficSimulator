@@ -24,11 +24,9 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 	{
 		private readonly IntersectionSimulationHandlerFactory _intersectionSimulationHandlerFactory;
 		private readonly ILogger<MainViewModel> _logger;
-		private DispatcherTimer? _dispatcherTimer;
 		private ISimulationHandler _simulationHandler;
 		private IntersectionElement _tempIntersectionElement = new();
 		private IntersectionSimulation? _currentIntersectionSimulation;
-		private string _simulationMode = SimulationMode.RealTime;
 
 		public IntersectionElementsOptions CanvasOptions { get; } = new();
 
@@ -37,7 +35,6 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 		public event Action<Guid, TrafficLightState>? TrafficLightUpdated;
 		public event Action<Guid, CarLocation>? CarLocationUpdated;
-		public event Action<string> SimulationTimeUpdated;
 		public event Action? NewSimulationStarted;
 
 		private readonly DispatcherTimer _simulationTimer;
@@ -74,21 +71,21 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		public ICommand LoadSimulationCommand { get; }
 		public ICommand StartSimulationCommand { get; }
 		public ICommand ChangeSimulationModeCommand { get; }
+		public ICommand AbortSimulationCommand { get; }
 
 		public MainViewModel(IntersectionSimulationHandlerFactory intersectionSimulationHandlerFactory, IOptions<SimulationOptions> options, ILogger<MainViewModel> logger)
 		{
-			SetSimulationOptions(options.Value);
+			_logger = logger;
+
+			SetInitialSimulationOptions(options.Value);
 
 			_intersectionSimulationHandlerFactory = intersectionSimulationHandlerFactory;
-			_simulationHandler = intersectionSimulationHandlerFactory.CreateHandler(_simulationMode);
-			_simulationHandler.SimulationUpdated += OnSimulationUpdated;
+			CreateAndConfigureSimulationHandler();
 
 			LoadSimulationCommand = new AsyncRelayCommand(LoadIntersection);
 			StartSimulationCommand = new AsyncRelayCommand(RunSimulation);
-			ChangeSimulationModeCommand = new AsyncRelayCommand(ChangeSimulationMode);
-
-			_logger = logger;
-			_logger.LogInformation("MainViewModel initialized");
+			ChangeSimulationModeCommand = new RelayCommand(ChangeSimulationMode);
+			AbortSimulationCommand = new AsyncRelayCommand(AbortSimmulation);
 
 			// TODO: Implement
 			LoadDummyIntersection();
@@ -98,11 +95,51 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				Interval = TimeSpan.FromMilliseconds(40)
 			};
 			_simulationTimer.Tick += SimulationTimerTick;
+
+			_logger.LogInformation("MainViewModel initialized");
 		}
 
-		private Task ChangeSimulationMode()
+		private void CreateAndConfigureSimulationHandler()
+		{
+			_simulationHandler = _intersectionSimulationHandlerFactory.CreateHandler(SimulationModeName);
+			_simulationHandler.SimulationUpdated += OnSimulationUpdated;
+
+			if (_currentIntersectionSimulation is not null)
+			{
+				// TODO: Handle
+				_ = _simulationHandler.LoadIntersection(_currentIntersectionSimulation);
+			}
+		}
+
+		private Task AbortSimmulation()
 		{
 			throw new NotImplementedException();
+		}
+
+		private void ChangeSimulationMode()
+		{
+			ChangeSimulationModeName();
+
+			_simulationHandler.Dispose();
+			_simulationHandler = null;
+
+			CreateAndConfigureSimulationHandler();
+		}
+
+		private void ChangeSimulationModeName()
+		{
+			if (SimulationModeName == SimulationMode.InMemory)
+			{
+				SimulationModeName = SimulationMode.RealTime;
+			}
+			else if (SimulationModeName == SimulationMode.RealTime)
+			{
+				SimulationModeName = SimulationMode.InMemory;
+			}
+			else
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 		private async Task RunSimulation()
@@ -132,7 +169,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			TotalCarsIdleTimeMs = simulationResults.TotalCarsIdleTimeMs;
 			CalculationTimeSeconds = Math.Round(
 				simulationResults.SimulationStepsTaken *
-				_simulationHandler.IntersectionSimulation.Options.StepTimespan.TotalSeconds, 2);
+				_simulationHandler.IntersectionSimulation!.Options.StepTimespan.TotalSeconds, 2);
 
 			StopSimulationTimer();
 		}
@@ -180,11 +217,11 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			}
 		}
 
-		private void SetSimulationOptions(SimulationOptions options)
+		private void SetInitialSimulationOptions(SimulationOptions options)
 		{
 			CanvasOptions.CarGeneratorsAreaOffset = options.CarGenerationAreaSize;
 			CanvasOptions.CarWidth = options.CarSize;
-			_simulationMode = options.SimulationModeType;
+			SimulationModeName = options.SimulationModeType;
 		}
 
 		private void SimulationTimerTick(object? sender, EventArgs e)

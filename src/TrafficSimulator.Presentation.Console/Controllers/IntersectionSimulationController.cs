@@ -2,6 +2,8 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using TrafficSimulator.Application.Commons.Interfaces;
+using TrafficSimulator.Application.Simulation;
+using TrafficSimulator.Domain.Simulation;
 
 namespace TrafficSimulator.Presentation.Console.Controllers
 {
@@ -10,9 +12,9 @@ namespace TrafficSimulator.Presentation.Console.Controllers
 		private readonly ISimulationHandler _simulationHandler;
 		private readonly ILogger<IntersectionSimulationController> _logger;
 
-		public IntersectionSimulationController(ISimulationHandler simulationHandler, ILogger<IntersectionSimulationController> logger)
+		public IntersectionSimulationController(IntersectionSimulationHandlerFactory simulationHandlerFactory, ILogger<IntersectionSimulationController> logger)
 		{
-			_simulationHandler = simulationHandler;
+			_simulationHandler = simulationHandlerFactory.CreateHandler(SimulationMode.InMemory);
 			_logger = logger;
 		}
 
