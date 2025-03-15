@@ -21,5 +21,10 @@ namespace TrafficSimulator.Application.Handlers.Lights
 		{
 			return Task.FromResult(UnitResult.Success<Error>());
 		}
+
+		public UnitResult<Error> SetLightsManually(string trafficPhaseName)
+		{
+			return UnitResult.Success<Error>();
+		}
 	}
 }

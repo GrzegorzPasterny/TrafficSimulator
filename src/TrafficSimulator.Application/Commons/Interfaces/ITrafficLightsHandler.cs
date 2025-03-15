@@ -10,5 +10,6 @@ namespace TrafficSimulator.Application.Commons.Interfaces
 		void LoadIntersection(Intersection intersection);
 		Task<UnitResult<Error>> SetLights(TimeSpan timeElapsed);
 		TrafficPhase GetCurrentTrafficPhase();
+		UnitResult<Error> SetLightsManually(string trafficPhaseName);
 	}
 }

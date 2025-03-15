@@ -1,6 +1,9 @@
-﻿using MediatR;
+﻿using CSharpFunctionalExtensions;
+using ErrorOr;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using TrafficSimulator.Application.Commons;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.Simulation;
 using TrafficSimulator.Domain.Models;
@@ -19,6 +22,11 @@ namespace TrafficSimulator.Application.Simulation
 			: base(sender, trafficLightsHandler, logger)
 		{
 			_logger = logger;
+		}
+
+		public override UnitResult<Error> ChangeTrafficPhase(string trafficPhaseName)
+		{
+			return ApplicationErrors.TrafficPhaseManualChangeAttemptInInMemoryMode();
 		}
 
 		public override void Dispose()

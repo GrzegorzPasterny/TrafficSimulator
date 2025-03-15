@@ -78,5 +78,21 @@ namespace TrafficSimulator.Application.Handlers.Lights
 
 			return _circularListForTrafficPhases.Current;
 		}
+
+		public UnitResult<Error> SetLightsManually(string trafficPhaseName)
+		{
+			if (_circularListForTrafficPhases is null)
+			{
+				// TODO: Handle
+				throw new NotImplementedException();
+			}
+
+			while (trafficPhaseName == _circularListForTrafficPhases.Current.Name)
+			{
+				_circularListForTrafficPhases.MoveNext();
+			}
+
+			return UnitResult.Success<Error>();
+		}
 	}
 }

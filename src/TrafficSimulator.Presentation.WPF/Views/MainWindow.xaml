@@ -269,6 +269,7 @@
                             Grid.Row="0"/>
                     <ListBox ItemsSource="{Binding TrafficPhaseItems}"
                              SelectedItem="{Binding CurrentTrafficPhaseItem, Mode=TwoWay}"
+                             SelectionChanged="TrafficPhaseManualyChangedCommand.Execute"
                              Grid.Row="1">
                         <ListBox.ItemTemplate>
                             <DataTemplate>

@@ -1,4 +1,5 @@
-﻿using ErrorOr;
+﻿using CSharpFunctionalExtensions;
+using ErrorOr;
 
 namespace TrafficSimulator.Application.Commons
 {
@@ -11,5 +12,9 @@ namespace TrafficSimulator.Application.Commons
 		internal static Error IntersectionUninitialized()
 			=> Error.NotFound("TrafficSimulator.Application.IntersectionUninitialized",
 				"Load the intersection simulation");
+
+		internal static UnitResult<Error> TrafficPhaseManualChangeAttemptInInMemoryMode()
+			=> Error.Forbidden("TrafficSimulator.Application.InMemoryModeInvalidAction.TrafficPhaseManualChangeAttempt",
+				"In Memory simulation mode does not support manual changes of the Traffic Phase");
 	}
 }

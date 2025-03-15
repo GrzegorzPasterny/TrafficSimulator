@@ -79,6 +79,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		public ICommand StartSimulationCommand { get; }
 		public ICommand ChangeSimulationModeCommand { get; }
 		public ICommand AbortSimulationCommand { get; }
+		public ICommand TrafficPhaseManualyChangedCommand { get; }
 
 		public MainViewModel(IntersectionSimulationHandlerFactory intersectionSimulationHandlerFactory, IOptions<SimulationOptions> options, ILogger<MainViewModel> logger)
 		{
@@ -93,6 +94,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			StartSimulationCommand = new AsyncRelayCommand(RunSimulation);
 			ChangeSimulationModeCommand = new RelayCommand(ChangeSimulationMode);
 			AbortSimulationCommand = new AsyncRelayCommand(AbortSimmulation);
+			TrafficPhaseManualyChangedCommand = new RelayCommand(ChangeTrafficPhase);
 
 			// TODO: Implement
 			LoadDummyIntersection();
@@ -104,6 +106,19 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			_simulationTimer.Tick += SimulationTimerTick;
 
 			_logger.LogInformation("MainViewModel initialized");
+		}
+
+		private void ChangeTrafficPhase()
+		{
+			if (_currentIntersectionSimulation is null)
+			{
+				return;
+			}
+
+			if (_currentIntersectionSimulation.SimulationState.IsInProgres)
+			{
+
+			}
 		}
 
 		private void CreateAndConfigureSimulationHandler()

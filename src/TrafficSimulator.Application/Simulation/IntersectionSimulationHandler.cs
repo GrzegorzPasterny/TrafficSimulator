@@ -22,7 +22,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 	{
 		public IntersectionSimulation? IntersectionSimulation { get; internal set; }
 		private readonly ISender _sender;
-		private readonly ITrafficLightsHandler _trafficLightsHandler;
+		internal readonly ITrafficLightsHandler _trafficLightsHandler;
 		internal readonly ILogger<IntersectionSimulationHandler> _logger;
 
 		public event EventHandler<SimulationStateEventArgs>? SimulationUpdated;
@@ -257,8 +257,8 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			NotifyAboutSimulationState();
 		}
 
+		public abstract UnitResult<Error> ChangeTrafficPhase(string trafficPhaseName);
 		internal abstract Task SimulationRunner();
 		public abstract void Dispose();
-
 	}
 }

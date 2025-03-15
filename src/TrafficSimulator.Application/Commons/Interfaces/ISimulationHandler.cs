@@ -24,6 +24,7 @@ public interface ISimulationHandler : IDisposable
 	Task<UnitResult<Error>> LoadIntersection(string identifier);
 
 	Task<UnitResult<Error>> Start();
+	UnitResult<Error> ChangeTrafficPhase(string trafficPhaseName);
 	UnitResult<Error> Abort();
 
 }

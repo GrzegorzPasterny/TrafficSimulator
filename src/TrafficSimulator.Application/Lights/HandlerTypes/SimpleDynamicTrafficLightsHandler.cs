@@ -54,5 +54,10 @@ namespace TrafficSimulator.Application.Handlers.Lights
 		{
 			throw new NotImplementedException();
 		}
+
+		public UnitResult<Error> SetLightsManually(string trafficPhaseName)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
