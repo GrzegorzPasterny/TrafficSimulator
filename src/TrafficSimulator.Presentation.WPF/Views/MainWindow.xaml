@@ -99,11 +99,14 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 
                 <TextBlock Text="Results" 
                            FontSize="16" 
                            HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
                            Grid.Row="0"/>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
@@ -171,7 +174,8 @@
                 <TextBlock Text="Options" 
                        FontSize="16" 
                        HorizontalAlignment="Center"
-                       Grid.Row="2"/>   
+                       VerticalAlignment="Center"
+                       Grid.Row="2"/>
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -245,6 +249,33 @@
                                Margin="5"
                                Grid.Row="4"/>
                     </Grid>
+                </Grid>
+                <TextBlock Text="Controls" 
+                        FontSize="16" 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Grid.Row="4"/>
+                <Grid Grid.Row="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Traffic phases" 
+                            FontSize="16" 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Grid.Row="0"/>
+                    <ListBox ItemsSource="{Binding TrafficPhasesItems}"
+                             SelectedItem="{Binding CurrentTrafficPhaseItem, Mode=TwoWay}"
+                        Grid.Row="1">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
             </Grid>
         </Grid>
