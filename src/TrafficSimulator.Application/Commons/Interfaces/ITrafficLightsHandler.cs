@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
+using TrafficSimulator.Domain.Models.Lights;
 
 namespace TrafficSimulator.Application.Commons.Interfaces
 {
@@ -8,5 +9,6 @@ namespace TrafficSimulator.Application.Commons.Interfaces
 	{
 		void LoadIntersection(Intersection intersection);
 		Task<UnitResult<Error>> SetLights(TimeSpan timeElapsed);
+		TrafficPhase GetCurrentTrafficPhase();
 	}
 }

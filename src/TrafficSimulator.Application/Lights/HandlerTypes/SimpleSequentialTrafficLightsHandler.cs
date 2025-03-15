@@ -67,5 +67,16 @@ namespace TrafficSimulator.Application.Handlers.Lights
 			_trafficPhasesHandler.LoadIntersection(intersection);
 			_circularListForTrafficPhases = new CircularList<TrafficPhase>(intersection.TrafficPhases);
 		}
+
+		public TrafficPhase GetCurrentTrafficPhase()
+		{
+			if (_circularListForTrafficPhases is null)
+			{
+				// TODO: Handle
+				throw new NotImplementedException();
+			}
+
+			return _circularListForTrafficPhases.Current;
+		}
 	}
 }

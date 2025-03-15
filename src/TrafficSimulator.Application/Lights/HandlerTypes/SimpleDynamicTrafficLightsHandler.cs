@@ -49,5 +49,10 @@ namespace TrafficSimulator.Application.Handlers.Lights
 		{
 			_trafficPhasesHandler.LoadIntersection(intersection);
 		}
+
+		public TrafficPhase GetCurrentTrafficPhase()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

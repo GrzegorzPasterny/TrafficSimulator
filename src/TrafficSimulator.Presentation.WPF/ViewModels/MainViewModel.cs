@@ -15,6 +15,7 @@ using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.Lights;
 using TrafficSimulator.Domain.Simulation;
+using TrafficSimulator.Presentation.WPF.Extensions;
 using TrafficSimulator.Presentation.WPF.Helpers;
 using TrafficSimulator.Presentation.WPF.ViewModels.IntersectionElements;
 using TrafficSimulator.Presentation.WPF.ViewModels.Items;
@@ -61,7 +62,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		[ObservableProperty]
 		private TrafficPhaseItem _currentTrafficPhaseItem;
 		[ObservableProperty]
-		private ObservableCollection<TrafficPhaseItem> _trafficPhaseItems;
+		private ObservableCollection<TrafficPhaseItem> _trafficPhaseItems = new ObservableCollection<TrafficPhaseItem>();
 
 		[ObservableProperty]
 		private string _simulationName;
@@ -194,6 +195,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		private void OnSimulationUpdated(object? sender, SimulationStateEventArgs e)
 		{
 			SimulationStepCounter = e.SimulationStep;
+			CurrentTrafficPhaseItem = TrafficPhaseItems.Single(t => t.Name == e.CurrentTrafficPhaseName);
 
 			foreach (KeyValuePair<Guid, TrafficLightState> trafficLights in e.TrafficLightsState)
 			{
@@ -271,6 +273,12 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			SimulationFilePath = jsonConfigurationFile;
 			SimulationTimespanMs = (int)intersectionSimulation.Options.StepTimespan.TotalMilliseconds;
 			MinimalDistanceBetweenCars = intersectionSimulation.Options.MinimalDistanceBetweenTheCars;
+
+			TrafficPhaseItems.Clear();
+			foreach (TrafficPhase trafficPhase in intersectionSimulation.Intersection.TrafficPhases)
+			{
+				TrafficPhaseItems.Add(trafficPhase.ToTrafficPhaseItem());
+			}
 		}
 
 		private void DrawIntersection(Intersection intersection)
