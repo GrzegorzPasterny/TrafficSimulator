@@ -267,9 +267,9 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Grid.Row="0"/>
-                    <ListBox ItemsSource="{Binding TrafficPhasesItems}"
+                    <ListBox ItemsSource="{Binding TrafficPhaseItems}"
                              SelectedItem="{Binding CurrentTrafficPhaseItem, Mode=TwoWay}"
-                        Grid.Row="1">
+                             Grid.Row="1">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}" />

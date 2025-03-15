@@ -4,6 +4,7 @@ using CSharpFunctionalExtensions;
 using ErrorOr;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows.Threading;
 using TrafficSimulator.Application.Commons.Interfaces;
@@ -16,6 +17,7 @@ using TrafficSimulator.Domain.Models.Lights;
 using TrafficSimulator.Domain.Simulation;
 using TrafficSimulator.Presentation.WPF.Helpers;
 using TrafficSimulator.Presentation.WPF.ViewModels.IntersectionElements;
+using TrafficSimulator.Presentation.WPF.ViewModels.Items;
 using TrafficSimulator.Presentation.WPF.ViewModels.SimulationElements;
 
 namespace TrafficSimulator.Presentation.WPF.ViewModels
@@ -56,6 +58,10 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		private double _totalCarsIdleTimeMs;
 		[ObservableProperty]
 		private double _calculationTimeSeconds;
+		[ObservableProperty]
+		private TrafficPhaseItem _currentTrafficPhaseItem;
+		[ObservableProperty]
+		private ObservableCollection<TrafficPhaseItem> _trafficPhaseItems;
 
 		[ObservableProperty]
 		private string _simulationName;
