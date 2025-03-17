@@ -2,6 +2,7 @@
 using ErrorOr;
 using Microsoft.Extensions.Logging;
 using TrafficSimulator.Application.Commons;
+using TrafficSimulator.Application.Commons.Extensions;
 using TrafficSimulator.Application.Commons.Helpers;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
@@ -50,16 +51,19 @@ namespace TrafficSimulator.Application.Handlers.Lights
 			if (CurrentPhaseTime >= TimeForOnePhase)
 			{
 				_circularListForTrafficPhases.MoveNext();
-
-				// TODO: Handle
-				_ = _trafficPhasesHandler.SetPhase(_circularListForTrafficPhases.Current);
-
-				CurrentPhaseTime = TimeSpan.Zero;
-
-				_logger.LogTrace("Traffic Lights phase changed [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
+				ChangeTrafficLightsPhase();
 			}
 
 			return Task.FromResult(UnitResult.Success<Error>());
+		}
+
+		private void ChangeTrafficLightsPhase()
+		{
+			// TODO: Handle
+			_ = _trafficPhasesHandler.SetPhase(_circularListForTrafficPhases.Current);
+			CurrentPhaseTime = TimeSpan.Zero;
+
+			_logger.LogTrace("Traffic Lights phase changed [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
 		}
 
 		public void LoadIntersection(Intersection intersection)
@@ -87,11 +91,15 @@ namespace TrafficSimulator.Application.Handlers.Lights
 				throw new NotImplementedException();
 			}
 
-			while (trafficPhaseName == _circularListForTrafficPhases.Current.Name)
+			bool wasSet = _circularListForTrafficPhases.Set(trafficPhaseName, trafficPhase => trafficPhase.Name);
+
+			if (wasSet == false)
 			{
-				_circularListForTrafficPhases.MoveNext();
+				// TODO: Handle
+				throw new ArgumentOutOfRangeException();
 			}
 
+			ChangeTrafficLightsPhase();
 			return UnitResult.Success<Error>();
 		}
 	}

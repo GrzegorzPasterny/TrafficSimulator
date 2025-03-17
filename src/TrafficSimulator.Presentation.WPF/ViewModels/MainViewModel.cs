@@ -79,7 +79,6 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		public ICommand StartSimulationCommand { get; }
 		public ICommand ChangeSimulationModeCommand { get; }
 		public ICommand AbortSimulationCommand { get; }
-		public ICommand TrafficPhaseManualyChangedCommand { get; }
 
 		public MainViewModel(IntersectionSimulationHandlerFactory intersectionSimulationHandlerFactory, IOptions<SimulationOptions> options, ILogger<MainViewModel> logger)
 		{
@@ -94,7 +93,6 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			StartSimulationCommand = new AsyncRelayCommand(RunSimulation);
 			ChangeSimulationModeCommand = new RelayCommand(ChangeSimulationMode);
 			AbortSimulationCommand = new AsyncRelayCommand(AbortSimmulation);
-			TrafficPhaseManualyChangedCommand = new RelayCommand(ChangeTrafficPhase);
 
 			// TODO: Implement
 			LoadDummyIntersection();
@@ -108,16 +106,31 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			_logger.LogInformation("MainViewModel initialized");
 		}
 
-		private void ChangeTrafficPhase()
+		partial void OnCurrentTrafficPhaseItemChanged(TrafficPhaseItem value)
+		{
+			ChangeTrafficPhase(value);
+		}
+
+		private void ChangeTrafficPhase(TrafficPhaseItem newTrafficPhase)
 		{
 			if (_currentIntersectionSimulation is null)
-			{
 				return;
-			}
 
-			if (_currentIntersectionSimulation.SimulationState.IsInProgres)
+			if (SimulationModeName == SimulationMode.InMemory)
+				return;
+
+			if (!_currentIntersectionSimulation.SimulationState.IsInProgress)
+				return;
+
+			// TODO: This method is triggered not only after user manual change of the Traffic Phase in GUI,
+			// but also when simulation engine change the phase. In latter scenatio this call is redundant.
+			UnitResult<Error> trafficPhaseChangeResult =
+				_simulationHandler.ChangeTrafficPhase(newTrafficPhase.Name);
+
+			if (trafficPhaseChangeResult.IsFailure)
 			{
-
+				_logger.LogError("Traffic Lights phase manual change failed [Error = {Error}]",
+					trafficPhaseChangeResult.Error);
 			}
 		}
 

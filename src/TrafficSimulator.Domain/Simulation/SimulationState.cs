@@ -12,7 +12,7 @@ namespace TrafficSimulator.Domain.Models
 
 		public List<Car> Cars { get; set; } = [];
 		public List<ICarGenerator> CarGenerators { get; set; } = [];
-		public bool IsInProgres => SimulationPhase is SimulationPhase.InProgress or SimulationPhase.InProgressCarGenerationFinished;
+		public bool IsInProgress => SimulationPhase is SimulationPhase.InProgress or SimulationPhase.InProgressCarGenerationFinished;
 
 		public override string ToString()
 		{

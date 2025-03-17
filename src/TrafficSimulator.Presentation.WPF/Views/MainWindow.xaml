@@ -269,7 +269,6 @@
                             Grid.Row="0"/>
                     <ListBox ItemsSource="{Binding TrafficPhaseItems}"
                              SelectedItem="{Binding CurrentTrafficPhaseItem, Mode=TwoWay}"
-                             SelectionChanged="TrafficPhaseManualyChangedCommand.Execute"
                              Grid.Row="1">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -282,15 +281,18 @@
         </Grid>
         <Grid Grid.Row="3" Margin="5">
             <DataGrid Name="LogDataGrid" 
-                      AutoGenerateColumns="False"
-                      IsReadOnly="True"
-                      Height="120">
+              AutoGenerateColumns="False"
+              IsReadOnly="True"
+              Height="120"
+              ScrollViewer.CanContentScroll="False"
+              ScrollViewer.HorizontalScrollBarVisibility="Auto">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Timestamp" Binding="{Binding Timestamp}" Width="150"/>
                     <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="80"/>
-                    <DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="*" />
+                    <DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="Auto"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
+
     </Grid>
 </Window>
