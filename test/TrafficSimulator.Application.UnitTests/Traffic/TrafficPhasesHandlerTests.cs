@@ -17,8 +17,8 @@ namespace TrafficSimulator.Application.UnitTests.Traffic
 
 			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
 
-			IEnumerable<Domain.Models.IntersectionObjects.TrafficLights> trafficLights =
-				intersection.ObjectLookup.OfType<Domain.Models.IntersectionObjects.TrafficLights>();
+			IEnumerable<Domain.Models.IntersectionObjects.TrafficLight> trafficLights =
+				intersection.ObjectLookup.OfType<Domain.Models.IntersectionObjects.TrafficLight>();
 
 			// Take all Inbound lanes and all turn possibilities and add them as a default Traffic Phase
 			TrafficPhase allGreenTrafficPhase = new TrafficPhase("AllGreen", intersection);

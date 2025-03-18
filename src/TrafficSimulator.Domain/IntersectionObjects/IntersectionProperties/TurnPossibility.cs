@@ -8,7 +8,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionProperties
 
 		// TODO: Intersection Builder should assign here Traffic Lights.
 		// TODO: Should be Get only
-		public TrafficLights? TrafficLights { get; set; }
+		public TrafficLight? TrafficLights { get; set; }
 
 		// TODO: Should be Get only
 		public bool ContainsTrafficLights { get; set; }

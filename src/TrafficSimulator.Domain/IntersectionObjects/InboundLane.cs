@@ -16,7 +16,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 
 			if (addTrafficLights)
 			{
-				TrafficLights = new TrafficLights(root, this);
+				TrafficLights = new TrafficLight(root, this);
 			}
 		}
 
@@ -24,7 +24,7 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 
 		// TODO: Intersection Builder should assign here Traffic Lights.
 		// TODO: Add conditional right green light in the future
-		public TrafficLights? TrafficLights { get; }
+		public TrafficLight? TrafficLights { get; }
 
 		public bool ContainsTrafficLights { get; }
 

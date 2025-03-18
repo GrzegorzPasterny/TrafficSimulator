@@ -13,7 +13,7 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 		private const int _orangeLightTimespanMs = 5000;
 		private readonly IntersectionSimulation _intersectionSimulation;
 		private Intersection _intersection => _intersectionSimulation.Intersection;
-		private readonly TrafficLights _trafficLights;
+		private readonly TrafficLight _trafficLights;
 
 		public TrafficLightsTests(ITestOutputHelper testOutputHelper)
 		{
@@ -22,7 +22,7 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 
 			InboundLane sampleInboundLane = _intersection.LanesCollection.First().InboundLanes!.First();
 
-			_trafficLights = new TrafficLights(_intersection, sampleInboundLane, (options) =>
+			_trafficLights = new TrafficLight(_intersection, sampleInboundLane, (options) =>
 			{
 				options.SwitchLightTimespanMs = TimeSpan.FromMilliseconds(_orangeLightTimespanMs);
 				options.InitialState = TrafficLightState.Red;

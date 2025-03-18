@@ -2,6 +2,7 @@
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.Lights;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
+using TrafficSimulator.Application.Lights.HandlerTypes;
 using TrafficSimulator.Application.Simulation;
 
 namespace TrafficSimulator.Application
@@ -16,7 +17,10 @@ namespace TrafficSimulator.Application
 			});
 
 			services.AddScoped<TrafficPhasesHandler>();
+			services.AddScoped<ITrafficLightsHandler, ManualTrafficLightsHandler>();
 			services.AddScoped<ITrafficLightsHandler, SimpleSequentialTrafficLightsHandler>();
+			services.AddSingleton<TrafficLightsHandlerFactory>();
+
 			services.AddScoped<RealTimeIntersectionSimulationHandler>();
 			// In memory is the default simulation handler
 			services.AddScoped<InMemoryIntersectionSimulationHandler>();

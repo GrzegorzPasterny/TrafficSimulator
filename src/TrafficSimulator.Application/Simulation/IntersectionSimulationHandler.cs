@@ -141,9 +141,9 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		{
 			simulationStateEventArgs.CurrentTrafficPhaseName = _trafficLightsHandler.GetCurrentTrafficPhase().Name;
 
-			IEnumerable<TrafficLights> trafficLightsCollection = IntersectionSimulation!.Intersection.ObjectLookup.OfType<TrafficLights>();
+			IEnumerable<TrafficLight> trafficLightsCollection = IntersectionSimulation!.Intersection.ObjectLookup.OfType<TrafficLight>();
 
-			foreach (TrafficLights trafficLights in trafficLightsCollection)
+			foreach (TrafficLight trafficLights in trafficLightsCollection)
 			{
 				simulationStateEventArgs.TrafficLightsState.Add(trafficLights.Id, trafficLights.TrafficLightState);
 			}
