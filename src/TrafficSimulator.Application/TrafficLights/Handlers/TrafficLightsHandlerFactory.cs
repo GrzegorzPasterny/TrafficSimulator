@@ -5,7 +5,7 @@ using TrafficSimulator.Application.TrafficLights.Handlers;
 
 namespace TrafficSimulator.Application.Lights.HandlerTypes
 {
-	public class TrafficLightsHandlerFactory
+	public class TrafficLightsHandlerFactory : ITrafficLightsHandlerFactory
 	{
 		private readonly IServiceProvider _serviceProvider;
 
@@ -14,7 +14,7 @@ namespace TrafficSimulator.Application.Lights.HandlerTypes
 			_serviceProvider = serviceProvider;
 		}
 
-		public ITrafficLightsHandler CreateHandler(string mode)
+		public ITrafficLightsHandler CreateHandler(string mode = TrafficLightHandlerTypes.Sequential)
 		{
 			return mode switch
 			{

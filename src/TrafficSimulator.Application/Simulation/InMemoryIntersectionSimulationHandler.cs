@@ -4,8 +4,8 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using TrafficSimulator.Application.Commons;
-using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.Simulation;
+using TrafficSimulator.Application.Lights.HandlerTypes;
 using TrafficSimulator.Domain.Models;
 
 namespace TrafficSimulator.Application.Simulation
@@ -17,9 +17,9 @@ namespace TrafficSimulator.Application.Simulation
 
 		public InMemoryIntersectionSimulationHandler(
 			ISender sender,
-			ITrafficLightsHandler trafficLightsHandler,
+			ITrafficLightsHandlerFactory trafficLightsHandlerFactory,
 			ILogger<InMemoryIntersectionSimulationHandler> logger)
-			: base(sender, trafficLightsHandler, logger)
+			: base(sender, trafficLightsHandlerFactory, logger)
 		{
 			_logger = logger;
 		}

@@ -11,6 +11,7 @@ using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.Lights;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
 using TrafficSimulator.Application.Simulation;
+using TrafficSimulator.Application.TrafficLights.Handlers;
 using TrafficSimulator.Domain;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
@@ -77,7 +78,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			trafficPhasesHandler.SetPhase(trafficLightsPhaseName);
 
 			using ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_mediator, new NullTrafficLightsHandler(), _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+				new InMemoryIntersectionSimulationHandler(_mediator, new NullTrafficLightsHandlerFactory(), _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 

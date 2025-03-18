@@ -7,6 +7,7 @@ using TrafficSimulator.Application.Cars.GetCars;
 using TrafficSimulator.Application.Cars.MoveCar;
 using TrafficSimulator.Application.Commons;
 using TrafficSimulator.Application.Commons.Interfaces;
+using TrafficSimulator.Application.Lights.HandlerTypes;
 using TrafficSimulator.Application.Simulation;
 using TrafficSimulator.Application.SimulationSetup.LoadSimulation;
 using TrafficSimulator.Domain.Commons;
@@ -22,7 +23,8 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 	{
 		public IntersectionSimulation? IntersectionSimulation { get; internal set; }
 		private readonly ISender _sender;
-		internal readonly ITrafficLightsHandler _trafficLightsHandler;
+		private readonly ITrafficLightsHandlerFactory _trafficLightsHandlerFactory;
+		internal ITrafficLightsHandler? _trafficLightsHandler;
 		internal readonly ILogger<IntersectionSimulationHandler> _logger;
 
 		public event EventHandler<SimulationStateEventArgs>? SimulationUpdated;
@@ -32,11 +34,11 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 		public IntersectionSimulationHandler(
 			ISender sender,
-			ITrafficLightsHandler trafficLightsHandler,
+			ITrafficLightsHandlerFactory trafficLightsHandlerFactory,
 			ILogger<IntersectionSimulationHandler> logger)
 		{
 			_sender = sender;
-			_trafficLightsHandler = trafficLightsHandler;
+			_trafficLightsHandlerFactory = trafficLightsHandlerFactory;
 			_logger = logger;
 		}
 
@@ -55,7 +57,21 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		public UnitResult<Error> LoadIntersection(IntersectionSimulation intersectionSimulation)
 		{
 			IntersectionSimulation = intersectionSimulation;
+
+			if (intersectionSimulation.Options.TrafficLightHandlerType is not null)
+			{
+				_trafficLightsHandler =
+					_trafficLightsHandlerFactory.CreateHandler(intersectionSimulation.Options.TrafficLightHandlerType);
+			}
+			else
+			{
+				// Create the default one
+				_trafficLightsHandler =
+					_trafficLightsHandlerFactory.CreateHandler();
+			}
+
 			_trafficLightsHandler.LoadIntersection(intersectionSimulation.Intersection);
+
 			SimulationState.CarGenerators =
 							IntersectionSimulation.Intersection.ObjectLookup.OfType<ICarGenerator>().ToList();
 

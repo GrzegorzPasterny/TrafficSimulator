@@ -114,7 +114,8 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 				MinimalDistanceBetweenTheCars = intersectionSimulationOptionsDto.MinimalDistanceBetweenTheCars,
 				StepLimit = intersectionSimulationOptionsDto.StepLimit,
 				StepTimespan = TimeSpan.FromMilliseconds(intersectionSimulationOptionsDto.StepTimespanMs),
-				Timeout = TimeSpan.FromMilliseconds(intersectionSimulationOptionsDto.TimeoutMs)
+				Timeout = TimeSpan.FromMilliseconds(intersectionSimulationOptionsDto.TimeoutMs),
+				TrafficLightHandlerType = intersectionSimulationOptionsDto.TrafficLightHandlerType
 			};
 		}
 
@@ -269,6 +270,7 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 				StepLimit = intersectionSimulationOptions.StepLimit,
 				StepTimespanMs = intersectionSimulationOptions.StepTimespan.TotalMilliseconds,
 				TimeoutMs = intersectionSimulationOptions.Timeout.TotalMilliseconds,
+				TrafficLightHandlerType = intersectionSimulationOptions.TrafficLightHandlerType
 			};
 		}
 	}

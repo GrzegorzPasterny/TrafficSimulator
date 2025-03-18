@@ -13,13 +13,13 @@ namespace TrafficSimulator.Application.Simulation
 			_serviceProvider = serviceProvider;
 		}
 
-		public ISimulationHandler CreateHandler(string mode)
+		public ISimulationHandler CreateHandler(string simulationMode)
 		{
-			return mode switch
+			return simulationMode switch
 			{
 				SimulationMode.InMemory => _serviceProvider.GetRequiredService<InMemoryIntersectionSimulationHandler>(),
 				SimulationMode.RealTime => _serviceProvider.GetRequiredService<RealTimeIntersectionSimulationHandler>(),
-				_ => throw new ArgumentException($"Invalid simulation mode: {mode}", nameof(mode))
+				_ => throw new ArgumentException($"Invalid simulation mode: {simulationMode}", nameof(simulationMode))
 			};
 		}
 	}
