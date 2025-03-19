@@ -8,9 +8,20 @@ namespace TrafficSimulator.Application.Handlers.Lights
 {
 	public class NullTrafficLightsHandler : ITrafficLightsHandler
 	{
+		private readonly TrafficPhase? _trafficPhase;
+
+		public NullTrafficLightsHandler()
+		{
+		}
+
+		public NullTrafficLightsHandler(TrafficPhase? trafficPhase)
+		{
+			_trafficPhase = trafficPhase;
+		}
+
 		public TrafficPhase GetCurrentTrafficPhase()
 		{
-			throw new NotImplementedException();
+			return _trafficPhase;
 		}
 
 		public void LoadIntersection(Intersection intersection)

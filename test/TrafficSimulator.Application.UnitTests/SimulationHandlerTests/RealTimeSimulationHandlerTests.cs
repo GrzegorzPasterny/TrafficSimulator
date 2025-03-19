@@ -2,11 +2,13 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Moq;
 using Serilog;
 using Serilog.Events;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.Lights;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
+using TrafficSimulator.Application.Lights.HandlerTypes;
 using TrafficSimulator.Application.Simulation;
 using TrafficSimulator.Application.TrafficLights.Handlers;
 using TrafficSimulator.Domain;
@@ -28,6 +30,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 		internal readonly ILoggerFactory _loggerFactory;
 		internal readonly IMediator _mediator;
 		internal readonly ICarRepository _carRepository;
+		internal Mock<ITrafficLightsHandlerFactory> _trafficLightsHandlerFactoryMock;
 
 		public RealTimeSimulationHandlerTests(ITestOutputHelper testOutputHelper)
 		{
@@ -52,6 +55,8 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			_logger = _loggerFactory.CreateLogger<RealTimeSimulationHandlerTests>();
 
 			_carRepository = provider.GetRequiredService<ICarRepository>();
+
+			_trafficLightsHandlerFactoryMock = new Mock<ITrafficLightsHandlerFactory>();
 		}
 
 		[Theory]
@@ -78,7 +83,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			trafficPhasesHandler.SetPhase(trafficLightsPhaseName);
 
 			using ISimulationHandler simulationHandler =
-				new RealTimeIntersectionSimulationHandler(_mediator, new NullTrafficLightsHandlerFactory(), _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
+				new RealTimeIntersectionSimulationHandler(_mediator, new NullTrafficLightsHandlerFactory(trafficPhasesHandler.CurrentPhase), _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
@@ -118,8 +123,11 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 
+			_trafficLightsHandlerFactoryMock.Setup(factory => factory.CreateHandler(It.IsAny<string>()))
+				.Returns(() => trafficLightsHandler);
+
 			using ISimulationHandler simulationHandler =
-				new RealTimeIntersectionSimulationHandler(_mediator, trafficLightsHandler, _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
+				new RealTimeIntersectionSimulationHandler(_mediator, _trafficLightsHandlerFactoryMock.Object, _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
