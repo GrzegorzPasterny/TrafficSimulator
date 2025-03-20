@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using TrafficSimulator.Application.TrafficLights.Handlers;
 using TrafficSimulator.Domain.CarGenerators;
 using TrafficSimulator.Domain.Cars;
 using TrafficSimulator.Domain.Commons;
@@ -166,6 +167,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 				};
 			}
 		}
+
 		public static IntersectionSimulationDto ZebraCrossingOnOneLaneRoadEastWestWithCarGenerators
 		{
 			get
@@ -179,7 +181,8 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 						CarOptions = new CarOptions(),
 						StepLimit = 1000,
 						StepTimespanMs = 40,
-						TimeoutMs = 10000
+						TimeoutMs = 10000,
+						TrafficLightHandlerType = TrafficLightHandlerTypes.Sequential
 					},
 					Intersection = new()
 					{
