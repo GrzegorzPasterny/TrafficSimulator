@@ -373,12 +373,6 @@ namespace TrafficSimulator.Tests.Commons.Assets
 
 			IntersectionSimulationOptions intersectionSimulationOptions = new()
 			{
-				CarOptions = new CarOptions()
-				{
-					DistanceBetweenCars = 4,
-					Length = 2,
-					MoveVelocity = 30
-				},
 				StepLimit = 1200,
 				StepTimespan = TimeSpan.FromMilliseconds(40),
 				Timeout = TimeSpan.FromSeconds(15),

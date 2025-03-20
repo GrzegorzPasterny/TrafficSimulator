@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using TrafficSimulator.Application.TrafficLights.Handlers;
 using TrafficSimulator.Domain.CarGenerators;
-using TrafficSimulator.Domain.Cars;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Handlers.CarGenerators;
 using TrafficSimulator.Domain.Models;
@@ -21,12 +20,6 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 					Name = "ZebraCrossingSimulation",
 					Options = new()
 					{
-						CarOptions = new CarOptions()
-						{
-							DistanceBetweenCars = 1,
-							Length = 2,
-							MoveVelocity = 50
-						},
 						StepLimit = 1000,
 						StepTimespanMs = 100,
 						TimeoutMs = 5000
@@ -178,7 +171,6 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 					Name = "ZebraCrossingSimulation",
 					Options = new()
 					{
-						CarOptions = new CarOptions(),
 						StepLimit = 1000,
 						StepTimespanMs = 40,
 						TimeoutMs = 10000,

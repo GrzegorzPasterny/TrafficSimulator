@@ -117,7 +117,6 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 		{
 			return new IntersectionSimulationOptions()
 			{
-				CarOptions = intersectionSimulationOptionsDto.CarOptions,
 				StepLimit = intersectionSimulationOptionsDto.StepLimit,
 				StepTimespan = TimeSpan.FromMilliseconds(intersectionSimulationOptionsDto.StepTimespanMs),
 				Timeout = TimeSpan.FromMilliseconds(intersectionSimulationOptionsDto.TimeoutMs),
@@ -272,7 +271,6 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 		{
 			return new IntersectionSimulationOptionsDto()
 			{
-				CarOptions = intersectionSimulationOptions.CarOptions,
 				StepLimit = intersectionSimulationOptions.StepLimit,
 				StepTimespanMs = intersectionSimulationOptions.StepTimespan.TotalMilliseconds,
 				TimeoutMs = intersectionSimulationOptions.Timeout.TotalMilliseconds,
