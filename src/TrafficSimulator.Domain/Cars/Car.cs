@@ -56,7 +56,6 @@ namespace TrafficSimulator.Domain.Models.Agents
 			StartLocation = startLocation;
 			CurrentLocation = new(startLocation, 0);
 
-			// TODO: Randomize the logic where car can go
 			Intersection intersection = StartLocation.Root;
 			IntersectionCore? intersectionCore = intersection.IntersectionCore;
 
@@ -65,8 +64,8 @@ namespace TrafficSimulator.Domain.Models.Agents
 				// TODO: Handle
 			}
 
-			// TODO: Randomize
-			CarTurnType = StartLocation.LaneTypes.First();
+			Random random = new Random();
+			CarTurnType = StartLocation.LaneTypes[random.Next(StartLocation.LaneTypes.Count())];
 
 			WorldDirection outboundLaneWorldDirection = StartLocation.WorldDirection.Rotate(CarTurnType);
 

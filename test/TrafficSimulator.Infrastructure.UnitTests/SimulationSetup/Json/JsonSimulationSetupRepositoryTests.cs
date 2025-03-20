@@ -39,6 +39,10 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 			{
 				IntersectionsRepository.FourDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLightsWithCarGenerators(null)
 			};
+			yield return new object[]
+			{
+				IntersectionsRepository.FourDirectional_Full(null)
+			};
 		}
 
 		[Theory]
