@@ -29,8 +29,8 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 		public event EventHandler<SimulationStateEventArgs>? SimulationUpdated;
 
-		public SimulationState SimulationState => IntersectionSimulation!.SimulationState;
-		public SimulationResults SimulationResults => IntersectionSimulation!.SimulationResults!;
+		public SimulationState? SimulationState => IntersectionSimulation?.SimulationState;
+		public SimulationResults? SimulationResults => IntersectionSimulation?.SimulationResults!;
 
 		public IntersectionSimulationHandler(
 			ISender sender,

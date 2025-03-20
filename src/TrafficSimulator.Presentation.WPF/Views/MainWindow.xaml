@@ -276,6 +276,20 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+                    <TextBlock Text="Traffic phases mode" 
+                                FontSize="16" 
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Grid.Row="2"/>
+                    <ListBox ItemsSource="{Binding TrafficLightsModeItems}"
+                             SelectedItem="{Binding CurrentTrafficLightsModeItem, Mode=TwoWay}"
+                             Grid.Row="3">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
             </Grid>
         </Grid>

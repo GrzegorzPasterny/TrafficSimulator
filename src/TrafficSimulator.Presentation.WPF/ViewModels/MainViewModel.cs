@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Simulation;
+using TrafficSimulator.Application.TrafficLights.Handlers;
 using TrafficSimulator.Domain.Cars;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models;
@@ -63,6 +64,11 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		private TrafficPhaseItem _currentTrafficPhaseItem;
 		[ObservableProperty]
 		private ObservableCollection<TrafficPhaseItem> _trafficPhaseItems = new ObservableCollection<TrafficPhaseItem>();
+		[ObservableProperty]
+		private TrafficLightsModeItem _currentTrafficLightsModeItem;
+		[ObservableProperty]
+		private ObservableCollection<TrafficLightsModeItem> _trafficLightsModeItems = new ObservableCollection<TrafficLightsModeItem>(
+			TrafficLightHandlerTypes.Modes.Select(m => m.ToTrafficPhaseModeItem()));
 
 		[ObservableProperty]
 		private string _simulationName;
@@ -132,6 +138,57 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				_logger.LogError("Traffic Lights phase manual change failed [Error = {Error}]",
 					trafficPhaseChangeResult.Error);
 			}
+		}
+
+		partial void OnCurrentTrafficLightsModeItemChanged(TrafficLightsModeItem value)
+		{
+			ChangeTrafficLightsMode(value);
+		}
+
+		private void ChangeTrafficLightsMode(TrafficLightsModeItem value)
+		{
+			if (_simulationHandler is null || _simulationHandler.SimulationState is null)
+			{
+				return;
+			}
+
+			if (_simulationHandler.SimulationState.IsInProgress)
+			{
+				// TODO: Consider allowing to change the traffic lights mode in ongoing simulation
+				return;
+			}
+
+			if (_currentIntersectionSimulation is not null)
+			{
+				_currentIntersectionSimulation.Options.TrafficLightHandlerType = value.Name;
+
+				ReloadCurrentIntersection();
+			}
+		}
+
+		private void ReloadCurrentIntersection()
+		{
+			if (_currentIntersectionSimulation is null)
+			{
+				return;
+			}
+
+			CleanUpTheSimulationData();
+
+			UnitResult<Error> loadIntersectionResult = _simulationHandler.LoadIntersection(_currentIntersectionSimulation);
+
+			if (loadIntersectionResult.IsFailure)
+			{
+				_logger.LogDebug("Simulation reloading failed [Error = {Error}]", loadIntersectionResult.Error);
+				// TODO: Print error to the user
+				return;
+			}
+
+			Intersection intersection = _simulationHandler.IntersectionSimulation!.Intersection;
+			_currentIntersectionSimulation = _simulationHandler.IntersectionSimulation;
+
+			DrawIntersection(intersection);
+			UpdateIntersectionOptions(_currentIntersectionSimulation, SimulationFilePath);
 		}
 
 		private void CreateAndConfigureSimulationHandler()
@@ -258,6 +315,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			CanvasOptions.CarGeneratorsAreaOffset = options.CarGenerationAreaSize;
 			CanvasOptions.CarWidth = options.CarSize;
 			SimulationModeName = options.SimulationModeType;
+			CurrentTrafficLightsModeItem = TrafficLightsModeItems.Single(i => i.Name == options.TrafficLightsMode);
 		}
 
 		private void SimulationTimerTick(object? sender, EventArgs e)
@@ -301,6 +359,12 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			SimulationFilePath = jsonConfigurationFile;
 			SimulationTimespanMs = (int)intersectionSimulation.Options.StepTimespan.TotalMilliseconds;
 			MinimalDistanceBetweenCars = intersectionSimulation.Options.MinimalDistanceBetweenTheCars;
+
+			if (intersectionSimulation.Options.TrafficLightHandlerType is not null)
+			{
+				// TODO: Handle exception when wrong mode name is provided by configuration
+				CurrentTrafficLightsModeItem = TrafficLightsModeItems.Single(i => i.Name == intersectionSimulation.Options.TrafficLightHandlerType);
+			}
 
 			TrafficPhaseItems.Clear();
 			foreach (TrafficPhase trafficPhase in intersectionSimulation.Intersection.TrafficPhases)

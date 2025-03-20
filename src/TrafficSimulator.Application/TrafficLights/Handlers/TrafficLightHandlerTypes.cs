@@ -2,6 +2,8 @@
 {
 	public static class TrafficLightHandlerTypes
 	{
+		public const string Default = Sequential;
+
 		public const string Sequential = "Sequential";
 		public const string Manual = "Manual";
 

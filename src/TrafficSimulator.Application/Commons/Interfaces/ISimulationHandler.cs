@@ -8,8 +8,8 @@ namespace TrafficSimulator.Application.Commons.Interfaces;
 
 public interface ISimulationHandler : IDisposable
 {
-	SimulationState SimulationState { get; }
-	SimulationResults SimulationResults { get; }
+	SimulationState? SimulationState { get; }
+	SimulationResults? SimulationResults { get; }
 	IntersectionSimulation? IntersectionSimulation { get; }
 
 	event EventHandler<SimulationStateEventArgs> SimulationUpdated;
