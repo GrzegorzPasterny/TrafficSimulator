@@ -46,8 +46,13 @@ namespace TrafficSimulator.Domain.Models.Agents
 			}
 		}
 
-		public Car(InboundLane startLocation) : base(Guid.NewGuid())
+		public Car(InboundLane startLocation, CarOptions? carOptions = null) : base(Guid.NewGuid())
 		{
+			if (carOptions is not null)
+			{
+				Options = carOptions;
+			}
+
 			StartLocation = startLocation;
 			CurrentLocation = new(startLocation, 0);
 

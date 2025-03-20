@@ -358,7 +358,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			SimulationId = intersectionSimulation.Id.ToString();
 			SimulationFilePath = jsonConfigurationFile;
 			SimulationTimespanMs = (int)intersectionSimulation.Options.StepTimespan.TotalMilliseconds;
-			MinimalDistanceBetweenCars = intersectionSimulation.Options.MinimalDistanceBetweenTheCars;
+			MinimalDistanceBetweenCars = intersectionSimulation.Options.CarOptions.DistanceBetweenCars;
 
 			if (intersectionSimulation.Options.TrafficLightHandlerType is not null)
 			{

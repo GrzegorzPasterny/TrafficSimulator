@@ -11,5 +11,7 @@
 		/// Length of the car
 		/// </summary>
 		public int Length { get; set; } = 2;
+
+		public int DistanceBetweenCars { get; set; } = 1;
 	}
 }

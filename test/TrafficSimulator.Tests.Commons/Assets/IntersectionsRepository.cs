@@ -1,7 +1,9 @@
 ﻿using ErrorOr;
 using FluentAssertions;
 using MediatR;
+using TrafficSimulator.Application.TrafficLights.Handlers;
 using TrafficSimulator.Application.UnitTests.Commons;
+using TrafficSimulator.Domain.Cars;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Builders;
 using TrafficSimulator.Domain.Commons.Interfaces;
@@ -294,6 +296,99 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			Guid id = Guid.Parse("f004abcd-1d37-4289-928d-dd9798bf3007");
 
 			return new IntersectionSimulation(intersection, id, "NormalFourStreetsSimulation");
+		}
+
+		public static IntersectionSimulation FourDirectional_Full(ISender mediator)
+		{
+			ErrorOr<Intersection> intersectionResult =
+			IntersectionBuilder.Create("NormalFourStreets")
+			.AddIntersectionCore(distance: 15)
+			.AddLanesCollection(WorldDirection.North)
+			.AddInboundLane(WorldDirection.North, LaneTypeHelper.StraightLeftAndRight(), distance: 120)
+			.AddOutboundLane(WorldDirection.North, distance: 120)
+			.AddLanesCollection(WorldDirection.East)
+			.AddInboundLane(WorldDirection.East, LaneTypeHelper.StraightLeftAndRight(), distance: 120)
+			.AddOutboundLane(WorldDirection.East, distance: 120)
+			.AddLanesCollection(WorldDirection.South)
+			.AddInboundLane(WorldDirection.South, LaneTypeHelper.StraightLeftAndRight(), distance: 120)
+			.AddOutboundLane(WorldDirection.South, distance: 120)
+			.AddLanesCollection(WorldDirection.West)
+			.AddInboundLane(WorldDirection.West, LaneTypeHelper.StraightLeftAndRight(), distance: 120)
+			.AddOutboundLane(WorldDirection.West, distance: 120)
+			.Build();
+
+			intersectionResult.IsError.Should().BeFalse();
+			Intersection intersection = intersectionResult.Value;
+
+			InboundLane northInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.North)!
+				.InboundLanes!
+				.First();
+
+			InboundLane eastInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.East)!
+				.InboundLanes!
+				.First();
+
+			InboundLane southInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.South)!
+				.InboundLanes!
+				.First();
+
+			InboundLane westInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.West)!
+				.InboundLanes!
+				.First();
+
+			MultipleCarsGeneratorOptions multipleCarsGeneratorOptions = new()
+			{
+				AmountOfCarsToGenerate = 20,
+				DelayBetweenCarGeneration = TimeSpan.FromMilliseconds(750),
+				CarOptions = new CarOptions()
+				{
+					DistanceBetweenCars = 4,
+					Length = 2,
+					MoveVelocity = 30
+				}
+			};
+
+			ICarGenerator northLaneCarGenerator = new MultipleCarsGenerator(intersection, eastInboundLane, mediator, multipleCarsGeneratorOptions);
+			northInboundLane.CarGenerator = northLaneCarGenerator;
+
+			ICarGenerator eastLaneCarGenerator = new MultipleCarsGenerator(intersection, eastInboundLane, mediator, multipleCarsGeneratorOptions);
+			eastInboundLane.CarGenerator = eastLaneCarGenerator;
+
+			ICarGenerator southLaneCarGenerator = new MultipleCarsGenerator(intersection, southInboundLane, mediator, multipleCarsGeneratorOptions);
+			southInboundLane.CarGenerator = southLaneCarGenerator;
+
+			ICarGenerator westLaneCarGenerator = new MultipleCarsGenerator(intersection, westInboundLane, mediator, multipleCarsGeneratorOptions);
+
+			westInboundLane.CarGenerator = westLaneCarGenerator;
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.North));
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.South));
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
+
+			Guid id = Guid.Parse("f004accd-1d37-4289-928d-dd9798bf3007");
+
+			IntersectionSimulationOptions intersectionSimulationOptions = new()
+			{
+				CarOptions = new CarOptions()
+				{
+					DistanceBetweenCars = 4,
+					Length = 2,
+					MoveVelocity = 30
+				},
+				StepLimit = 1200,
+				StepTimespan = TimeSpan.FromMilliseconds(40),
+				Timeout = TimeSpan.FromSeconds(15),
+				TrafficLightHandlerType = TrafficLightHandlerTypes.Manual
+			};
+
+			return new IntersectionSimulation(intersection, id, "NormalFourStreetsSimulation")
+			{
+				Options = intersectionSimulationOptions
+			};
 		}
 	}
 }

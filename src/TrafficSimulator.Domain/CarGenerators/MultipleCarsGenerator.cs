@@ -9,7 +9,6 @@ namespace TrafficSimulator.Domain.Handlers.CarGenerators
 	public class MultipleCarsGenerator : CarGenerator<MultipleCarsGeneratorOptions>
 	{
 		private bool _isGenerationFinished = false;
-		private TimeSpan _simulationTime = TimeSpan.Zero;
 		private TimeSpan _timeFromLastGeneration = TimeSpan.Zero;
 		private int _carsGeneratedSoFar = 0;
 
@@ -59,7 +58,6 @@ namespace TrafficSimulator.Domain.Handlers.CarGenerators
 		public override void Reset()
 		{
 			_isGenerationFinished = false;
-			_simulationTime = TimeSpan.Zero;
 			_timeFromLastGeneration = TimeSpan.Zero;
 			_carsGeneratedSoFar = 0;
 

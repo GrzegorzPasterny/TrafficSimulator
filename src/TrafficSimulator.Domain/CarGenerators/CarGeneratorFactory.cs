@@ -54,7 +54,7 @@ namespace TrafficSimulator.Domain.CarGenerators
 				throw new Exception($"Failed to deserialize options for {carGeneratorType}");
 			}
 
-			carGenerator = (ICarGenerator?)Activator.CreateInstance(generatorType, root, parent, _mediator, null);
+			carGenerator = (ICarGenerator?)Activator.CreateInstance(generatorType, root, parent, _mediator, options);
 
 			return carGenerator.ToErrorOr();
 		}
