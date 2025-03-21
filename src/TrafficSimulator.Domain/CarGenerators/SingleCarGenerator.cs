@@ -24,7 +24,7 @@ namespace TrafficSimulator.Domain.Handlers.CarGenerators
 			}
 		}
 
-		public override bool IsGenerationFinished => _isGenerationFinished;
+		public override bool IsGenerationCompleted => _isGenerationFinished;
 
 		public override async Task<UnitResult<Error>> Generate(TimeSpan timeSpan)
 		{

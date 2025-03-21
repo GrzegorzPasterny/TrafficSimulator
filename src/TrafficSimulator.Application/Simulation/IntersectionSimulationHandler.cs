@@ -167,7 +167,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 		internal bool AllCarGeneratorsFinished()
 		{
-			return SimulationState.CarGenerators.All(carGenerator => carGenerator.IsGenerationFinished);
+			return SimulationState.CarGenerators.All(carGenerator => carGenerator.IsGenerationCompleted);
 		}
 
 		internal async Task<bool> AllCarsFinished(SimulationState simulationState)
@@ -235,7 +235,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		{
 			foreach (ICarGenerator carGenerator in SimulationState.CarGenerators)
 			{
-				if (carGenerator.IsGenerationFinished == false)
+				if (carGenerator.IsGenerationCompleted == false)
 				{
 					await carGenerator.Generate(IntersectionSimulation!.Options.StepTimespan);
 				}

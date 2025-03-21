@@ -2,28 +2,29 @@
 using ErrorOr;
 using MediatR;
 using TrafficSimulator.Domain.Commons;
+using TrafficSimulator.Domain.Handlers.CarGenerators;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 
-namespace TrafficSimulator.Domain.Handlers.CarGenerators
+namespace TrafficSimulator.Domain.CarGenerators
 {
-	public class MultipleCarsGenerator : CarGenerator<MultipleCarsGeneratorOptions>
+	public class RandomCarsGenerator : CarGenerator<RandomCarsGeneratorOptions>
 	{
 		private bool _isGenerationCompleted = false;
-		private TimeSpan _timeFromLastGeneration = TimeSpan.Zero;
 		private int _carsGeneratedSoFar = 0;
+		private readonly Random _randomNumberGenerator = new Random();
 
-		public MultipleCarsGenerator(
+		public RandomCarsGenerator(
 			Intersection root, IntersectionObject? parent,
-			ISender mediator, MultipleCarsGeneratorOptions? multipleCarsGeneratorOptions = null)
+			ISender mediator, RandomCarsGeneratorOptions? randomCarsGeneratorOptions = null)
 			: base(root, parent, mediator)
 		{
-			if (multipleCarsGeneratorOptions is not null)
+			if (randomCarsGeneratorOptions is not null)
 			{
-				Options = multipleCarsGeneratorOptions;
+				Options = randomCarsGeneratorOptions;
 			}
 			else
 			{
-				Options = new MultipleCarsGeneratorOptions();
+				Options = new RandomCarsGeneratorOptions();
 			}
 		}
 
@@ -37,14 +38,13 @@ namespace TrafficSimulator.Domain.Handlers.CarGenerators
 				return UnitResult.Success<Error>();
 			}
 
-			_timeFromLastGeneration += timeSpan;
+			int randomValue = _randomNumberGenerator.Next(0, 100);
 
-			if (_carsGeneratedSoFar == 0 || _timeFromLastGeneration > Options.DelayBetweenCarGeneration)
+			if (randomValue <= Options.Probability)
 			{
 				await GenerateCar();
 
 				_carsGeneratedSoFar++;
-				_timeFromLastGeneration = TimeSpan.Zero;
 			}
 
 			DetermineGenerationCompletion();
@@ -62,10 +62,8 @@ namespace TrafficSimulator.Domain.Handlers.CarGenerators
 
 		public override void Reset()
 		{
-			_isGenerationCompleted = false;
-			_timeFromLastGeneration = TimeSpan.Zero;
 			_carsGeneratedSoFar = 0;
-
+			_isGenerationCompleted = false;
 		}
 
 		public override string ToString()

@@ -27,7 +27,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.CarGeneratorsTests
 			var singleCarsGenerator = new SingleCarGenerator(intersection, inboundLane, mediatorMock.Object);
 
 			// Act
-			while (singleCarsGenerator.IsGenerationFinished == false)
+			while (singleCarsGenerator.IsGenerationCompleted == false)
 			{
 				_ = await singleCarsGenerator.Generate(TimeSpan.FromMicroseconds(100));
 			}

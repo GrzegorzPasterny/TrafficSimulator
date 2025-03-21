@@ -13,13 +13,15 @@ namespace TrafficSimulator.Domain.CarGenerators
 		private readonly Dictionary<string, Type> _generatorTypes = new()
 		{
 			{ nameof(SingleCarGenerator), typeof(SingleCarGenerator) },
-			{ nameof(MultipleCarsGenerator), typeof(MultipleCarsGenerator) }
+			{ nameof(MultipleCarsGenerator), typeof(MultipleCarsGenerator) },
+			{ nameof(RandomCarsGenerator), typeof(RandomCarsGenerator) },
 		};
 
 		private readonly Dictionary<string, Type> _optionsTypes = new()
 		{
 			{ nameof(SingleCarGenerator), typeof(SingleCarGeneratorOptions) },
 			{ nameof(MultipleCarsGenerator), typeof(MultipleCarsGeneratorOptions) },
+			{ nameof(RandomCarsGenerator), typeof(RandomCarsGeneratorOptions) },
 		};
 		private readonly ISender _mediator;
 

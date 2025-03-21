@@ -20,7 +20,7 @@ namespace TrafficSimulator.Domain.Handlers.CarGenerators
 			_mediator = mediator;
 		}
 
-		public abstract bool IsGenerationFinished { get; }
+		public abstract bool IsGenerationCompleted { get; }
 
 		public TOptions Options { get; init; }
 
@@ -30,12 +30,12 @@ namespace TrafficSimulator.Domain.Handlers.CarGenerators
 
 		public override string ToString()
 		{
-			return $"[CarsGeneratorName = {Name}, HasFinished = {IsGenerationFinished}]";
+			return $"[CarsGeneratorName = {Name}, HasFinished = {IsGenerationCompleted}]";
 		}
 
 		public abstract void Reset();
 
-		internal async Task GenerateCar()
+		protected virtual async Task GenerateCar()
 		{
 			Car car = new Car((InboundLane)Parent!, Options.CarOptions);
 

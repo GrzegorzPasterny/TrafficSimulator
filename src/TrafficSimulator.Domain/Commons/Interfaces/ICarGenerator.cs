@@ -11,7 +11,7 @@ namespace TrafficSimulator.Domain.Commons.Interfaces
 		CarGeneratorOptions Options { get; }
 
 		Task<UnitResult<Error>> Generate(TimeSpan timeSpan);
-		bool IsGenerationFinished { get; }
+		bool IsGenerationCompleted { get; }
 		void Reset();
 	}
 }
