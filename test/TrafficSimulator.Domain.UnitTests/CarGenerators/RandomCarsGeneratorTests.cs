@@ -49,5 +49,41 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 			_randomCarsGeneratorMock.Protected()
 				.Verify("GenerateCar", Times.Once());
 		}
+
+		[Fact]
+		public async Task GenerateCars_WithMultipleRequests_ShouldGenerateCorrectNumberOfCars()
+		{
+			// Arrange
+			RandomCarsGeneratorOptions options = new RandomCarsGeneratorOptions()
+			{
+				CarOptions = new CarOptions(),
+				AmountOfCarsToGenerate = 3,
+				Probability = 100
+			};
+
+			_randomCarsGeneratorMock = new Mock<RandomCarsGenerator>(
+				_rootMock.Object, _parentMock.Object, _mediatorMock.Object, options)
+			{
+				CallBase = true
+			};
+
+			_randomCarsGeneratorMock.Protected()
+				.Setup<Task>("GenerateCar")
+				.Returns(Task.CompletedTask);
+
+			RandomCarsGenerator randomCarsGenerator = _randomCarsGeneratorMock.Object;
+
+			// Act
+			for (int i = 0; i < options.AmountOfCarsToGenerate; i++)
+			{
+				(await randomCarsGenerator.Generate(TimeSpan.Zero)).IsSuccess.Should().BeTrue();
+			}
+
+			// Assert
+			randomCarsGenerator.IsGenerationCompleted.Should().BeTrue();
+			_randomCarsGeneratorMock.Protected()
+				.Verify("GenerateCar", Times.Exactly(3));
+		}
+
 	}
 }
