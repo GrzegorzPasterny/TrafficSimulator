@@ -22,7 +22,7 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 		}
 
 		[Fact]
-		public async Task GenerateCars_Should()
+		public async Task GenerateCars_WithMaximumProbability_WhenOneCarIsRequested_ShouldProduceCarImmediately()
 		{
 			RandomCarsGeneratorOptions options = new RandomCarsGeneratorOptions()
 			{
