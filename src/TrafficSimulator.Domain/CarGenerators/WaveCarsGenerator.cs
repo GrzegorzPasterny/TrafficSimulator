@@ -11,7 +11,6 @@ namespace TrafficSimulator.Domain.CarGenerators
 	{
 		private int _carsGeneratedSoFar = 0;
 		private bool _isGenerationCompleted = false;
-		private double _currentProbability = 0; // Probability changes over time
 		private DateTime _startTime = DateTime.UtcNow;
 
 		public WaveCarsGenerator(Intersection root, IntersectionObject? parent, ISender mediator, WaveCarsGeneratorOptions options)
@@ -29,24 +28,27 @@ namespace TrafficSimulator.Domain.CarGenerators
 				return UnitResult.Success<Error>();
 			}
 
-			double frequency = Options.WavePeriodHz;
-			double intensity = Options.WaveAmplitude;
-			double baseProbability = Options.BaseProbability;
+			double currentProbability = ComputeProbability(DateTime.UtcNow - _startTime, Options);
 
-			_currentProbability = ComputeProbability(DateTime.UtcNow - _startTime, frequency, intensity, baseProbability);
+			double adjustedProbability = AdjustProbabilityForSimulationStepTimeSpan(currentProbability, timeSpan);
 
-			if (Random.Shared.NextDouble() * 100 <= _currentProbability)
+			if (Random.Shared.NextDouble() * 100 <= adjustedProbability)
 			{
 				await GenerateCar();
 				_carsGeneratedSoFar++;
 			}
 
-			if (_carsGeneratedSoFar >= Options.TotalCarsToGenerate)
-			{
-				_isGenerationCompleted = true;
-			}
+			DetermineGenerationCompletion();
 
 			return UnitResult.Success<Error>();
+		}
+
+		private double AdjustProbabilityForSimulationStepTimeSpan(double currentProbability, TimeSpan timeSpan)
+		{
+			// Adjust probability based on how often Generate() is called
+			double scalingFactor = Math.Min(1, timeSpan.TotalSeconds * Options.WavePeriodHz);
+			double adjustedProbability = currentProbability * scalingFactor;
+			return adjustedProbability;
 		}
 
 		public override void Reset()
@@ -56,15 +58,23 @@ namespace TrafficSimulator.Domain.CarGenerators
 			_startTime = DateTime.UtcNow;
 		}
 
-		private double ComputeProbability(TimeSpan elapsedTime, double frequency, double intensity, double baseProbability)
+		private double ComputeProbability(TimeSpan elapsedTime, WaveCarsGeneratorOptions options)
 		{
 			double timeInSeconds = elapsedTime.TotalSeconds;
 
-			// Probability oscillates in waves (sinusoidal function)
-			double waveEffect = Math.Sin(timeInSeconds * frequency) * intensity;
+			// Compute wave effect
+			double waveEffect = Math.Sin(timeInSeconds * options.WavePeriodHz * 2 * Math.PI) * options.WaveAmplitude;
 
-			return Math.Clamp(baseProbability + waveEffect, 0, 100);
+			// Ensure that probability remains valid
+			return Math.Max(0, options.BaseRate + waveEffect);
+		}
+
+		private void DetermineGenerationCompletion()
+		{
+			if (_carsGeneratedSoFar >= Options.AmountOfCarsToGenerate)
+			{
+				_isGenerationCompleted = true;
+			}
 		}
 	}
-
 }

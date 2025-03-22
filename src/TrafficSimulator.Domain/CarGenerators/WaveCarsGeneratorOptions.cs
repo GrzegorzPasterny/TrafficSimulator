@@ -2,8 +2,12 @@
 {
 	public class WaveCarsGeneratorOptions : CarGeneratorOptions
 	{
-		public int TotalCarsToGenerate { get; set; } = 20;
-		public double BaseProbability { get; set; } = 50;
+		public int AmountOfCarsToGenerate { get; set; } = 20;
+
+		/// <summary>
+		/// Expected average number of cars generated per second
+		/// </summary>
+		public double BaseRate { get; set; } = 1;
 
 		/// <summary>
 		/// Cars generation probability wave cycles per seconds

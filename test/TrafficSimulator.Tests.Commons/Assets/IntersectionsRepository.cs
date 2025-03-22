@@ -364,8 +364,8 @@ namespace TrafficSimulator.Tests.Commons.Assets
 
 			WaveCarsGeneratorOptions waveCarsGeneratorOptions = new()
 			{
-				BaseProbability = 50,
-				TotalCarsToGenerate = 20,
+				BaseRate = 50,
+				AmountOfCarsToGenerate = 20,
 				WaveAmplitude = 30,
 				WavePeriodHz = 4,
 				CarOptions = carOptions
