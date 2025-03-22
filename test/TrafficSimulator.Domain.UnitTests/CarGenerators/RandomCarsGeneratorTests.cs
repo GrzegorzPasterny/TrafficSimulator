@@ -51,7 +51,7 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 		}
 
 		[Fact]
-		public async Task GenerateCars_WithMultipleRequests_ShouldGenerateCorrectNumberOfCars()
+		public async Task GenerateCars_WithThreeRequests_WithMaximumProbability_ShouldGenerateThreeCars()
 		{
 			// Arrange
 			RandomCarsGeneratorOptions options = new RandomCarsGeneratorOptions()
@@ -85,5 +85,39 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 				.Verify("GenerateCar", Times.Exactly(3));
 		}
 
+		[Fact]
+		public async Task GenerateCars_WithMultipleRequests_ShouldGenerateCorrectNumberOfCars()
+		{
+			// Arrange
+			RandomCarsGeneratorOptions options = new RandomCarsGeneratorOptions()
+			{
+				CarOptions = new CarOptions(),
+				AmountOfCarsToGenerate = 1_000,
+				Probability = 50
+			};
+
+			_randomCarsGeneratorMock = new Mock<RandomCarsGenerator>(
+				_rootMock.Object, _parentMock.Object, _mediatorMock.Object, options)
+			{
+				CallBase = true
+			};
+
+			_randomCarsGeneratorMock.Protected()
+				.Setup<Task>("GenerateCar")
+				.Returns(Task.CompletedTask);
+
+			RandomCarsGenerator randomCarsGenerator = _randomCarsGeneratorMock.Object;
+
+			// Act
+			for (int i = 0; i < 1_000; i++)
+			{
+				(await randomCarsGenerator.Generate(TimeSpan.Zero)).IsSuccess.Should().BeTrue();
+			}
+
+			// Assert
+			randomCarsGenerator.IsGenerationCompleted.Should().BeFalse();
+			_randomCarsGeneratorMock.Protected()
+				.Verify("GenerateCar", Times.Between(400, 600, Moq.Range.Inclusive));
+		}
 	}
 }
