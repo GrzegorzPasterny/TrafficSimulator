@@ -248,7 +248,9 @@ namespace TrafficSimulator.Domain.Models.Agents
 
 		private Car? FindCarInFrontOnTheSameLane(IEnumerable<Car> cars)
 		{
-			return cars.Where(car => car.HasReachedDestination == false)
+			var carsSnapshot = cars.ToList(); // Create a safe copy
+
+			return carsSnapshot.Where(car => car.HasReachedDestination == false)
 				.Where(car => car.CurrentLocation.Location == CurrentLocation.Location && car.Id != Id)
 				.Where(car => car.CurrentLocation.DistanceLeft < CurrentLocation.DistanceLeft)
 				.OrderByDescending(c => c.CurrentLocation.DistanceLeft)

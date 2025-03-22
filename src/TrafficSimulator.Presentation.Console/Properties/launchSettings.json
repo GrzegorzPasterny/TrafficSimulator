@@ -15,6 +15,10 @@
     "Console Run4Ways": {
       "commandName": "Project",
       "commandLineArgs": "Run -f \"Assets/NormalFourStreetsSimulation_f004abcd-1d37-4289-928d-dd9798bf3007.json\""
+    },
+    "Console Run4Full": {
+      "commandName": "Project",
+      "commandLineArgs": "Run -f \"Assets/NormalFourStreetsSimulation_f004accd-1d37-4289-928d-dd9798bf3007.json\""
     }
   }
 }

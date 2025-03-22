@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using TrafficSimulator.Application.Cars.CommitCarsMovement;
 using TrafficSimulator.Application.Cars.GetCars;
 using TrafficSimulator.Domain.Models.Agents;
 
@@ -22,6 +23,8 @@ namespace TrafficSimulator.Application.Cars.MoveCar
 			{
 				car.Move(request.StepTimespan, cars);
 			}
+
+			await _sender.Send(new CommitCarsMovementCommand());
 		}
 	}
 }

@@ -51,7 +51,7 @@
             ],
             "ContainsTrafficLights": true,
             "CarGeneratorOptions": {
-              "Probability": 5,
+              "Probability": 60,
               "AmountOfCarsToGenerate": 20,
               "CarOptions": {
                 "MoveVelocity": 30,
@@ -570,8 +570,8 @@
   },
   "Options": {
     "StepTimespanMs": 40,
-    "TimeoutMs": 60000,
-    "StepLimit": 1500,
-    "TrafficLightHandlerType": "Manual"
+    "TimeoutMs": 15000,
+    "StepLimit": 1200,
+    "TrafficLightHandlerType": "Sequential"
   }
 }

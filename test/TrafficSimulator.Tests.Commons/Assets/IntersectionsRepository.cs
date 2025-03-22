@@ -3,6 +3,7 @@ using FluentAssertions;
 using MediatR;
 using TrafficSimulator.Application.TrafficLights.Handlers;
 using TrafficSimulator.Application.UnitTests.Commons;
+using TrafficSimulator.Domain.CarGenerators;
 using TrafficSimulator.Domain.Cars;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Builders;
@@ -340,25 +341,43 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				.InboundLanes!
 				.First();
 
+			CarOptions carOptions = new CarOptions()
+			{
+				DistanceBetweenCars = 4,
+				Length = 2,
+				MoveVelocity = 30
+			};
+
 			MultipleCarsGeneratorOptions multipleCarsGeneratorOptions = new()
 			{
-				AmountOfCarsToGenerate = 20,
+				AmountOfCarsToGenerate = 25,
 				DelayBetweenCarGeneration = TimeSpan.FromMilliseconds(750),
-				CarOptions = new CarOptions()
-				{
-					DistanceBetweenCars = 4,
-					Length = 2,
-					MoveVelocity = 30
-				}
+				CarOptions = carOptions
+			};
+
+			RandomCarsGeneratorOptions randomCarsGeneratorOptions = new()
+			{
+				AmountOfCarsToGenerate = 20,
+				Probability = 60,
+				CarOptions = carOptions
+			};
+
+			WaveCarsGeneratorOptions waveCarsGeneratorOptions = new()
+			{
+				BaseProbability = 50,
+				TotalCarsToGenerate = 20,
+				WaveAmplitude = 30,
+				WavePeriodHz = 4,
+				CarOptions = carOptions
 			};
 
 			ICarGenerator northLaneCarGenerator = new MultipleCarsGenerator(intersection, eastInboundLane, mediator, multipleCarsGeneratorOptions);
 			northInboundLane.CarGenerator = northLaneCarGenerator;
 
-			ICarGenerator eastLaneCarGenerator = new MultipleCarsGenerator(intersection, eastInboundLane, mediator, multipleCarsGeneratorOptions);
+			ICarGenerator eastLaneCarGenerator = new RandomCarsGenerator(intersection, eastInboundLane, mediator, randomCarsGeneratorOptions);
 			eastInboundLane.CarGenerator = eastLaneCarGenerator;
 
-			ICarGenerator southLaneCarGenerator = new MultipleCarsGenerator(intersection, southInboundLane, mediator, multipleCarsGeneratorOptions);
+			ICarGenerator southLaneCarGenerator = new WaveCarsGenerator(intersection, southInboundLane, mediator, waveCarsGeneratorOptions);
 			southInboundLane.CarGenerator = southLaneCarGenerator;
 
 			ICarGenerator westLaneCarGenerator = new MultipleCarsGenerator(intersection, westInboundLane, mediator, multipleCarsGeneratorOptions);

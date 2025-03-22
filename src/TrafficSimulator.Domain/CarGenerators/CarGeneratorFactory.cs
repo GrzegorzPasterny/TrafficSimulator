@@ -15,6 +15,7 @@ namespace TrafficSimulator.Domain.CarGenerators
 			{ nameof(SingleCarGenerator), typeof(SingleCarGenerator) },
 			{ nameof(MultipleCarsGenerator), typeof(MultipleCarsGenerator) },
 			{ nameof(RandomCarsGenerator), typeof(RandomCarsGenerator) },
+			{ nameof(WaveCarsGenerator), typeof(WaveCarsGenerator) },
 		};
 
 		private readonly Dictionary<string, Type> _optionsTypes = new()
@@ -22,6 +23,7 @@ namespace TrafficSimulator.Domain.CarGenerators
 			{ nameof(SingleCarGenerator), typeof(SingleCarGeneratorOptions) },
 			{ nameof(MultipleCarsGenerator), typeof(MultipleCarsGeneratorOptions) },
 			{ nameof(RandomCarsGenerator), typeof(RandomCarsGeneratorOptions) },
+			{ nameof(WaveCarsGenerator), typeof(WaveCarsGeneratorOptions) },
 		};
 		private readonly ISender _mediator;
 
