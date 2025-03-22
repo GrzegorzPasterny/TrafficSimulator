@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentAssertions;
+using MediatR;
 using Moq;
 using Moq.Protected;
 using TrafficSimulator.Domain.CarGenerators;
@@ -54,10 +55,9 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 			for (int i = 0; i < simulationSteps; i++)
 			{
 				await waveCarsGenerator.Generate(TimeSpan.FromMilliseconds(simulationStepMs));
-
-				if (waveCarsGenerator.IsGenerationCompleted) break;
 			}
 
+			waveCarsGenerator.IsGenerationCompleted.Should().BeFalse();
 			_waveCarsGeneratorMock.Protected()
 				.Verify("GenerateCar", Times.Between(expectedCarsMin, expectedCarsMax, Moq.Range.Inclusive));
 		}

@@ -38,9 +38,11 @@ namespace TrafficSimulator.Domain.CarGenerators
 				return UnitResult.Success<Error>();
 			}
 
+			double baseProbability = Options.BaseRate * timeSpan.TotalSeconds * 100;
+
 			int randomValue = _randomNumberGenerator.Next(0, 100);
 
-			if (randomValue <= Options.Probability)
+			if (randomValue <= baseProbability)
 			{
 				await GenerateCar();
 

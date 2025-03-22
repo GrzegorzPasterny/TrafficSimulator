@@ -28,7 +28,7 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 			{
 				CarOptions = new CarOptions(),
 				AmountOfCarsToGenerate = 1,
-				Probability = 100
+				BaseRate = 1
 			};
 
 			_randomCarsGeneratorMock = new Mock<RandomCarsGenerator>(
@@ -43,7 +43,7 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 
 			RandomCarsGenerator randomCarsGenerator = _randomCarsGeneratorMock.Object;
 
-			(await randomCarsGenerator.Generate(TimeSpan.Zero)).IsSuccess.Should().BeTrue();
+			(await randomCarsGenerator.Generate(TimeSpan.FromSeconds(2))).IsSuccess.Should().BeTrue();
 
 			randomCarsGenerator.IsGenerationCompleted.Should().BeTrue();
 			_randomCarsGeneratorMock.Protected()
@@ -58,7 +58,7 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 			{
 				CarOptions = new CarOptions(),
 				AmountOfCarsToGenerate = 3,
-				Probability = 100
+				BaseRate = 1
 			};
 
 			_randomCarsGeneratorMock = new Mock<RandomCarsGenerator>(
@@ -76,7 +76,7 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 			// Act
 			for (int i = 0; i < options.AmountOfCarsToGenerate; i++)
 			{
-				(await randomCarsGenerator.Generate(TimeSpan.Zero)).IsSuccess.Should().BeTrue();
+				(await randomCarsGenerator.Generate(TimeSpan.FromSeconds(2))).IsSuccess.Should().BeTrue();
 			}
 
 			// Assert
@@ -93,7 +93,7 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 			{
 				CarOptions = new CarOptions(),
 				AmountOfCarsToGenerate = 1_000,
-				Probability = 50
+				BaseRate = 0.5
 			};
 
 			_randomCarsGeneratorMock = new Mock<RandomCarsGenerator>(
@@ -111,7 +111,7 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 			// Act
 			for (int i = 0; i < 1_000; i++)
 			{
-				(await randomCarsGenerator.Generate(TimeSpan.Zero)).IsSuccess.Should().BeTrue();
+				(await randomCarsGenerator.Generate(TimeSpan.FromSeconds(1))).IsSuccess.Should().BeTrue();
 			}
 
 			// Assert

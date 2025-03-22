@@ -302,7 +302,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 		public static IntersectionSimulation FourDirectional_Full(ISender mediator)
 		{
 			ErrorOr<Intersection> intersectionResult =
-			IntersectionBuilder.Create("NormalFourStreets")
+			IntersectionBuilder.Create("4StreetsFull")
 			.AddIntersectionCore(distance: 15)
 			.AddLanesCollection(WorldDirection.North)
 			.AddInboundLane(WorldDirection.North, LaneTypeHelper.StraightLeftAndRight(), distance: 120)
@@ -358,13 +358,13 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			RandomCarsGeneratorOptions randomCarsGeneratorOptions = new()
 			{
 				AmountOfCarsToGenerate = 20,
-				Probability = 60,
+				BaseRate = 1,
 				CarOptions = carOptions
 			};
 
 			WaveCarsGeneratorOptions waveCarsGeneratorOptions = new()
 			{
-				BaseRate = 50,
+				BaseRate = 1,
 				AmountOfCarsToGenerate = 20,
 				WaveAmplitude = 30,
 				WavePeriodHz = 4,
@@ -388,7 +388,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.South));
 			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
 
-			Guid id = Guid.Parse("f004accd-1d37-4289-928d-dd9798bf3007");
+			Guid id = Guid.Parse("1000ffff-1d37-4289-928d-dd9798bf3007");
 
 			IntersectionSimulationOptions intersectionSimulationOptions = new()
 			{
@@ -398,7 +398,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				TrafficLightHandlerType = TrafficLightHandlerTypes.Manual
 			};
 
-			return new IntersectionSimulation(intersection, id, "NormalFourStreetsSimulation")
+			return new IntersectionSimulation(intersection, id, "4StreetsFull")
 			{
 				Options = intersectionSimulationOptions
 			};

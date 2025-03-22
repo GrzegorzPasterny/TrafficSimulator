@@ -1,6 +1,6 @@
 {
-  "Id": "f004accd-1d37-4289-928d-dd9798bf3007",
-  "Name": "NormalFourStreetsSimulation",
+  "Id": "1000ffff-1d37-4289-928d-dd9798bf3007",
+  "Name": "4StreetsFull",
   "Intersection": {
     "LanesCollection": [
       {
@@ -25,7 +25,7 @@
             "WorldDirection": 0,
             "Distance": 120,
             "Name": "InboundLane",
-            "ParentName": ".NormalFourStreets.Lanes.North"
+            "ParentName": ".4StreetsFull.Lanes.North"
           }
         ],
         "OutboundLanes": [
@@ -33,12 +33,12 @@
             "WorldDirection": 0,
             "Distance": 120,
             "Name": "OutboundLane",
-            "ParentName": ".NormalFourStreets.Lanes.North"
+            "ParentName": ".4StreetsFull.Lanes.North"
           }
         ],
         "WorldDirection": 0,
         "Name": "Lanes.North",
-        "ParentName": ".NormalFourStreets"
+        "ParentName": ".4StreetsFull"
       },
       {
         "InboundLanes": [
@@ -51,7 +51,7 @@
             ],
             "ContainsTrafficLights": true,
             "CarGeneratorOptions": {
-              "Probability": 5,
+              "BaseRate": 1,
               "AmountOfCarsToGenerate": 20,
               "CarOptions": {
                 "MoveVelocity": 30,
@@ -62,7 +62,7 @@
             "WorldDirection": 1,
             "Distance": 120,
             "Name": "InboundLane",
-            "ParentName": ".NormalFourStreets.Lanes.East"
+            "ParentName": ".4StreetsFull.Lanes.East"
           }
         ],
         "OutboundLanes": [
@@ -70,12 +70,12 @@
             "WorldDirection": 1,
             "Distance": 120,
             "Name": "OutboundLane",
-            "ParentName": ".NormalFourStreets.Lanes.East"
+            "ParentName": ".4StreetsFull.Lanes.East"
           }
         ],
         "WorldDirection": 1,
         "Name": "Lanes.East",
-        "ParentName": ".NormalFourStreets"
+        "ParentName": ".4StreetsFull"
       },
       {
         "InboundLanes": [
@@ -88,8 +88,8 @@
             ],
             "ContainsTrafficLights": true,
             "CarGeneratorOptions": {
-              "TotalCarsToGenerate": 20,
-              "BaseProbability": 50,
+              "AmountOfCarsToGenerate": 20,
+              "BaseRate": 1,
               "WavePeriodHz": 4,
               "WaveAmplitude": 30,
               "CarOptions": {
@@ -101,7 +101,7 @@
             "WorldDirection": 2,
             "Distance": 120,
             "Name": "InboundLane",
-            "ParentName": ".NormalFourStreets.Lanes.South"
+            "ParentName": ".4StreetsFull.Lanes.South"
           }
         ],
         "OutboundLanes": [
@@ -109,12 +109,12 @@
             "WorldDirection": 2,
             "Distance": 120,
             "Name": "OutboundLane",
-            "ParentName": ".NormalFourStreets.Lanes.South"
+            "ParentName": ".4StreetsFull.Lanes.South"
           }
         ],
         "WorldDirection": 2,
         "Name": "Lanes.South",
-        "ParentName": ".NormalFourStreets"
+        "ParentName": ".4StreetsFull"
       },
       {
         "InboundLanes": [
@@ -138,7 +138,7 @@
             "WorldDirection": 3,
             "Distance": 120,
             "Name": "InboundLane",
-            "ParentName": ".NormalFourStreets.Lanes.West"
+            "ParentName": ".4StreetsFull.Lanes.West"
           }
         ],
         "OutboundLanes": [
@@ -146,25 +146,25 @@
             "WorldDirection": 3,
             "Distance": 120,
             "Name": "OutboundLane",
-            "ParentName": ".NormalFourStreets.Lanes.West"
+            "ParentName": ".4StreetsFull.Lanes.West"
           }
         ],
         "WorldDirection": 3,
         "Name": "Lanes.West",
-        "ParentName": ".NormalFourStreets"
+        "ParentName": ".4StreetsFull"
       }
     ],
     "IntersectionCore": {
       "Distance": 15,
       "Name": "IntersectionCore",
-      "ParentName": ".NormalFourStreets"
+      "ParentName": ".4StreetsFull"
     },
     "TrafficPhases": [
       {
         "Name": "GreenForNorthOnly",
         "TrafficLightsAssignments": [
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.North.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.North.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -172,7 +172,7 @@
             "TrafficLightState": 1
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.North.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.North.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -180,7 +180,7 @@
             "TrafficLightState": 1
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.North.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.North.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -188,7 +188,7 @@
             "TrafficLightState": 1
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.East.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.East.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -196,7 +196,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.East.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.East.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -204,7 +204,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.East.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.East.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -212,7 +212,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.South.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.South.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -220,7 +220,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.South.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.South.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -228,7 +228,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.South.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.South.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -236,7 +236,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.West.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.West.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -244,7 +244,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.West.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.West.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -252,7 +252,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.West.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.West.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -265,7 +265,7 @@
         "Name": "GreenForEastOnly",
         "TrafficLightsAssignments": [
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.North.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.North.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -273,7 +273,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.North.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.North.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -281,7 +281,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.North.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.North.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -289,7 +289,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.East.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.East.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -297,7 +297,7 @@
             "TrafficLightState": 1
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.East.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.East.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -305,7 +305,7 @@
             "TrafficLightState": 1
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.East.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.East.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -313,7 +313,7 @@
             "TrafficLightState": 1
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.South.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.South.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -321,7 +321,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.South.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.South.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -329,7 +329,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.South.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.South.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -337,7 +337,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.West.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.West.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -345,7 +345,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.West.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.West.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -353,7 +353,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.West.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.West.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -366,7 +366,7 @@
         "Name": "GreenForSouthOnly",
         "TrafficLightsAssignments": [
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.North.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.North.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -374,7 +374,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.North.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.North.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -382,7 +382,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.North.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.North.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -390,7 +390,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.East.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.East.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -398,7 +398,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.East.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.East.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -406,7 +406,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.East.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.East.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -414,7 +414,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.South.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.South.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -422,7 +422,7 @@
             "TrafficLightState": 1
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.South.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.South.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -430,7 +430,7 @@
             "TrafficLightState": 1
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.South.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.South.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -438,7 +438,7 @@
             "TrafficLightState": 1
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.West.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.West.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -446,7 +446,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.West.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.West.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -454,7 +454,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.West.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.West.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -467,7 +467,7 @@
         "Name": "GreenForWestOnly",
         "TrafficLightsAssignments": [
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.North.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.North.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -475,7 +475,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.North.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.North.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -483,7 +483,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.North.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.North.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -491,7 +491,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.East.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.East.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -499,7 +499,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.East.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.East.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -507,7 +507,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.East.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.East.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -515,7 +515,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.South.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.South.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -523,7 +523,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.South.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.South.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -531,7 +531,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.South.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.South.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -539,7 +539,7 @@
             "TrafficLightState": 3
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.West.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.West.InboundLane",
             "TurnPossibility": {
               "LaneType": 0,
               "ContainsTrafficLights": true
@@ -547,7 +547,7 @@
             "TrafficLightState": 1
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.West.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.West.InboundLane",
             "TurnPossibility": {
               "LaneType": 2,
               "ContainsTrafficLights": true
@@ -555,7 +555,7 @@
             "TrafficLightState": 1
           },
           {
-            "InboundLaneName": ".NormalFourStreets.Lanes.West.InboundLane",
+            "InboundLaneName": ".4StreetsFull.Lanes.West.InboundLane",
             "TurnPossibility": {
               "LaneType": 1,
               "ContainsTrafficLights": true
@@ -565,13 +565,13 @@
         ]
       }
     ],
-    "Name": "NormalFourStreets",
+    "Name": "4StreetsFull",
     "ParentName": ""
   },
   "Options": {
     "StepTimespanMs": 40,
     "TimeoutMs": 60000,
-    "StepLimit": 1500,
-    "TrafficLightHandlerType": "Manual"
+    "StepLimit": 2000,
+    "TrafficLightHandlerType": "Sequential"
   }
 }
