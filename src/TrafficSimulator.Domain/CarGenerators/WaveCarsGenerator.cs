@@ -28,27 +28,51 @@ namespace TrafficSimulator.Domain.CarGenerators
 				return UnitResult.Success<Error>();
 			}
 
-			double currentProbability = ComputeProbability(DateTime.UtcNow - _startTime, Options);
+			// Compute the final adjusted probability
+			double carGenerationProbability = GetAdjustedCarGenerationProbability(timeSpan);
 
-			double adjustedProbability = AdjustProbabilityForSimulationStepTimeSpan(currentProbability, timeSpan);
-
-			if (Random.Shared.NextDouble() * 100 <= adjustedProbability)
+			// Determine whether to generate a car
+			if (ShouldGenerateCar(carGenerationProbability))
 			{
 				await GenerateCar();
 				_carsGeneratedSoFar++;
 			}
 
+			// Check if generation should be marked as completed
 			DetermineGenerationCompletion();
 
 			return UnitResult.Success<Error>();
 		}
 
-		private double AdjustProbabilityForSimulationStepTimeSpan(double currentProbability, TimeSpan timeSpan)
+		/// <summary>
+		/// Computes the probability of generating a car in this step, considering base rate and wave fluctuation.
+		/// </summary>
+		private double GetAdjustedCarGenerationProbability(TimeSpan timeSpan)
 		{
-			// Adjust probability based on how often Generate() is called
-			double scalingFactor = Math.Min(1, timeSpan.TotalSeconds * Options.WavePeriodHz);
-			double adjustedProbability = currentProbability * scalingFactor;
-			return adjustedProbability;
+			double baseProbability = Options.BaseRate * timeSpan.TotalSeconds * 100;
+
+			double waveEffect = CalculateWaveEffect();
+
+			double adjustedProbability = baseProbability + (waveEffect * timeSpan.TotalSeconds);
+
+			return Math.Clamp(adjustedProbability, 0, 100);
+		}
+
+		/// <summary>
+		/// Simulates a sinusoidal fluctuation in car generation probability.
+		/// </summary>
+		private double CalculateWaveEffect()
+		{
+			double elapsedSeconds = (DateTime.UtcNow - _startTime).TotalSeconds;
+			return Math.Sin(elapsedSeconds * Options.WavePeriodHz * 2 * Math.PI) * Options.WaveAmplitude;
+		}
+
+		/// <summary>
+		/// Determines whether a car should be generated based on the computed probability.
+		/// </summary>
+		private bool ShouldGenerateCar(double probability)
+		{
+			return Random.Shared.NextDouble() * 100 <= probability;
 		}
 
 		public override void Reset()
@@ -56,17 +80,6 @@ namespace TrafficSimulator.Domain.CarGenerators
 			_carsGeneratedSoFar = 0;
 			_isGenerationCompleted = false;
 			_startTime = DateTime.UtcNow;
-		}
-
-		private double ComputeProbability(TimeSpan elapsedTime, WaveCarsGeneratorOptions options)
-		{
-			double timeInSeconds = elapsedTime.TotalSeconds;
-
-			// Compute wave effect
-			double waveEffect = Math.Sin(timeInSeconds * options.WavePeriodHz * 2 * Math.PI) * options.WaveAmplitude;
-
-			// Ensure that probability remains valid
-			return Math.Max(0, options.BaseRate + waveEffect);
 		}
 
 		private void DetermineGenerationCompletion()

@@ -20,7 +20,7 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 			CarOptions = new CarOptions(),
 			AmountOfCarsToGenerate = 1000,
 			WavePeriodHz = 0.5, // 2s period
-			WaveAmplitude = 50,
+			WaveAmplitude = 30,
 			BaseRate = 1
 		};
 
@@ -30,7 +30,10 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 		}
 
 		[Theory]
-		[InlineData(20000, 100, 15, 25)]
+		[InlineData(20000, 100, 10, 30)]
+		[InlineData(20000, 500, 10, 30)]
+		[InlineData(20000, 50, 10, 30)]
+		[InlineData(20000, 25, 10, 30)]
 		public async Task GenerateCars_WithHighCallFrequency_ShouldProduceCars(
 			int overallGenerationTimeMs, int simulationStepMs, int expectedCarsMin, int expectedCarsMax)
 		{
@@ -58,6 +61,5 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 			_waveCarsGeneratorMock.Protected()
 				.Verify("GenerateCar", Times.Between(expectedCarsMin, expectedCarsMax, Moq.Range.Inclusive));
 		}
-
 	}
 }
