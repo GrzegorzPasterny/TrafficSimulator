@@ -32,11 +32,19 @@ namespace TrafficSimulator.Application.Handlers.Lights
 		{
 			IEnumerable<Car> waitingCars = (await _carRepository.GetCarsAsync()).Where(car => car.IsCarWaiting);
 
-			InboundLane mostCrowdedInboundLane = waitingCars
+			if (waitingCars is null || waitingCars.Count() == 0)
+			{
+				// Simulation has not started, or is in the starting phase
+				return UnitResult.Success<Error>();
+			}
+
+			var waitingCarsOnLanes = waitingCars
 				.GroupBy(car => car.StartLocation)
-				.OrderDescending()
-				// TODO: Randomize possible here
-				.First().Key;
+				.OrderDescending();
+
+			// TODO: Fix the logic - It needs to be determined what Inbound lane has the most cars.
+			// TODO: Write unit tests
+			InboundLane mostCrowdedInboundLane = waitingCarsOnLanes.ElementAt(0).Key;
 
 			IEnumerable<TrafficPhase> desiredTrafficPhases =
 				_trafficPhasesHandler.TrafficPhases!

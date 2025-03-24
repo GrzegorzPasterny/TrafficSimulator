@@ -18,6 +18,7 @@ namespace TrafficSimulator.Application
 			services.AddScoped<TrafficPhasesHandler>();
 			services.AddScoped<ManualTrafficLightsHandler>();
 			services.AddScoped<SimpleSequentialTrafficLightsHandler>();
+			services.AddScoped<SimpleDynamicTrafficLightsHandler>();
 			services.AddSingleton<ITrafficLightsHandlerFactory, TrafficLightsHandlerFactory>();
 
 			services.AddScoped<RealTimeIntersectionSimulationHandler>();

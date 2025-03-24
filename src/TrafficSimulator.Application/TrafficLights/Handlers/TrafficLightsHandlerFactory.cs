@@ -20,6 +20,7 @@ namespace TrafficSimulator.Application.Lights.HandlerTypes
 			{
 				TrafficLightHandlerTypes.Sequential => _serviceProvider.GetRequiredService<SimpleSequentialTrafficLightsHandler>(),
 				TrafficLightHandlerTypes.Manual => _serviceProvider.GetRequiredService<ManualTrafficLightsHandler>(),
+				TrafficLightHandlerTypes.Dynamic => _serviceProvider.GetRequiredService<SimpleDynamicTrafficLightsHandler>(),
 				_ => throw new ArgumentException($"Invalid Traffic Lights Handler mode: {mode}", nameof(mode))
 			};
 		}

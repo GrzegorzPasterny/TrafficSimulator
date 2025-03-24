@@ -100,7 +100,7 @@
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="40"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 
                 <TextBlock Text="Results" 
@@ -260,7 +260,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="60"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="Traffic phases" 
                             FontSize="16" 
