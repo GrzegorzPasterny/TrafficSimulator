@@ -20,7 +20,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 		private readonly ILogger<SimpleSequentialTrafficLightsHandler> _logger;
 		private CircularList<TrafficPhase>? _circularListForTrafficPhases;
 
-		public TimeSpan CurrentPhaseTime { get; set; }
+		public TimeSpan CurrentPhaseTime { get; private set; }
 
 		// Options
 		public TimeSpan TimeForOnePhase { get; set; } = TimeSpan.FromSeconds(1);

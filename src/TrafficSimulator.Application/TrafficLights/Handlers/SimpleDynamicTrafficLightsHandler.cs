@@ -8,12 +8,16 @@ using TrafficSimulator.Domain.Models.Lights;
 
 namespace TrafficSimulator.Application.Handlers.Lights
 {
+	/// <summary>
+	/// Traffic Lights handler that always sets green for inbound lane with the most waiting cars
+	/// </summary>
 	public class SimpleDynamicTrafficLightsHandler : ITrafficLightsHandler
 	{
 		private readonly ICarRepository _carRepository;
 		private readonly TrafficPhasesHandler _trafficPhasesHandler;
 
-		public TimeSpan CurrentPhaseTime { get; set; }
+		public TimeSpan CurrentPhaseTime { get; private set; } = TimeSpan.Zero;
+		public TrafficPhase CurrentPhase { get; private set; }
 
 		// Options
 		public TimeSpan MinimalTimeForOnePhase { get; set; } = TimeSpan.FromSeconds(1);
@@ -28,36 +32,74 @@ namespace TrafficSimulator.Application.Handlers.Lights
 		{
 			IEnumerable<Car> waitingCars = (await _carRepository.GetCarsAsync()).Where(car => car.IsCarWaiting);
 
-			IOrderedEnumerable<IGrouping<InboundLane, Car>> carsWaitingOnInboundLanes = waitingCars.GroupBy(car => car.StartLocation).OrderDescending();
-
-			InboundLane mostCrowdedInboundLane = carsWaitingOnInboundLanes.First().Key;
+			InboundLane mostCrowdedInboundLane = waitingCars
+				.GroupBy(car => car.StartLocation)
+				.OrderDescending()
+				// TODO: Randomize possible here
+				.First().Key;
 
 			IEnumerable<TrafficPhase> desiredTrafficPhases =
-				_trafficPhasesHandler.TrafficPhases.Where(p => p.LanesWithGreenLight.Any(l => l.InboundLane == mostCrowdedInboundLane));
+				_trafficPhasesHandler.TrafficPhases!
+					.Where(p => p.LanesWithGreenLight.Any(l => l.InboundLane == mostCrowdedInboundLane));
 
-			// TODO: The first one doesn't mean the best one
-			// TODO: Calculations above take into account only Inbound lane,
-			// but there is possibility that some of the cars want to turn other direction from the same lane
-			// that the traffic light does not allow to (e.g. conditional green for right turn)
+			// Pick traffic phase randomly, when more than one phase switch green light for the most crowded inbound
+			// TODO: Take into account conditional green light for right turn
+			TrafficPhase desiredTrafficPhase =
+				desiredTrafficPhases.ElementAt(Random.Shared.Next(0, desiredTrafficPhases.Count()));
 
-			// TODO: Finish implementation
+			ChangePhase(desiredTrafficPhase.Name, timeElapsed);
 
 			return UnitResult.Success<Error>();
+		}
+
+		private void ChangePhase(string desiredTrafficPhaseName, TimeSpan timeElapsed)
+		{
+			if (CurrentPhase is null)
+			{
+				_trafficPhasesHandler.SetPhase(desiredTrafficPhaseName);
+				CurrentPhaseTime = TimeSpan.Zero;
+				return;
+			}
+
+			if (desiredTrafficPhaseName != CurrentPhase.Name && CurrentPhaseTime > MinimalTimeForOnePhase)
+			{
+				_trafficPhasesHandler.SetPhase(desiredTrafficPhaseName);
+				CurrentPhaseTime = TimeSpan.Zero;
+				return;
+			}
+
+			CurrentPhaseTime += timeElapsed;
 		}
 
 		public void LoadIntersection(Intersection intersection)
 		{
 			_trafficPhasesHandler.LoadIntersection(intersection);
+			ChangePhase(intersection.TrafficPhases.First().Name, TimeSpan.Zero);
 		}
 
 		public TrafficPhase GetCurrentTrafficPhase()
 		{
-			throw new NotImplementedException();
+			return CurrentPhase;
 		}
 
+		/// <summary>
+		/// Changes the Traffic phase according to <paramref name="trafficPhaseName"/>
+		/// Not recomended in dynamic mode.
+		/// </summary>
+		/// <param name="trafficPhaseName"></param>
+		/// <returns></returns>
+		/// <exception cref="NotImplementedException">When Intersection has not yet been loaded</exception>
 		public UnitResult<Error> SetLightsManually(string trafficPhaseName)
 		{
-			throw new NotImplementedException();
+			if (_trafficPhasesHandler.TrafficPhases is null)
+			{
+				// TODO: Handle
+				throw new NotImplementedException();
+			}
+
+			ChangePhase(trafficPhaseName, TimeSpan.Zero);
+
+			return UnitResult.Success<Error>();
 		}
 	}
 }
