@@ -32,6 +32,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Configurations\4StreetsFull2Lanes_2000ffff-1d37-4289-928d-dd9798bf3007.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Configurations\4StreetsFull_1000ffff-1d37-4289-928d-dd9798bf3007.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

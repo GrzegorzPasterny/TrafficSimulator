@@ -336,7 +336,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 			if (loadIntersectionResult.IsFailure)
 			{
-				_logger.LogDebug("Simulation loading failed [Error = {Error}]", loadIntersectionResult.Error);
+				_logger.LogError("Simulation loading failed [Error = {Error}]", loadIntersectionResult.Error);
 				// TODO: Print error to the user
 				return;
 			}

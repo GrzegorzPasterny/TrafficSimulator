@@ -34,15 +34,70 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 					.WhenTypeIs<JsonElement>());
 		}
 
-		[Fact]
-		public void MapFromDtoToDomain_GivenZebraCrossingDto_ShouldProduceDomainObjectsAsExpected()
+
+		public static IEnumerable<object[]> MapFromDomainToDtoAndBackToDomain_GivenZebraCrossing_ShouldProduceDtosAsExpected_DataSource()
+		{
+			yield return new object[]
+			{
+				IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWestWithCarGenerators(null),
+			};
+			yield return new object[]
+			{
+				IntersectionsRepository.FourDirectional_Full(null),
+			};
+			yield return new object[]
+			{
+				IntersectionsRepository.FourDirectional_2Lanes_Full(null),
+			};
+		}
+
+		[Theory]
+		[MemberData(nameof(MapFromDomainToDtoAndBackToDomain_GivenZebraCrossing_ShouldProduceDtosAsExpected_DataSource))]
+		public void MapFromDomainToDtoAndBackToDomain_GivenZebraCrossing_ShouldProduceDtosAsExpected(
+			IntersectionSimulation intersectionSimulation)
 		{
 			// Arrange
 			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
 
 			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper(carGeneratorFactory);
 
-			IntersectionSimulationDto intersectionSimulationDto = IntersectionSimulationDtosRepository.ZebraCrossingOnOneLaneRoadEastWest;
+			// Act
+			ErrorOr<IntersectionSimulationDto> intersectionSimulationDtoResult = mapper.ToDto(intersectionSimulation);
+
+			// Assert
+			intersectionSimulationDtoResult.IsError.Should().BeFalse();
+			intersectionSimulationDtoResult.Value.Should().BeEquivalentTo(IntersectionSimulationDtosRepository.ZebraCrossingOnOneLaneRoadEastWestWithCarGenerators,
+				options => options
+					.Using<JsonElement>(ctx => ctx.Subject.ToString().Should().Be(ctx.Expectation.ToString())) // Compare JSON content
+					.WhenTypeIs<JsonElement>());
+
+			// Act
+			ErrorOr<IntersectionSimulation> intersectionSimulationActualResult = mapper.ToDomain(intersectionSimulationDtoResult.Value);
+
+			// Assert
+			intersectionSimulationActualResult.IsError.Should().BeFalse();
+			intersectionSimulationActualResult.Value.Should().BeEquivalentTo(intersectionSimulation);
+
+		}
+
+		public static IEnumerable<object[]> MapFromDtoToDomain_GivenZebraCrossingDto_ShouldProduceDomainObjectsAsExpected_DataSource()
+		{
+			yield return new object[]
+			{
+				IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest,
+				IntersectionSimulationDtosRepository.ZebraCrossingOnOneLaneRoadEastWest
+			};
+		}
+
+		[Theory]
+		[MemberData(nameof(MapFromDtoToDomain_GivenZebraCrossingDto_ShouldProduceDomainObjectsAsExpected_DataSource))]
+		public void MapFromDtoToDomain_GivenZebraCrossingDto_ShouldProduceDomainObjectsAsExpected(
+			IntersectionSimulation intersectionSimulationExpected, IntersectionSimulationDto intersectionSimulationDto)
+		{
+			// Arrange
+			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
+
+			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper(carGeneratorFactory);
 
 			// Act
 			ErrorOr<IntersectionSimulation> intersectionSimulation = mapper.ToDomain(intersectionSimulationDto);
@@ -50,14 +105,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 			// Assert
 			intersectionSimulation.IsError.Should().BeFalse();
 
-			// This assertion does not entirely work
-			intersectionSimulation.Value.Should().BeEquivalentTo(IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest,
-				options => options
-					//.ComparingByMembers<IntersectionObject>()
-					//.ComparingByMembers<IntersectionCore>()
-					//.Excluding(x => x.Parent)
-					//.Excluding(x => x.Root)
-					);
+			intersectionSimulation.Value.Should().BeEquivalentTo(intersectionSimulationExpected);
 		}
 
 		[Fact]

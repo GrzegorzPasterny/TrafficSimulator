@@ -43,6 +43,10 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 			{
 				IntersectionsRepository.FourDirectional_Full(null)
 			};
+			yield return new object[]
+			{
+				IntersectionsRepository.FourDirectional_2Lanes_Full(null)
+			};
 		}
 
 		[Theory]
