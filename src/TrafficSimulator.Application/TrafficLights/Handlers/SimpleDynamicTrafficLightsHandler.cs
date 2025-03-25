@@ -17,7 +17,6 @@ namespace TrafficSimulator.Application.Handlers.Lights
 		private readonly TrafficPhasesHandler _trafficPhasesHandler;
 
 		public TimeSpan CurrentPhaseTime { get; private set; } = TimeSpan.Zero;
-		public TrafficPhase CurrentPhase { get; private set; }
 
 		// Options
 		public TimeSpan MinimalTimeForOnePhase { get; set; } = TimeSpan.FromSeconds(1);
@@ -30,6 +29,13 @@ namespace TrafficSimulator.Application.Handlers.Lights
 
 		public async Task<UnitResult<Error>> SetLights(TimeSpan timeElapsed)
 		{
+			CurrentPhaseTime += timeElapsed;
+
+			if (CurrentPhaseTime < MinimalTimeForOnePhase)
+			{
+				return UnitResult.Success<Error>();
+			}
+
 			IEnumerable<Car> waitingCars = (await _carRepository.GetCarsAsync()).Where(car => car.IsCarWaiting);
 
 			if (waitingCars is null || waitingCars.Count() == 0)
@@ -39,12 +45,10 @@ namespace TrafficSimulator.Application.Handlers.Lights
 			}
 
 			var waitingCarsOnLanes = waitingCars
-				.GroupBy(car => car.StartLocation)
-				.OrderDescending();
+				.GroupBy(car => car.StartLocation);
 
-			// TODO: Fix the logic - It needs to be determined what Inbound lane has the most cars.
-			// TODO: Write unit tests
-			InboundLane mostCrowdedInboundLane = waitingCarsOnLanes.ElementAt(0).Key;
+			InboundLane mostCrowdedInboundLane = waitingCarsOnLanes
+				.MaxBy(group => group.Count())?.Key;
 
 			IEnumerable<TrafficPhase> desiredTrafficPhases =
 				_trafficPhasesHandler.TrafficPhases!
@@ -55,39 +59,37 @@ namespace TrafficSimulator.Application.Handlers.Lights
 			TrafficPhase desiredTrafficPhase =
 				desiredTrafficPhases.ElementAt(Random.Shared.Next(0, desiredTrafficPhases.Count()));
 
-			ChangePhase(desiredTrafficPhase.Name, timeElapsed);
+			ChangePhase(desiredTrafficPhase.Name);
 
 			return UnitResult.Success<Error>();
 		}
 
-		private void ChangePhase(string desiredTrafficPhaseName, TimeSpan timeElapsed)
+		private void ChangePhase(string desiredTrafficPhaseName)
 		{
-			if (CurrentPhase is null)
+			if (_trafficPhasesHandler.CurrentPhase is null)
 			{
 				_trafficPhasesHandler.SetPhase(desiredTrafficPhaseName);
 				CurrentPhaseTime = TimeSpan.Zero;
 				return;
 			}
 
-			if (desiredTrafficPhaseName != CurrentPhase.Name && CurrentPhaseTime > MinimalTimeForOnePhase)
+			if (desiredTrafficPhaseName != _trafficPhasesHandler.CurrentPhase.Name && CurrentPhaseTime > MinimalTimeForOnePhase)
 			{
 				_trafficPhasesHandler.SetPhase(desiredTrafficPhaseName);
-				CurrentPhaseTime = TimeSpan.Zero;
+				CurrentPhaseTime -= MinimalTimeForOnePhase;
 				return;
 			}
-
-			CurrentPhaseTime += timeElapsed;
 		}
 
 		public void LoadIntersection(Intersection intersection)
 		{
 			_trafficPhasesHandler.LoadIntersection(intersection);
-			ChangePhase(intersection.TrafficPhases.First().Name, TimeSpan.Zero);
+			ChangePhase(intersection.TrafficPhases.First().Name);
 		}
 
 		public TrafficPhase GetCurrentTrafficPhase()
 		{
-			return CurrentPhase;
+			return _trafficPhasesHandler.CurrentPhase;
 		}
 
 		/// <summary>
@@ -105,7 +107,8 @@ namespace TrafficSimulator.Application.Handlers.Lights
 				throw new NotImplementedException();
 			}
 
-			ChangePhase(trafficPhaseName, TimeSpan.Zero);
+			ChangePhase(trafficPhaseName);
+			CurrentPhaseTime = TimeSpan.Zero;
 
 			return UnitResult.Success<Error>();
 		}
