@@ -158,12 +158,8 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				return;
 			}
 
-			if (_currentIntersectionSimulation is not null)
-			{
-				_currentIntersectionSimulation.Options.TrafficLightHandlerType = value.Name;
-
-				ReloadCurrentIntersection();
-			}
+			_currentIntersectionSimulation!.Options.TrafficLightHandlerType = value.Name;
+			ReloadCurrentIntersection();
 		}
 
 		private void ReloadCurrentIntersection()

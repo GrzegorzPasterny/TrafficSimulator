@@ -276,7 +276,7 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <TextBlock Text="Traffic phases mode" 
+                    <TextBlock Text="Traffic Lights handler type" 
                                 FontSize="16" 
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
@@ -301,7 +301,7 @@
               ScrollViewer.CanContentScroll="False"
               ScrollViewer.HorizontalScrollBarVisibility="Auto">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Timestamp" Binding="{Binding Timestamp}" Width="150"/>
+                    <DataGridTextColumn Header="Timestamp" Binding="{Binding Timestamp}" Width="100"/>
                     <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="80"/>
                     <DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="Auto"/>
                 </DataGrid.Columns>
