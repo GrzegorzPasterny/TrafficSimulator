@@ -76,7 +76,8 @@ namespace TrafficSimulator.Domain.Models.Agents
 				// TODO: Handle
 			}
 
-			OutboundLane? carEndLocation = lanes?.OutboundLanes?.First();
+			// TODO: Real world inbound lanes have constraints which outbound lane can the car turn into
+			OutboundLane? carEndLocation = lanes?.OutboundLanes?[Random.Shared.Next(0, lanes.OutboundLanes.Count)];
 
 			if (carEndLocation is null)
 			{
