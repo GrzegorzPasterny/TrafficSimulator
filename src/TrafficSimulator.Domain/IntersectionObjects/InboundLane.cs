@@ -18,6 +18,12 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 			{
 				TrafficLights = new TrafficLight(root, this);
 			}
+
+			if (string.IsNullOrEmpty(name))
+			{
+				DeterminePositionOfTheInboundLane(root, worldDirection);
+				Name = string.Concat(Name, "_", PositionOnTheLane);
+			}
 		}
 
 		public LaneType[] LaneTypes { get; set; }
@@ -29,6 +35,15 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 		public bool ContainsTrafficLights { get; }
 
 		public ICarGenerator? CarGenerator { get; set; }
+
+		private void DeterminePositionOfTheInboundLane(Intersection root, WorldDirection worldDirection)
+		{
+			IEnumerable<InboundLane> lanesOnTheSameDirection = root.ObjectLookup
+				.OfType<InboundLane>()
+				.Where(lane => lane.WorldDirection == worldDirection);
+
+			PositionOnTheLane = lanesOnTheSameDirection.Count();
+		}
 
 		public override bool Equals(object? obj)
 		{

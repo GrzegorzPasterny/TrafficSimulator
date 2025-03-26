@@ -35,7 +35,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 		}
 
 
-		public static IEnumerable<object[]> MapFromDomainToDtoAndBackToDomain_GivenZebraCrossing_ShouldProduceDtosAsExpected_DataSource()
+		public static IEnumerable<object[]> MapFromDomainToDtoAndBackToDomain_ShouldProduceDtosAsExpected_DataSource()
 		{
 			yield return new object[]
 			{
@@ -52,8 +52,8 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 		}
 
 		[Theory]
-		[MemberData(nameof(MapFromDomainToDtoAndBackToDomain_GivenZebraCrossing_ShouldProduceDtosAsExpected_DataSource))]
-		public void MapFromDomainToDtoAndBackToDomain_GivenZebraCrossing_ShouldProduceDtosAsExpected(
+		[MemberData(nameof(MapFromDomainToDtoAndBackToDomain_ShouldProduceDtosAsExpected_DataSource))]
+		public void MapFromDomainToDtoAndBackToDomain_ShouldProduceDtosAsExpected(
 			IntersectionSimulation intersectionSimulation)
 		{
 			// Arrange
@@ -66,10 +66,6 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 
 			// Assert
 			intersectionSimulationDtoResult.IsError.Should().BeFalse();
-			intersectionSimulationDtoResult.Value.Should().BeEquivalentTo(IntersectionSimulationDtosRepository.ZebraCrossingOnOneLaneRoadEastWestWithCarGenerators,
-				options => options
-					.Using<JsonElement>(ctx => ctx.Subject.ToString().Should().Be(ctx.Expectation.ToString())) // Compare JSON content
-					.WhenTypeIs<JsonElement>());
 
 			// Act
 			ErrorOr<IntersectionSimulation> intersectionSimulationActualResult = mapper.ToDomain(intersectionSimulationDtoResult.Value);

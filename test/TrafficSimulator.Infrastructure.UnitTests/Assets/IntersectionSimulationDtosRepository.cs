@@ -195,7 +195,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 								InboundLanes = [
 									new InboundLaneDto()
 									{
-										Name = "InboundLane",
+										Name = "InboundLane_1",
 										ParentName = ".ZebraCrossing.Lanes.West",
 										Distance = 100,
 										WorldDirection = WorldDirection.West,
@@ -214,7 +214,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 									new OutboundLaneDto()
 									{
 										Distance = 100,
-										Name = "OutboundLane",
+										Name = "OutboundLane_1",
 										ParentName = ".ZebraCrossing.Lanes.West",
 										WorldDirection = WorldDirection.West
 									}
@@ -228,7 +228,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 								InboundLanes = [
 									new InboundLaneDto()
 									{
-										Name = "InboundLane",
+										Name = "InboundLane_1",
 										ParentName = ".ZebraCrossing.Lanes.East",
 										Distance = 100,
 										WorldDirection = WorldDirection.East,
@@ -247,7 +247,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 									new OutboundLaneDto()
 									{
 										Distance = 100,
-										Name = "OutboundLane",
+										Name = "OutboundLane_1",
 										ParentName = ".ZebraCrossing.Lanes.East",
 										WorldDirection = WorldDirection.East
 									}
@@ -261,7 +261,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 								TrafficLightsAssignments = [
 									new TurnWithTrafficLightDto()
 									{
-										InboundLaneName = ".ZebraCrossing.Lanes.East.InboundLane",
+										InboundLaneName = ".ZebraCrossing.Lanes.East.InboundLane_1",
 										TrafficLightState = Domain.Models.Lights.TrafficLightState.Green,
 										TurnPossibility = new TurnPossibilityDto()
 										{
@@ -271,7 +271,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 									},
 									new TurnWithTrafficLightDto()
 									{
-										InboundLaneName = ".ZebraCrossing.Lanes.West.InboundLane",
+										InboundLaneName = ".ZebraCrossing.Lanes.West.InboundLane_1",
 										TrafficLightState = Domain.Models.Lights.TrafficLightState.Green,
 										TurnPossibility = new TurnPossibilityDto()
 										{
@@ -287,7 +287,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 								TrafficLightsAssignments = [
 									new TurnWithTrafficLightDto()
 									{
-										InboundLaneName = ".ZebraCrossing.Lanes.East.InboundLane",
+										InboundLaneName = ".ZebraCrossing.Lanes.East.InboundLane_1",
 										TrafficLightState = Domain.Models.Lights.TrafficLightState.Red,
 										TurnPossibility = new TurnPossibilityDto()
 										{
@@ -297,7 +297,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 									},
 									new TurnWithTrafficLightDto()
 									{
-										InboundLaneName = ".ZebraCrossing.Lanes.West.InboundLane",
+										InboundLaneName = ".ZebraCrossing.Lanes.West.InboundLane_1",
 										TrafficLightState = Domain.Models.Lights.TrafficLightState.Red,
 										TurnPossibility = new TurnPossibilityDto()
 										{

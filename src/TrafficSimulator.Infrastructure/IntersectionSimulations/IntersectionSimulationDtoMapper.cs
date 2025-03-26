@@ -25,7 +25,7 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 		{
 			IntersectionDto intersectionDto = intersectionSimulationDto.Intersection;
 
-			ErrorOr<Intersection> intersectionResult = BuilderIntersectionBase(intersectionSimulationDto, intersectionDto);
+			ErrorOr<Intersection> intersectionResult = BuildIntersectionBase(intersectionSimulationDto, intersectionDto);
 
 			if (intersectionResult.IsError)
 			{
@@ -39,30 +39,7 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 			};
 
 			Intersection intersection = intersectionSimulation.Intersection;
-
-			intersectionDto.TrafficPhases.ForEach(trafficPhase =>
-			{
-				intersection.TrafficPhases.Add(new TrafficPhase(trafficPhase.Name, intersection)
-				{
-					TrafficLightsAssignments = trafficPhase.TrafficLightsAssignments.Select(light =>
-					{
-						InboundLane? inboundLane = intersection.GetObject<InboundLane>(light.InboundLaneName);
-						LaneType laneType = inboundLane.LaneTypes.First(laneType => laneType == light.TurnPossibility.LaneType);
-
-						return new TurnWithTrafficLight()
-						{
-							InboundLane = inboundLane,
-							TrafficLightState = light.TrafficLightState,
-							TurnPossibility = new TurnPossibility()
-							{
-								ContainsTrafficLights = inboundLane.ContainsTrafficLights,
-								LaneType = laneType,
-								TrafficLights = inboundLane.TrafficLights
-							}
-						};
-					}).ToList()
-				});
-			});
+			TraficPhasesToDomain(intersectionDto, intersection);
 
 			intersectionDto.LanesCollection.ForEach(lanes => lanes.InboundLanes.ForEach(lane =>
 			{
@@ -83,7 +60,29 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 			return intersectionSimulation;
 		}
 
-		private static ErrorOr<Intersection> BuilderIntersectionBase(IntersectionSimulationDto intersectionSimulationDto, IntersectionDto intersectionDto)
+		private void TraficPhasesToDomain(IntersectionDto intersectionDto, Intersection intersection)
+		{
+			intersectionDto.TrafficPhases.ForEach(trafficPhase =>
+			{
+				intersection.TrafficPhases.Add(new TrafficPhase(trafficPhase.Name, intersection)
+				{
+					TrafficLightsAssignments = trafficPhase.TrafficLightsAssignments.Select(light =>
+					{
+						InboundLane? inboundLane = intersection.GetObject<InboundLane>(light.InboundLaneName);
+						LaneType laneType = inboundLane.LaneTypes.First(laneType => laneType == light.TurnPossibility.LaneType);
+
+						return new TurnWithTrafficLight()
+						{
+							InboundLane = inboundLane,
+							TrafficLightState = light.TrafficLightState,
+							TurnPossibility = ToDomain(light.TurnPossibility, inboundLane.TrafficLights)
+						};
+					}).ToList()
+				});
+			});
+		}
+
+		private static ErrorOr<Intersection> BuildIntersectionBase(IntersectionSimulationDto intersectionSimulationDto, IntersectionDto intersectionDto)
 		{
 			IntersectionBuilder intersectionBuilder =
 							IntersectionBuilder.Create(intersectionSimulationDto.Intersection.Name)
@@ -225,6 +224,16 @@ namespace TrafficSimulator.Infrastructure.IntersectionSimulations
 			{
 				ContainsTrafficLights = turn.ContainsTrafficLights,
 				LaneType = turn.LaneType,
+			};
+		}
+
+		private TurnPossibility ToDomain(TurnPossibilityDto turnDto, TrafficLight? trafficLights)
+		{
+			return new TurnPossibility()
+			{
+				ContainsTrafficLights = turnDto.ContainsTrafficLights,
+				LaneType = turnDto.LaneType,
+				TrafficLights = trafficLights
 			};
 		}
 

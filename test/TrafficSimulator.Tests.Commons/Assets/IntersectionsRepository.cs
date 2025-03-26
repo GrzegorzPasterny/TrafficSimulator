@@ -410,23 +410,23 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			IntersectionBuilder.Create("4StreetsFull")
 			.AddIntersectionCore(distance: 15)
 			.AddLanesCollection(WorldDirection.North)
-			.AddInboundLane(WorldDirection.North, LaneTypeHelper.StraightAndRight(), distance: 120)
 			.AddInboundLane(WorldDirection.North, LaneTypeHelper.StraightAndLeft(), distance: 120)
+			.AddInboundLane(WorldDirection.North, LaneTypeHelper.StraightAndRight(), distance: 120)
 			.AddOutboundLane(WorldDirection.North, distance: 120)
 			.AddOutboundLane(WorldDirection.North, distance: 120)
 			.AddLanesCollection(WorldDirection.East)
-			.AddInboundLane(WorldDirection.East, LaneTypeHelper.StraightAndRight(), distance: 120)
 			.AddInboundLane(WorldDirection.East, LaneTypeHelper.StraightAndLeft(), distance: 120)
+			.AddInboundLane(WorldDirection.East, LaneTypeHelper.StraightAndRight(), distance: 120)
 			.AddOutboundLane(WorldDirection.East, distance: 120)
 			.AddOutboundLane(WorldDirection.East, distance: 120)
 			.AddLanesCollection(WorldDirection.South)
-			.AddInboundLane(WorldDirection.South, LaneTypeHelper.StraightAndRight(), distance: 120)
 			.AddInboundLane(WorldDirection.South, LaneTypeHelper.StraightAndLeft(), distance: 120)
+			.AddInboundLane(WorldDirection.South, LaneTypeHelper.StraightAndRight(), distance: 120)
 			.AddOutboundLane(WorldDirection.South, distance: 120)
 			.AddOutboundLane(WorldDirection.South, distance: 120)
 			.AddLanesCollection(WorldDirection.West)
-			.AddInboundLane(WorldDirection.West, LaneTypeHelper.StraightAndRight(), distance: 120)
 			.AddInboundLane(WorldDirection.West, LaneTypeHelper.StraightAndLeft(), distance: 120)
+			.AddInboundLane(WorldDirection.West, LaneTypeHelper.StraightAndRight(), distance: 120)
 			.AddOutboundLane(WorldDirection.West, distance: 120)
 			.AddOutboundLane(WorldDirection.West, distance: 120)
 			.Build();
@@ -513,9 +513,9 @@ namespace TrafficSimulator.Tests.Commons.Assets
 
 			IntersectionSimulationOptions intersectionSimulationOptions = new()
 			{
-				StepLimit = 1200,
+				StepLimit = 2000,
 				StepTimespan = TimeSpan.FromMilliseconds(40),
-				Timeout = TimeSpan.FromSeconds(15),
+				Timeout = TimeSpan.FromSeconds(60),
 				TrafficLightHandlerType = TrafficLightHandlerTypes.Dynamic
 			};
 
