@@ -26,6 +26,7 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 
 		// Current phase must be assigned when starting the simulation
 		public TrafficPhase? CurrentPhase { get; set; }
+		public TrafficPhase? PreviousPhase { get; set; }
 
 		public void LoadIntersection(Intersection intersection)
 		{
@@ -72,7 +73,7 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 		{
 			_currentPhaseDuration += timeElapsed;
 
-			if (AreLightsChanging)
+			if (AreLightsChanging && nextTrafficPhase != CurrentPhase)
 			{
 				return ApplicationErrors.TrafficLightsChangeAttemptedTooSoon(
 					CurrentPhase!.Name, (int)_currentPhaseDuration.TotalMicroseconds, nextTrafficPhase.Name);
@@ -91,34 +92,31 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 
 			if (CurrentPhase == nextTrafficPhase)
 			{
-				return UnitResult.Success<Error>();
+				ApplyLights();
 			}
-
-			foreach (var turn in nextTrafficPhase.TrafficLightsAssignments)
+			else
 			{
-				// TODO: Handle all of the cases below
-				switch (turn.TrafficLightState)
-				{
-					case TrafficLightState.Off:
-						break;
-					case TrafficLightState.Green:
-						turn.TurnPossibility.TrafficLights!.SwitchToGreen();
-						break;
-					case TrafficLightState.Orange:
-						break;
-					case TrafficLightState.Red:
-						turn.TurnPossibility.TrafficLights!.SwitchToRed();
-						break;
-					case TrafficLightState.ConditionalRightGreen:
-						break;
-					default:
-						break;
-				}
+				PreviousPhase = CurrentPhase;
+				CurrentPhase = nextTrafficPhase;
+				_currentPhaseDuration = TimeSpan.Zero;
+
+				ApplyLights();
 			}
 
-			CurrentPhase = nextTrafficPhase;
-			_currentPhaseDuration = TimeSpan.Zero;
 			return UnitResult.Success<Error>();
+		}
+
+		private void ApplyLights()
+		{
+			if (AreLightsChanging)
+			{
+				PreviousPhase.ApplyChange();
+				CurrentPhase.ApplyChange();
+			}
+			else
+			{
+				CurrentPhase.Apply();
+			}
 		}
 	}
 }

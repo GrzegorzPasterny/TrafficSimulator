@@ -34,17 +34,8 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 		{
 			_trafficLights.IsOn.Should().BeTrue();
 
-			// Normal lights state change request
 			_trafficLights.SwitchToGreen().IsSuccess.Should().BeTrue();
 
-			// TODO: When changing to orange it implemented
-			// After change request we first get orange light
-			//trafficLights.TrafficLightState.Should().Be(TrafficLightState.Orange);
-
-			// Waiting for Ornage light to pass
-			//await Task.Delay(orangeLightTimespanMs);
-
-			// Light should finally change the state
 			_trafficLights.TrafficLightState.Should().Be(TrafficLightState.Green);
 		}
 
@@ -53,10 +44,8 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 		{
 			_trafficLights.IsOn.Should().BeTrue();
 
-			// Not allowed to change the state when demanded state is already applied
 			_trafficLights.SwitchToRed().IsFailure.Should().BeTrue();
 
-			// Traffic lights state should be still the same
 			_trafficLights.TrafficLightState.Should().Be(TrafficLightState.Red);
 		}
 
@@ -65,10 +54,8 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 		{
 			_trafficLights.TurnOff();
 
-			// Not allowed to change the state when demanded state is already applied
 			_trafficLights.SwitchToRed().IsFailure.Should().BeTrue();
 
-			// Traffic lights state should be still the same
 			_trafficLights.TrafficLightState.Should().Be(TrafficLightState.Off);
 		}
 	}

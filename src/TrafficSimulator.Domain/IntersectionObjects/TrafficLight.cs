@@ -27,14 +27,18 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 				return DomainErrors.TrafficLightsOff(Id);
 			}
 
-			if (TrafficLightState == TrafficLightState.Green)
+			TrafficLightState = TrafficLightState.Green;
+			return UnitResult.Success<Error>();
+		}
+
+		public UnitResult<Error> SwitchToOrange()
+		{
+			if (!IsOn)
 			{
-				return DomainErrors.TrafficLightsAlreadyInRequestedState(Id, TrafficLightState);
+				return DomainErrors.TrafficLightsOff(Id);
 			}
 
-			//TODO: Turn to Orange first
-
-			TrafficLightState = TrafficLightState.Green;
+			TrafficLightState = TrafficLightState.Orange;
 			return UnitResult.Success<Error>();
 		}
 
@@ -44,13 +48,6 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 			{
 				return DomainErrors.TrafficLightsOff(Id);
 			}
-
-			if (TrafficLightState == TrafficLightState.Red)
-			{
-				return DomainErrors.TrafficLightsAlreadyInRequestedState(Id, TrafficLightState);
-			}
-
-			//TODO: Turn to Orange first
 
 			TrafficLightState = TrafficLightState.Red;
 			return UnitResult.Success<Error>();

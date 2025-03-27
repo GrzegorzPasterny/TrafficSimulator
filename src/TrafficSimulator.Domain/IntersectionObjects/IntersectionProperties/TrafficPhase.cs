@@ -24,6 +24,55 @@ namespace TrafficSimulator.Domain.Models.Lights
 		public IEnumerable<TurnWithTrafficLight> LanesWithRedLight
 			=> TrafficLightsAssignments.Where(a => a.TrafficLightState is TrafficLightState.Red);
 
+		public void Apply()
+		{
+			foreach (var turn in TrafficLightsAssignments)
+			{
+				// TODO: Handle all of the cases below
+				switch (turn.TrafficLightState)
+				{
+					case TrafficLightState.Off:
+						break;
+					case TrafficLightState.Green:
+						turn.TurnPossibility.TrafficLights!.SwitchToGreen();
+						break;
+					case TrafficLightState.Orange:
+						break;
+					case TrafficLightState.Red:
+						turn.TurnPossibility.TrafficLights!.SwitchToRed();
+						break;
+					case TrafficLightState.ConditionalRightGreen:
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
+		public void ApplyChange()
+		{
+			foreach (var turn in TrafficLightsAssignments)
+			{
+				// TODO: Handle all of the cases below
+				switch (turn.TrafficLightState)
+				{
+					case TrafficLightState.Off:
+						break;
+					case TrafficLightState.Green:
+						turn.TurnPossibility.TrafficLights!.SwitchToOrange();
+						break;
+					case TrafficLightState.Orange:
+						break;
+					case TrafficLightState.Red:
+						break;
+					case TrafficLightState.ConditionalRightGreen:
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
 		public override string ToString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
