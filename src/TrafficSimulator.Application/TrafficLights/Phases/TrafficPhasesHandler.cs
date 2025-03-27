@@ -9,13 +9,16 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 	public class TrafficPhasesHandler
 	{
 		private Intersection? _intersection;
+		private TimeSpan _currentPhaseDuration;
+		private TimeSpan _lightsChangeDuration = TimeSpan.FromMilliseconds(500);
+		public bool AreLightsChanging => CurrentPhase != null && _currentPhaseDuration < _lightsChangeDuration;
 
 		public TrafficPhasesHandler(Intersection intersection)
 		{
 			_intersection = intersection;
 		}
 
-		public TrafficPhasesHandler()
+		private TrafficPhasesHandler()
 		{
 		}
 
@@ -29,12 +32,24 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 			_intersection = intersection;
 		}
 
-		public UnitResult<Error> SetPhase(TrafficPhase trafficPhase)
+		public UnitResult<Error> SetPhase(TrafficPhase trafficPhase, TimeSpan timeElapsed)
 		{
+			if (TrafficPhases is null)
+			{
+				return ApplicationErrors.IntersectionUninitialized();
+			}
+
+			UnitResult<Error> checkResult = HandlePhaseChangingConditions(trafficPhase, timeElapsed);
+
+			if (checkResult.IsFailure)
+			{
+				return checkResult;
+			}
+
 			return SetLights(trafficPhase);
 		}
 
-		public UnitResult<Error> SetPhase(string trafficPhaseName)
+		public UnitResult<Error> SetPhase(string trafficPhaseName, TimeSpan timeElapsed)
 		{
 			if (TrafficPhases is null)
 			{
@@ -43,18 +58,43 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 
 			TrafficPhase? trafficPhase = TrafficPhases.Find((p) => p.Name == trafficPhaseName);
 
+			UnitResult<Error> checkResult = HandlePhaseChangingConditions(trafficPhase, timeElapsed);
+
+			if (checkResult.IsFailure)
+			{
+				return checkResult;
+			}
+
 			return SetLights(trafficPhase);
 		}
 
-		private UnitResult<Error> SetLights(TrafficPhase? trafficPhase)
+		private UnitResult<Error> HandlePhaseChangingConditions(TrafficPhase nextTrafficPhase, TimeSpan timeElapsed)
 		{
-			if (trafficPhase is null)
+			_currentPhaseDuration += timeElapsed;
+
+			if (AreLightsChanging)
+			{
+				return ApplicationErrors.TrafficLightsChangeAttemptedTooSoon(
+					CurrentPhase!.Name, (int)_currentPhaseDuration.TotalMicroseconds, nextTrafficPhase.Name);
+			}
+
+			return UnitResult.Success<Error>();
+		}
+
+		private UnitResult<Error> SetLights(TrafficPhase? nextTrafficPhase)
+		{
+			if (nextTrafficPhase is null)
 			{
 				// TODO Handle
 				throw new NotImplementedException();
 			}
 
-			foreach (var turn in trafficPhase.TrafficLightsAssignments)
+			if (CurrentPhase == nextTrafficPhase)
+			{
+				return UnitResult.Success<Error>();
+			}
+
+			foreach (var turn in nextTrafficPhase.TrafficLightsAssignments)
 			{
 				// TODO: Handle all of the cases below
 				switch (turn.TrafficLightState)
@@ -76,7 +116,8 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 				}
 			}
 
-			CurrentPhase = trafficPhase;
+			CurrentPhase = nextTrafficPhase;
+			_currentPhaseDuration = TimeSpan.Zero;
 			return UnitResult.Success<Error>();
 		}
 	}

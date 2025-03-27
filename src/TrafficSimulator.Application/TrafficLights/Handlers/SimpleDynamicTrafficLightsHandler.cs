@@ -59,23 +59,23 @@ namespace TrafficSimulator.Application.Handlers.Lights
 			TrafficPhase desiredTrafficPhase =
 				desiredTrafficPhases.ElementAt(Random.Shared.Next(0, desiredTrafficPhases.Count()));
 
-			ChangePhase(desiredTrafficPhase.Name);
+			ChangePhase(desiredTrafficPhase.Name, timeElapsed);
 
 			return UnitResult.Success<Error>();
 		}
 
-		private void ChangePhase(string desiredTrafficPhaseName)
+		private void ChangePhase(string desiredTrafficPhaseName, TimeSpan timeElapsed)
 		{
 			if (_trafficPhasesHandler.CurrentPhase is null)
 			{
-				_trafficPhasesHandler.SetPhase(desiredTrafficPhaseName);
+				_trafficPhasesHandler.SetPhase(desiredTrafficPhaseName, timeElapsed);
 				CurrentPhaseTime = TimeSpan.Zero;
 				return;
 			}
 
 			if (desiredTrafficPhaseName != _trafficPhasesHandler.CurrentPhase.Name && CurrentPhaseTime > MinimalTimeForOnePhase)
 			{
-				_trafficPhasesHandler.SetPhase(desiredTrafficPhaseName);
+				_trafficPhasesHandler.SetPhase(desiredTrafficPhaseName, timeElapsed);
 				CurrentPhaseTime -= MinimalTimeForOnePhase;
 				return;
 			}
@@ -84,7 +84,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 		public void LoadIntersection(Intersection intersection)
 		{
 			_trafficPhasesHandler.LoadIntersection(intersection);
-			ChangePhase(intersection.TrafficPhases.First().Name);
+			ChangePhase(intersection.TrafficPhases.First().Name, TimeSpan.Zero);
 		}
 
 		public TrafficPhase GetCurrentTrafficPhase()
@@ -107,7 +107,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 				throw new NotImplementedException();
 			}
 
-			ChangePhase(trafficPhaseName);
+			ChangePhase(trafficPhaseName, TimeSpan.Zero);
 			CurrentPhaseTime = TimeSpan.Zero;
 
 			return UnitResult.Success<Error>();

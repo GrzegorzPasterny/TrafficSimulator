@@ -20,7 +20,7 @@ namespace TrafficSimulator.Application.Lights.HandlerTypes
 
 			if (trafficPhasesHandler.TrafficPhases is not null)
 			{
-				_trafficPhasesHandler.SetPhase(_trafficPhasesHandler.TrafficPhases!.First());
+				_trafficPhasesHandler.SetPhase(_trafficPhasesHandler.TrafficPhases!.First(), TimeSpan.Zero);
 
 				_logger.LogTrace("Traffic Lights initial phase set [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
 			}
@@ -35,7 +35,7 @@ namespace TrafficSimulator.Application.Lights.HandlerTypes
 		{
 			_trafficPhasesHandler.LoadIntersection(intersection);
 
-			_trafficPhasesHandler.SetPhase(_trafficPhasesHandler.TrafficPhases!.First());
+			_trafficPhasesHandler.SetPhase(_trafficPhasesHandler.TrafficPhases!.First(), TimeSpan.Zero);
 			_logger.LogTrace("Traffic Lights initial phase set [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
 		}
 
@@ -46,7 +46,15 @@ namespace TrafficSimulator.Application.Lights.HandlerTypes
 
 		public UnitResult<Error> SetLightsManually(string trafficPhaseName)
 		{
-			return _trafficPhasesHandler.SetPhase(trafficPhaseName);
+			UnitResult<Error> setPhaseResult = _trafficPhasesHandler.SetPhase(trafficPhaseName, TimeSpan.Zero);
+
+			if (setPhaseResult.IsFailure
+				&& setPhaseResult.Error.Code == "TrafficSimulator.Application.TrafficLightsChangeAttemptedTooSoon")
+			{
+				return UnitResult.Success<Error>();
+			}
+
+			return setPhaseResult;
 		}
 	}
 }

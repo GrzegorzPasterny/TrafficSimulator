@@ -29,13 +29,13 @@ namespace TrafficSimulator.Application.UnitTests.Traffic
 			allRedTrafficPhase.TrafficLightsAssignments.ForEach(a => a.TrafficLightState = TrafficLightState.Red);
 
 			// Act
-			trafficPhasesHandler.SetPhase("AllGreen");
+			trafficPhasesHandler.SetPhase("AllGreen", TimeSpan.Zero);
 
 			// Assert
 			trafficLights.All(lights => lights.TrafficLightState is TrafficLightState.Green);
 
 			// Act
-			trafficPhasesHandler.SetPhase("AllRed");
+			trafficPhasesHandler.SetPhase("AllRed", TimeSpan.FromSeconds(1));
 
 			// Assert
 			trafficLights.All(lights => lights.TrafficLightState is TrafficLightState.Red);

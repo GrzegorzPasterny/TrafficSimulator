@@ -33,7 +33,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 			if (trafficPhasesHandler.TrafficPhases is not null)
 			{
 				_circularListForTrafficPhases = new CircularList<TrafficPhase>(trafficPhasesHandler.TrafficPhases);
-				_trafficPhasesHandler.SetPhase(_circularListForTrafficPhases.Current);
+				_trafficPhasesHandler.SetPhase(_circularListForTrafficPhases.Current, TimeSpan.Zero);
 
 				_logger.LogTrace("Traffic Lights initial phase set [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
 			}
@@ -51,16 +51,16 @@ namespace TrafficSimulator.Application.Handlers.Lights
 			if (CurrentPhaseTime >= TimeForOnePhase)
 			{
 				_circularListForTrafficPhases.MoveNext();
-				ChangeTrafficLightsPhase();
+				ChangeTrafficLightsPhase(timeElapsed);
 			}
 
 			return Task.FromResult(UnitResult.Success<Error>());
 		}
 
-		private void ChangeTrafficLightsPhase()
+		private void ChangeTrafficLightsPhase(TimeSpan timeElapsed)
 		{
 			// TODO: Handle
-			_ = _trafficPhasesHandler.SetPhase(_circularListForTrafficPhases.Current);
+			_ = _trafficPhasesHandler.SetPhase(_circularListForTrafficPhases.Current, timeElapsed);
 			CurrentPhaseTime = TimeSpan.Zero;
 
 			_logger.LogTrace("Traffic Lights phase changed [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
@@ -71,7 +71,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 			_trafficPhasesHandler.LoadIntersection(intersection);
 			_circularListForTrafficPhases = new CircularList<TrafficPhase>(intersection.TrafficPhases);
 
-			ChangeTrafficLightsPhase();
+			ChangeTrafficLightsPhase(TimeSpan.Zero);
 		}
 
 		public TrafficPhase GetCurrentTrafficPhase()
@@ -101,7 +101,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 				throw new ArgumentOutOfRangeException();
 			}
 
-			ChangeTrafficLightsPhase();
+			ChangeTrafficLightsPhase(TimeSpan.Zero);
 			return UnitResult.Success<Error>();
 		}
 	}

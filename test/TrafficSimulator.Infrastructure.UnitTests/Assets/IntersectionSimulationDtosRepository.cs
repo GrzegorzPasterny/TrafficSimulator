@@ -171,9 +171,9 @@ namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 					Name = "ZebraCrossingSimulation",
 					Options = new()
 					{
-						StepLimit = 1000,
+						StepLimit = 2000,
 						StepTimespanMs = 40,
-						TimeoutMs = 10000,
+						TimeoutMs = 60000,
 						TrafficLightHandlerType = TrafficLightHandlerTypes.Sequential
 					},
 					Intersection = new()
