@@ -67,6 +67,19 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 			return SetLights(trafficPhase, timeElapsed);
 		}
 
+		public UnitResult<Error> SetPhase(TimeSpan timeElapsed)
+		{
+			if (TrafficPhases is null)
+			{
+				return ApplicationErrors.IntersectionUninitialized();
+			}
+
+			_currentPhaseDuration += timeElapsed;
+			ApplyLights();
+
+			return UnitResult.Success<Error>();
+		}
+
 		private UnitResult<Error> HandlePhaseChangingConditions(TrafficPhase nextTrafficPhase, TimeSpan timeElapsed)
 		{
 			_currentPhaseDuration += timeElapsed;

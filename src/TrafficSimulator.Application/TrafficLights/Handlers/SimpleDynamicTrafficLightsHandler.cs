@@ -35,6 +35,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 
 			if (CurrentPhaseTime < MinimalTimeForOnePhase)
 			{
+				_trafficPhasesHandler.SetPhase(timeElapsed);
 				return UnitResult.Success<Error>();
 			}
 
@@ -44,6 +45,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 			if (waitingCars is null || waitingCars.Count() == 0)
 			{
 				// Simulation has not started, or is in the starting phase
+				_trafficPhasesHandler.SetPhase(timeElapsed);
 				return UnitResult.Success<Error>();
 			}
 
@@ -79,7 +81,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 			if (desiredTrafficPhaseName != _trafficPhasesHandler.CurrentPhase.Name && CurrentPhaseTime > MinimalTimeForOnePhase)
 			{
 				_trafficPhasesHandler.SetPhase(desiredTrafficPhaseName, timeElapsed);
-				CurrentPhaseTime -= MinimalTimeForOnePhase;
+				CurrentPhaseTime = timeElapsed;
 				return;
 			}
 		}
@@ -90,7 +92,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 			ChangePhase(intersection.TrafficPhases.First().Name, TimeSpan.Zero);
 		}
 
-		public TrafficPhase GetCurrentTrafficPhase()
+		public TrafficPhase? GetCurrentTrafficPhase()
 		{
 			return _trafficPhasesHandler.CurrentPhase;
 		}

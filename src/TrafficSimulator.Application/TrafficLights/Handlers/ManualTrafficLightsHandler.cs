@@ -41,6 +41,7 @@ namespace TrafficSimulator.Application.Lights.HandlerTypes
 
 		public Task<UnitResult<Error>> SetLights(TimeSpan timeElapsed)
 		{
+			_trafficPhasesHandler.SetPhase(timeElapsed);
 			return Task.FromResult(UnitResult.Success<Error>());
 		}
 

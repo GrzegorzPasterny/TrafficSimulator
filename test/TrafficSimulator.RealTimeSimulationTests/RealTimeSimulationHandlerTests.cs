@@ -82,7 +82,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
 			trafficPhasesHandler.LoadIntersection(intersection);
 
-			trafficPhasesHandler.SetPhase(trafficLightsPhaseName, TimeSpan.Zero);
+			trafficPhasesHandler.SetPhase(trafficLightsPhaseName, TimeSpan.FromSeconds(1));
 
 			using ISimulationHandler simulationHandler =
 				new RealTimeIntersectionSimulationHandler(_mediator, new NullTrafficLightsHandlerFactory(trafficPhasesHandler.CurrentPhase), _loggerFactory.CreateLogger<RealTimeIntersectionSimulationHandler>());

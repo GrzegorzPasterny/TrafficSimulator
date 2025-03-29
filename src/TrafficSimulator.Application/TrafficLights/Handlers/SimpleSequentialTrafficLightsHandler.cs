@@ -53,6 +53,10 @@ namespace TrafficSimulator.Application.Handlers.Lights
 				_circularListForTrafficPhases.MoveNext();
 				ChangeTrafficLightsPhase(timeElapsed);
 			}
+			else
+			{
+				_trafficPhasesHandler.SetPhase(timeElapsed);
+			}
 
 			return Task.FromResult(UnitResult.Success<Error>());
 		}
