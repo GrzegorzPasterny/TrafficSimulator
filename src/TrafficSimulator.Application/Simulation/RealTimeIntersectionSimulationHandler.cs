@@ -48,7 +48,7 @@ namespace TrafficSimulator.Application.Simulation
 			{
 				if (cancellationToken.IsCancellationRequested)
 				{
-					_logger.LogWarning("Simulation aborted due to timeout [TimeLimit = {TimeLimit} ms]",
+					_logger.LogWarning("Simulation aborted due to timeout [TimeLimit = {TimeLimit}]",
 						IntersectionSimulation!.Options.Timeout);
 
 					IntersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.Aborted;

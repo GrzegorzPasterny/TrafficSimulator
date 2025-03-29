@@ -1,5 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
+using MediatR;
+using TrafficSimulator.Application.Cars.GetCars;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
 using TrafficSimulator.Domain.Models.Agents;
@@ -13,7 +15,7 @@ namespace TrafficSimulator.Application.Handlers.Lights
 	/// </summary>
 	public class SimpleDynamicTrafficLightsHandler : ITrafficLightsHandler
 	{
-		private readonly ICarRepository _carRepository;
+		private readonly ISender _sender;
 		private readonly TrafficPhasesHandler _trafficPhasesHandler;
 
 		public TimeSpan CurrentPhaseTime { get; private set; } = TimeSpan.Zero;
@@ -21,9 +23,9 @@ namespace TrafficSimulator.Application.Handlers.Lights
 		// Options
 		public TimeSpan MinimalTimeForOnePhase { get; set; } = TimeSpan.FromSeconds(1);
 
-		public SimpleDynamicTrafficLightsHandler(ICarRepository carRepository, TrafficPhasesHandler trafficPhasesHandler)
+		public SimpleDynamicTrafficLightsHandler(ISender sender, TrafficPhasesHandler trafficPhasesHandler)
 		{
-			_carRepository = carRepository;
+			_sender = sender;
 			_trafficPhasesHandler = trafficPhasesHandler;
 		}
 
@@ -36,7 +38,8 @@ namespace TrafficSimulator.Application.Handlers.Lights
 				return UnitResult.Success<Error>();
 			}
 
-			IEnumerable<Car> waitingCars = (await _carRepository.GetCarsAsync()).Where(car => car.IsCarWaiting);
+			IEnumerable<Car> cars = await _sender.Send(new GetCarsCommand());
+			IEnumerable<Car> waitingCars = cars.Where(car => car.IsCarWaiting);
 
 			if (waitingCars is null || waitingCars.Count() == 0)
 			{

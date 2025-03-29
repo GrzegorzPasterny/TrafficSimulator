@@ -13,12 +13,7 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 		private TimeSpan _lightsChangeDuration = TimeSpan.FromMilliseconds(500);
 		public bool AreLightsChanging => CurrentPhase != null && _currentPhaseDuration < _lightsChangeDuration;
 
-		public TrafficPhasesHandler(Intersection intersection)
-		{
-			_intersection = intersection;
-		}
-
-		private TrafficPhasesHandler()
+		public TrafficPhasesHandler()
 		{
 		}
 
@@ -31,6 +26,9 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 		public void LoadIntersection(Intersection intersection)
 		{
 			_intersection = intersection;
+			_currentPhaseDuration = TimeSpan.Zero;
+			CurrentPhase = null;
+			PreviousPhase = null;
 		}
 
 		public UnitResult<Error> SetPhase(TrafficPhase trafficPhase, TimeSpan timeElapsed)
@@ -110,12 +108,12 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 		{
 			if (AreLightsChanging)
 			{
-				PreviousPhase.ApplyChange();
-				CurrentPhase.ApplyChange();
+				PreviousPhase?.ApplyChange();
+				CurrentPhase!.ApplyChange();
 			}
 			else
 			{
-				CurrentPhase.Apply();
+				CurrentPhase!.Apply();
 			}
 		}
 	}

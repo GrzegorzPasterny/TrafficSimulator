@@ -15,7 +15,8 @@ namespace TrafficSimulator.Application.UnitTests.Traffic
 			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
 			Intersection intersection = intersectionSimulation.Intersection;
 
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			trafficPhasesHandler.LoadIntersection(intersection);
 
 			IEnumerable<TrafficLight> trafficLights =
 				intersection.ObjectLookup.OfType<TrafficLight>();

@@ -78,7 +78,8 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			inboundLane.CarGenerator = carGenerator;
 
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			trafficPhasesHandler.LoadIntersection(intersection);
 			trafficPhasesHandler.SetPhase(trafficLightsPhaseName, TimeSpan.Zero);
 
 			ITrafficLightsHandler trafficLightsHandler = new NullTrafficLightsHandler(trafficPhasesHandler.CurrentPhase!);
@@ -113,7 +114,8 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			inboundLane.CarGenerator = carGenerator;
 
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			trafficPhasesHandler.LoadIntersection(intersection);
 
 			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 
@@ -139,7 +141,8 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLightsWithMultipleCarGenerators(_mediator);
 			Intersection intersection = intersectionSimulation.Intersection;
 
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			trafficPhasesHandler.LoadIntersection(intersection);
 
 			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 
@@ -165,7 +168,8 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ThreeDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLightsWithCarGenerators(_mediator);
 			Intersection intersection = intersectionSimulation.Intersection;
 
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			trafficPhasesHandler.LoadIntersection(intersection);
 
 			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 
@@ -191,7 +195,8 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			IntersectionSimulation intersectionSimulation = IntersectionsRepository.FourDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLightsWithCarGenerators(_mediator);
 			Intersection intersection = intersectionSimulation.Intersection;
 
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler(intersection);
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			trafficPhasesHandler.LoadIntersection(intersection);
 
 			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
 

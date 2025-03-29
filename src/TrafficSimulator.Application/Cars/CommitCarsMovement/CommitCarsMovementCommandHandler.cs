@@ -3,11 +3,11 @@ using TrafficSimulator.Application.Commons.Interfaces;
 
 namespace TrafficSimulator.Application.Cars.CommitCarsMovement
 {
-	public class CommitCrasMovementCommandHandler : IRequestHandler<CommitCarsMovementCommand>
+	public class CommitCarsMovementCommandHandler : IRequestHandler<CommitCarsMovementCommand>
 	{
 		private readonly ICarRepository _carRepository;
 
-		public CommitCrasMovementCommandHandler(ICarRepository carRepository)
+		public CommitCarsMovementCommandHandler(ICarRepository carRepository)
 		{
 			_carRepository = carRepository;
 		}
