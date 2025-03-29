@@ -44,7 +44,7 @@ namespace TrafficSimulator.Domain.UnitTests.ModelsTests
 		{
 			_trafficLights.IsOn.Should().BeTrue();
 
-			_trafficLights.SwitchToRed().IsFailure.Should().BeTrue();
+			_trafficLights.SwitchToRed().IsSuccess.Should().BeTrue();
 
 			_trafficLights.TrafficLightState.Should().Be(TrafficLightState.Red);
 		}
