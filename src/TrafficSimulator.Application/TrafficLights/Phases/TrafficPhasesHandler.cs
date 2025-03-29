@@ -10,8 +10,8 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 	{
 		private Intersection? _intersection;
 		private TimeSpan _currentPhaseDuration;
-		private TimeSpan _lightsChangeDuration = TimeSpan.FromMilliseconds(500);
-		public bool AreLightsChanging => CurrentPhase != null && _currentPhaseDuration < _lightsChangeDuration;
+		public TimeSpan LightsChangeDuration { get; init; } = TimeSpan.FromMilliseconds(500);
+		public bool AreLightsChanging => CurrentPhase != null && _currentPhaseDuration < LightsChangeDuration;
 
 		public TrafficPhasesHandler()
 		{
@@ -45,7 +45,7 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 				return checkResult;
 			}
 
-			return SetLights(trafficPhase);
+			return SetLights(trafficPhase, timeElapsed);
 		}
 
 		public UnitResult<Error> SetPhase(string trafficPhaseName, TimeSpan timeElapsed)
@@ -64,7 +64,7 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 				return checkResult;
 			}
 
-			return SetLights(trafficPhase);
+			return SetLights(trafficPhase, timeElapsed);
 		}
 
 		private UnitResult<Error> HandlePhaseChangingConditions(TrafficPhase nextTrafficPhase, TimeSpan timeElapsed)
@@ -80,7 +80,7 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 			return UnitResult.Success<Error>();
 		}
 
-		private UnitResult<Error> SetLights(TrafficPhase? nextTrafficPhase)
+		private UnitResult<Error> SetLights(TrafficPhase? nextTrafficPhase, TimeSpan timeElapsed)
 		{
 			if (nextTrafficPhase is null)
 			{
@@ -96,7 +96,7 @@ namespace TrafficSimulator.Application.Handlers.TrafficPhases
 			{
 				PreviousPhase = CurrentPhase;
 				CurrentPhase = nextTrafficPhase;
-				_currentPhaseDuration = TimeSpan.Zero;
+				_currentPhaseDuration = timeElapsed;
 
 				ApplyLights();
 			}

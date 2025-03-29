@@ -1,4 +1,5 @@
-﻿using TrafficSimulator.Application.Handlers.TrafficPhases;
+﻿using FluentAssertions;
+using TrafficSimulator.Application.Handlers.TrafficPhases;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.Lights;
 using TrafficSimulator.Domain.Simulation;
@@ -9,13 +10,17 @@ namespace TrafficSimulator.Application.UnitTests.Traffic
 	public class TrafficPhasesHandlerTests
 	{
 		[Fact]
-		public void ChangePhases_ShouldTurnTheCorrectLightsGreenAndRed()
+		public void ChangePhases_WithSmallTimeIncrement_ShouldTurnTheCorrectLightsGreenOrangeAndRed()
 		{
 			// Arrange
 			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
 			Intersection intersection = intersectionSimulation.Intersection;
 
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler()
+			{
+				LightsChangeDuration = TimeSpan.FromSeconds(0.5),
+			};
+
 			trafficPhasesHandler.LoadIntersection(intersection);
 
 			IEnumerable<TrafficLight> trafficLights =
@@ -33,13 +38,29 @@ namespace TrafficSimulator.Application.UnitTests.Traffic
 			trafficPhasesHandler.SetPhase("AllGreen", TimeSpan.Zero);
 
 			// Assert
-			trafficLights.All(lights => lights.TrafficLightState is TrafficLightState.Green);
+			trafficLights.Select(trafficLight => trafficLight.TrafficLightState)
+				.Should().AllBeEquivalentTo(TrafficLightState.Orange);
+
+			// Act
+			trafficPhasesHandler.SetPhase("AllGreen", TimeSpan.FromSeconds(0.1));
+
+			// Assert
+			trafficLights.Select(trafficLight => trafficLight.TrafficLightState)
+				.Should().AllBeEquivalentTo(TrafficLightState.Orange);
+
+			// Act
+			trafficPhasesHandler.SetPhase("AllGreen", TimeSpan.FromSeconds(1));
+
+			// Assert
+			trafficLights.Select(trafficLight => trafficLight.TrafficLightState)
+				.Should().AllBeEquivalentTo(TrafficLightState.Green);
 
 			// Act
 			trafficPhasesHandler.SetPhase("AllRed", TimeSpan.FromSeconds(1));
 
 			// Assert
-			trafficLights.All(lights => lights.TrafficLightState is TrafficLightState.Red);
+			trafficLights.Select(trafficLight => trafficLight.TrafficLightState)
+				.Should().AllBeEquivalentTo(TrafficLightState.Red);
 		}
 	}
 }
