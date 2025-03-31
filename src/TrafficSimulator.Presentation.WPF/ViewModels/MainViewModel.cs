@@ -201,7 +201,9 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 		private Task AbortSimmulation()
 		{
-			throw new NotImplementedException();
+			_simulationHandler.Abort();
+
+			return Task.CompletedTask;
 		}
 
 		private void ChangeSimulationMode()

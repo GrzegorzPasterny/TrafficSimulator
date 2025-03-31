@@ -42,18 +42,6 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			_logger = logger;
 		}
 
-		public UnitResult<Error> Abort()
-		{
-			if (IntersectionSimulation!.SimulationState.SimulationPhase is SimulationPhase.Finished)
-			{
-				return DomainErrors.SimulationStateChange(IntersectionSimulation!.SimulationState.SimulationPhase, SimulationPhase.Finished);
-			}
-
-			// TODO: Cancel the simulation
-
-			return UnitResult.Success<Error>();
-		}
-
 		public UnitResult<Error> LoadIntersection(IntersectionSimulation intersectionSimulation)
 		{
 			IntersectionSimulation = intersectionSimulation;
@@ -113,7 +101,6 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			}
 
 			await _sender.Send(new DeleteCarsCommand());
-			//_trafficLightsHandler.Set
 
 			IntersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.InProgress;
 
@@ -276,5 +263,6 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 		public abstract UnitResult<Error> ChangeTrafficPhase(string trafficPhaseName);
 		internal abstract Task SimulationRunner();
 		public abstract void Dispose();
+		public abstract UnitResult<Error> Abort();
 	}
 }

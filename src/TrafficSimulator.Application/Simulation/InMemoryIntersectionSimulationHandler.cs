@@ -6,6 +6,7 @@ using System.Diagnostics;
 using TrafficSimulator.Application.Commons;
 using TrafficSimulator.Application.Handlers.Simulation;
 using TrafficSimulator.Application.Lights.HandlerTypes;
+using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models;
 
 namespace TrafficSimulator.Application.Simulation
@@ -14,6 +15,7 @@ namespace TrafficSimulator.Application.Simulation
 	{
 		private new readonly ILogger<InMemoryIntersectionSimulationHandler> _logger;
 		private Stopwatch? _stopwatch;
+		CancellationTokenSource? _cancellationTokenSource;
 
 		public InMemoryIntersectionSimulationHandler(
 			ISender sender,
@@ -31,16 +33,28 @@ namespace TrafficSimulator.Application.Simulation
 
 		public override void Dispose()
 		{
-			// Nothing to dispose
+			_cancellationTokenSource?.Dispose();
+		}
+
+		public override UnitResult<Error> Abort()
+		{
+			if (IntersectionSimulation!.SimulationState.SimulationPhase is SimulationPhase.Finished)
+			{
+				return DomainErrors.SimulationStateChange(IntersectionSimulation!.SimulationState.SimulationPhase, SimulationPhase.Finished);
+			}
+
+			_cancellationTokenSource?.Cancel();
+
+			return UnitResult.Success<Error>();
 		}
 
 		internal override async Task SimulationRunner()
 		{
 			_stopwatch = Stopwatch.StartNew();
 
-			using (CancellationTokenSource cts = new(IntersectionSimulation!.Options.Timeout))
+			using (_cancellationTokenSource = new(IntersectionSimulation!.Options.Timeout))
 			{
-				while (cts.IsCancellationRequested is false)
+				while (_cancellationTokenSource.IsCancellationRequested is false)
 				{
 					// Move cars
 					await PerformSimulationStep();
@@ -60,21 +74,19 @@ namespace TrafficSimulator.Application.Simulation
 						return;
 					}
 
-					if (IntersectionSimulation.SimulationState.SimulationPhase is SimulationPhase.Finished)
+					if (IntersectionSimulation.SimulationState.SimulationPhase
+							is SimulationPhase.Finished or SimulationPhase.Aborted)
 					{
 						_logger.LogDebug("The simulation has finished");
 
 						await GatherResults(_stopwatch.ElapsedMilliseconds);
 						return;
 					}
-
-					// small delay to allow other Tasks to run and to prevent CPU burning
-					//await Task.Delay(16);
 				}
 
-				if (cts.IsCancellationRequested)
+				if (_cancellationTokenSource.IsCancellationRequested)
 				{
-					_logger.LogInformation("The simulation has reached timeout [Timeout = {Timeout}]", IntersectionSimulation.Options.Timeout);
+					_logger.LogInformation(" ", IntersectionSimulation.Options.Timeout);
 					IntersectionSimulation.SimulationState.SimulationPhase = SimulationPhase.Aborted;
 
 					await GatherResults(_stopwatch.ElapsedMilliseconds);

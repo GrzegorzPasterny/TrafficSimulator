@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using TrafficSimulator.Application.Handlers.Simulation;
 using TrafficSimulator.Application.Lights.HandlerTypes;
+using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models;
 
 namespace TrafficSimulator.Application.Simulation
@@ -35,6 +36,32 @@ namespace TrafficSimulator.Application.Simulation
 			_cancellationTokenSource?.Dispose();
 		}
 
+		public override UnitResult<Error> Abort()
+		{
+			if (IntersectionSimulation is null)
+			{
+				_logger.LogWarning("Attempt to abort uninitialized simulation");
+				// TODO: Better to return error for the user
+				return UnitResult.Success<Error>();
+			}
+
+			if (IntersectionSimulation.SimulationState.SimulationPhase is SimulationPhase.Aborted)
+			{
+				_logger.LogWarning("Attempt to abort already aborted simulation");
+				// TODO: Better to return error for the user
+				return UnitResult.Success<Error>();
+			}
+
+			if (IntersectionSimulation!.SimulationState.SimulationPhase is SimulationPhase.Finished)
+			{
+				return DomainErrors.SimulationStateChange(IntersectionSimulation!.SimulationState.SimulationPhase, SimulationPhase.Finished);
+			}
+
+			_cancellationTokenSource?.Cancel();
+
+			return UnitResult.Success<Error>();
+		}
+
 		internal override Task SimulationRunner()
 		{
 			_timer = new System.Timers.Timer(IntersectionSimulation!.Options.StepTimespan);
@@ -48,7 +75,7 @@ namespace TrafficSimulator.Application.Simulation
 			{
 				if (cancellationToken.IsCancellationRequested)
 				{
-					_logger.LogWarning("Simulation aborted due to timeout [TimeLimit = {TimeLimit}]",
+					_logger.LogWarning("The simulation was aborted, or reached timeout [Timeout = {Timeout}]",
 						IntersectionSimulation!.Options.Timeout);
 
 					IntersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.Aborted;
