@@ -1,9 +1,9 @@
-﻿using TrafficSimulator.Application.TrafficLights.Handlers;
+﻿using TrafficSimulator.Application.TrafficLights.Handlers.Factory;
 using TrafficSimulator.Domain.Simulation;
 
 namespace TrafficSimulator.Presentation.WPF.ViewModels.SimulationElements
 {
-	public class SimulationOptions
+    public class SimulationOptions
 	{
 		public static string DefaultSectionName => nameof(SimulationOptions);
 

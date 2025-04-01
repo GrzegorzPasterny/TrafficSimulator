@@ -1,10 +1,10 @@
-﻿using TrafficSimulator.Application.TrafficLights.Handlers;
+﻿using TrafficSimulator.Application.TrafficLights.Handlers.Factory;
 using TrafficSimulator.Domain.Models.Lights;
 using TrafficSimulator.Presentation.WPF.ViewModels.Items;
 
 namespace TrafficSimulator.Presentation.WPF.Extensions
 {
-	internal static class TrafficPhaseExtensions
+    internal static class TrafficPhaseExtensions
 	{
 		public static TrafficPhaseItem ToTrafficPhaseItem(this TrafficPhase trafficPhase)
 		{

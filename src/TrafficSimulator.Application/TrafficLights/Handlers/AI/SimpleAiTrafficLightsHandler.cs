@@ -7,7 +7,7 @@ using TrafficSimulator.Application.Handlers.TrafficPhases;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.Lights;
 
-namespace TrafficSimulator.Application.TrafficLights.Handlers
+namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 {
 	public class SimpleAiTrafficLightsHandler : ITrafficLightsHandler
 	{
@@ -43,6 +43,7 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers
 		public Task<UnitResult<Error>> SetLights(TimeSpan timeElapsed)
 		{
 			// Get the input for the model
+
 
 			// Run the model
 

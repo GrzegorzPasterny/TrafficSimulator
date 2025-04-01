@@ -5,13 +5,13 @@ using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using TrafficSimulator.Application.Commons;
 using TrafficSimulator.Application.Handlers.Simulation;
-using TrafficSimulator.Application.Lights.HandlerTypes;
+using TrafficSimulator.Application.TrafficLights.Handlers.Factory;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models;
 
 namespace TrafficSimulator.Application.Simulation
 {
-	public class InMemoryIntersectionSimulationHandler : IntersectionSimulationHandler
+    public class InMemoryIntersectionSimulationHandler : IntersectionSimulationHandler
 	{
 		private new readonly ILogger<InMemoryIntersectionSimulationHandler> _logger;
 		private Stopwatch? _stopwatch;

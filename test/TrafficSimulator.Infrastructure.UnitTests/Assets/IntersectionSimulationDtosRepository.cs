@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using TrafficSimulator.Application.TrafficLights.Handlers;
+using TrafficSimulator.Application.TrafficLights.Handlers.Factory;
 using TrafficSimulator.Domain.CarGenerators;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Handlers.CarGenerators;
@@ -8,7 +8,7 @@ using TrafficSimulator.Infrastructure.DTOs;
 
 namespace TrafficSimulator.Infrastructure.UnitTests.Assets
 {
-	public static class IntersectionSimulationDtosRepository
+    public static class IntersectionSimulationDtosRepository
 	{
 		public static IntersectionSimulationDto ZebraCrossingOnOneLaneRoadEastWest
 		{

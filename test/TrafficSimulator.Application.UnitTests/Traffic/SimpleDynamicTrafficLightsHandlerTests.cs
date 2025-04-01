@@ -7,8 +7,8 @@ using Serilog;
 using Serilog.Events;
 using System.Reflection;
 using TrafficSimulator.Application.Cars.CommitCarsMovement;
-using TrafficSimulator.Application.Handlers.Lights;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
+using TrafficSimulator.Application.TrafficLights.Handlers.Dynamic;
 using TrafficSimulator.Domain;
 using TrafficSimulator.Domain.CarGenerators.DomainEvents;
 using TrafficSimulator.Domain.Commons;
@@ -22,7 +22,7 @@ using Xunit.Abstractions;
 
 namespace TrafficSimulator.Application.UnitTests.Traffic
 {
-	public class SimpleDynamicTrafficLightsHandlerTests
+    public class SimpleDynamicTrafficLightsHandlerTests
 	{
 		internal readonly ILogger<SimpleDynamicTrafficLightsHandlerTests> _logger;
 		internal readonly ILoggerFactory _loggerFactory;

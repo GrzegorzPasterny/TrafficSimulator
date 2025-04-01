@@ -1,4 +1,4 @@
-﻿namespace TrafficSimulator.Application.TrafficLights.Handlers
+﻿namespace TrafficSimulator.Application.TrafficLights.Handlers.Factory
 {
 	public static class TrafficLightHandlerTypes
 	{

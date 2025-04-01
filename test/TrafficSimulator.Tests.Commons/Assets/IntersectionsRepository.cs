@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
 using FluentAssertions;
 using MediatR;
-using TrafficSimulator.Application.TrafficLights.Handlers;
+using TrafficSimulator.Application.TrafficLights.Handlers.Factory;
 using TrafficSimulator.Application.UnitTests.Commons;
 using TrafficSimulator.Domain.CarGenerators;
 using TrafficSimulator.Domain.Cars;
@@ -15,7 +15,7 @@ using TrafficSimulator.Domain.Simulation;
 
 namespace TrafficSimulator.Tests.Commons.Assets
 {
-	public static class IntersectionsRepository
+    public static class IntersectionsRepository
 	{
 		public static IntersectionSimulation ZebraCrossingOnOneLaneRoadEastWest
 		{

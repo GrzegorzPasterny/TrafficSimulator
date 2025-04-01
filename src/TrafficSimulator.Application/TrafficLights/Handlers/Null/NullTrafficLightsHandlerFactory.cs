@@ -1,11 +1,11 @@
 ﻿using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.Lights;
-using TrafficSimulator.Application.Lights.HandlerTypes;
+using TrafficSimulator.Application.TrafficLights.Handlers.Factory;
 using TrafficSimulator.Domain.Models.Lights;
 
 namespace TrafficSimulator.Application.TrafficLights.Handlers
 {
-	public class NullTrafficLightsHandlerFactory : ITrafficLightsHandlerFactory
+    public class NullTrafficLightsHandlerFactory : ITrafficLightsHandlerFactory
 	{
 		private TrafficPhase? _currentPhase;
 

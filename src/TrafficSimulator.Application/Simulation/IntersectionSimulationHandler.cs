@@ -7,9 +7,9 @@ using TrafficSimulator.Application.Cars.GetCars;
 using TrafficSimulator.Application.Cars.MoveCar;
 using TrafficSimulator.Application.Commons;
 using TrafficSimulator.Application.Commons.Interfaces;
-using TrafficSimulator.Application.Lights.HandlerTypes;
 using TrafficSimulator.Application.Simulation;
 using TrafficSimulator.Application.SimulationSetup.LoadSimulation;
+using TrafficSimulator.Application.TrafficLights.Handlers.Factory;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
 using TrafficSimulator.Domain.Models;
@@ -19,7 +19,7 @@ using TrafficSimulator.Domain.Simulation;
 
 namespace TrafficSimulator.Application.Handlers.Simulation
 {
-	public abstract class IntersectionSimulationHandler : ISimulationHandler
+    public abstract class IntersectionSimulationHandler : ISimulationHandler
 	{
 		public IntersectionSimulation? IntersectionSimulation { get; internal set; }
 		private readonly ISender _sender;

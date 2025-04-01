@@ -8,7 +8,7 @@ using TrafficSimulator.Domain.Models.Agents;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.Lights;
 
-namespace TrafficSimulator.Application.Handlers.Lights
+namespace TrafficSimulator.Application.TrafficLights.Handlers.Dynamic
 {
 	/// <summary>
 	/// Traffic Lights handler that always sets green for inbound lane with the most waiting cars

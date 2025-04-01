@@ -4,13 +4,13 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using TrafficSimulator.Application.Handlers.Simulation;
-using TrafficSimulator.Application.Lights.HandlerTypes;
+using TrafficSimulator.Application.TrafficLights.Handlers.Factory;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models;
 
 namespace TrafficSimulator.Application.Simulation
 {
-	public class RealTimeIntersectionSimulationHandler : IntersectionSimulationHandler
+    public class RealTimeIntersectionSimulationHandler : IntersectionSimulationHandler
 	{
 		private new readonly ILogger<RealTimeIntersectionSimulationHandler> _logger;
 		private Stopwatch? _stopwatch;

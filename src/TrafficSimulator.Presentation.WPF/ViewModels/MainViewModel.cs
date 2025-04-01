@@ -9,7 +9,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Simulation;
-using TrafficSimulator.Application.TrafficLights.Handlers;
+using TrafficSimulator.Application.TrafficLights.Handlers.Factory;
 using TrafficSimulator.Domain.Cars;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models;

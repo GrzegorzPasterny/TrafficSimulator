@@ -11,8 +11,9 @@ using Serilog.Events;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.Lights;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
-using TrafficSimulator.Application.Lights.HandlerTypes;
 using TrafficSimulator.Application.Simulation;
+using TrafficSimulator.Application.TrafficLights.Handlers.Factory;
+using TrafficSimulator.Application.TrafficLights.Handlers.Sequential;
 using TrafficSimulator.Domain;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
@@ -26,7 +27,7 @@ using Xunit.Abstractions;
 
 namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 {
-	public class InMemorySimulationHandlerTests
+    public class InMemorySimulationHandlerTests
 	{
 		internal readonly ILogger<InMemorySimulationHandlerTests> _logger;
 		internal readonly ILoggerFactory _loggerFactory;

@@ -9,7 +9,7 @@ using TrafficSimulator.Application.Handlers.TrafficPhases;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.Lights;
 
-namespace TrafficSimulator.Application.Handlers.Lights
+namespace TrafficSimulator.Application.TrafficLights.Handlers.Sequential
 {
 	/// <summary>
 	/// Changes Traffic Lights phases one by one in some time interval
