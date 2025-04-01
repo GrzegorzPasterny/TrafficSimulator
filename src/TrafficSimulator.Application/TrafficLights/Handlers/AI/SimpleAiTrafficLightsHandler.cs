@@ -43,14 +43,15 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 		public Task<UnitResult<Error>> SetLights(TimeSpan timeElapsed)
 		{
 			// Get the input for the model
-
+			SimpleAiTrafficInput simpleAiTrafficInput = new SimpleAiTrafficInput();
 
 			// Run the model
+			IReadOnlyList<float> output = _aiAgent.Predict(simpleAiTrafficInput.ToAiInput());
 
 			// Apply the results
+			SimpleAiTrafficOutput simpleAiTrafficOutput = SimpleAiTrafficOutput.FromAiOutput(output);
 
 			throw new NotImplementedException();
-
 		}
 
 		public UnitResult<Error> SetLightsManually(string trafficPhaseName)
