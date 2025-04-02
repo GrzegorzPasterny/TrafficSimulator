@@ -5,7 +5,7 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 	public class SimpleAiTrafficInput
 	{
 		public Dictionary<WorldDirection, int> CarPerDirection { get; set; }
-		public Dictionary<WorldDirection, int> AverageWaitingTimePerDirection { get; set; }
+		public Dictionary<WorldDirection, int> TimeCarsSpentWaitingPerDirection { get; set; }
 		public TimeSpan CurrentPhaseDuration { get; set; }
 
 		public IEnumerable<float> ToAiInput()
@@ -26,7 +26,7 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 					result.Add(0);
 				}
 
-				if (AverageWaitingTimePerDirection.TryGetValue(direction, out int averageWaitingTimeOnDirection))
+				if (TimeCarsSpentWaitingPerDirection.TryGetValue(direction, out int averageWaitingTimeOnDirection))
 				{
 					result.Add(averageWaitingTimeOnDirection);
 				}

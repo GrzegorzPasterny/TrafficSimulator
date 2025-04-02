@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
 using TrafficSimulator.Application.Simulation;
+using TrafficSimulator.Application.TrafficLights.Handlers.AI;
 using TrafficSimulator.Application.TrafficLights.Handlers.Dynamic;
 using TrafficSimulator.Application.TrafficLights.Handlers.Factory;
 using TrafficSimulator.Application.TrafficLights.Handlers.Manual;
@@ -8,7 +9,7 @@ using TrafficSimulator.Application.TrafficLights.Handlers.Sequential;
 
 namespace TrafficSimulator.Application
 {
-    public static class DependencyInjection
+	public static class DependencyInjection
 	{
 		public static IServiceCollection AddApplication(this IServiceCollection services)
 		{
@@ -21,6 +22,7 @@ namespace TrafficSimulator.Application
 			services.AddScoped<ManualTrafficLightsHandler>();
 			services.AddScoped<SimpleSequentialTrafficLightsHandler>();
 			services.AddScoped<SimpleDynamicTrafficLightsHandler>();
+			services.AddScoped<SimpleAiTrafficLightsHandler>();
 			services.AddSingleton<ITrafficLightsHandlerFactory, TrafficLightsHandlerFactory>();
 
 			services.AddScoped<RealTimeIntersectionSimulationHandler>();
