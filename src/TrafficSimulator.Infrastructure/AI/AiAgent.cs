@@ -4,19 +4,22 @@ using TrafficSimulator.Domain.AI;
 
 namespace TrafficSimulator.Infrastructure.AI
 {
-	public class AiAgent : IAiAgent
+	public class AiAgent : IAiLearningAgent
 	{
 		private readonly MLContext _mlContext;
-		private readonly ITransformer _model;
-		private readonly PredictionEngine<TrafficState, TrafficState> _predictionEngine;
+		private ITransformer _model;
+		private readonly List<TrafficState> _trainingData = new();
+		private readonly string _modelPath;
+		private PredictionEngine<TrafficState, TrafficState> _predictionEngine;
 
 		public AiAgent(string modelPath)
 		{
+			_modelPath = modelPath;
 			_mlContext = new MLContext();
 			var dataView = _mlContext.Data.LoadFromEnumerable(new List<TrafficState>());
 
 			var pipeline = _mlContext.Transforms.ApplyOnnxModel(
-				modelFile: modelPath,
+				modelFile: _modelPath,
 				inputColumnNames: new[] { "Inputs" },
 				outputColumnNames: new[] { "QValues" });
 
@@ -28,6 +31,28 @@ namespace TrafficSimulator.Infrastructure.AI
 		{
 			var prediction = _predictionEngine.Predict(new TrafficState { Inputs = input.ToArray() });
 			return prediction.QValues;
+		}
+
+		public void CollectTrainingData(TrafficState state)
+		{
+			_trainingData.Add(state);
+		}
+
+		public void TrainModel()
+		{
+			if (_trainingData.Count < 100) return; // Ensure enough data for training
+
+			var dataView = _mlContext.Data.LoadFromEnumerable(_trainingData);
+
+			var pipeline = _mlContext.Transforms.ApplyOnnxModel(
+				modelFile: _modelPath,
+				inputColumnNames: new[] { "Inputs" },
+				outputColumnNames: new[] { "QValues" });
+
+			_model = pipeline.Fit(dataView);
+			_predictionEngine = _mlContext.Model.CreatePredictionEngine<TrafficState, TrafficState>(_model);
+
+			_trainingData.Clear();
 		}
 	}
 }
