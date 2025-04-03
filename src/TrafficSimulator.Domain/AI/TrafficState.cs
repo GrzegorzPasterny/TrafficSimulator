@@ -2,7 +2,8 @@
 {
 	public class TrafficState
 	{
-		public float[] Inputs { get; set; }
-		public float[] QValues { get; set; }
+		[VectorType(?)] public float[] Inputs { get; set; }
+		[VectorType(?)] public float[] QValues { get; set; }
+		public float Reward { get; set; }
 	}
 }

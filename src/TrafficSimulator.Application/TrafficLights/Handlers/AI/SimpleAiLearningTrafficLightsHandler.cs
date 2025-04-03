@@ -36,11 +36,14 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 			_simpleAiTrafficOutput.ApplyAiOutput(qValues);
 			TrafficPhase bestTrafficPhase = _simpleAiTrafficOutput.BestTrafficPhase;
 
+			float reward = CalculateRewardFunction(simpleAiTrafficInput);
+
 			// Update RL Training Data
 			var trafficState = new TrafficState
 			{
 				Inputs = simpleAiTrafficInput.ToAiInput().ToArray(),
-				QValues = qValues.ToArray()
+				QValues = qValues.ToArray(),
+				Reward = reward
 			};
 			_aiAgent.CollectTrainingData(trafficState);
 
@@ -50,6 +53,12 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 			TrainAiModel();
 
 			return UnitResult.Success<Error>();
+		}
+
+		private float CalculateRewardFunction(SimpleAiTrafficInput simpleAiTrafficInput)
+		{
+			var totalWaitingTime = simpleAiTrafficInput.TimeCarsSpentWaitingPerDirection.Values.Sum();
+			return -totalWaitingTime;
 		}
 
 		private void TrainAiModel()
