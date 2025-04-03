@@ -15,13 +15,13 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 {
 	public class SimpleAiTrafficLightsHandler : ITrafficLightsHandler
 	{
-		private readonly ISender _sender;
+		internal readonly ISender _sender;
 		private readonly TrafficPhasesHandler _trafficPhasesHandler;
 		private readonly IAiAgent _aiAgent;
 		private readonly ILogger<SimpleAiTrafficLightsHandler> _logger;
-		private SimpleAiTrafficOutput? _simpleAiTrafficOutput;
+		internal SimpleAiTrafficOutput? _simpleAiTrafficOutput;
 
-		public TimeSpan CurrentPhaseTime { get; private set; } = TimeSpan.Zero;
+		public TimeSpan CurrentPhaseTime { get; internal set; } = TimeSpan.Zero;
 		// Options
 		public TimeSpan MinimalTimeForOnePhase { get; set; } = TimeSpan.FromSeconds(1);
 
@@ -46,27 +46,14 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 			ChangePhase(intersection.TrafficPhases.First().Name, TimeSpan.Zero);
 		}
 
-		public async Task<UnitResult<Error>> SetLights(TimeSpan timeElapsed)
+		public virtual async Task<UnitResult<Error>> SetLights(TimeSpan timeElapsed)
 		{
 			if (_simpleAiTrafficOutput == null)
 			{
 				return UnitResult.Failure(ApplicationErrors.IntersectionUninitialized());
 			}
 
-			// Get the input for the model
-			IEnumerable<Car> cars = await _sender.Send(new GetCarsCommand());
-			IEnumerable<IGrouping<WorldDirection, Car>> carsPerDirection = cars.Where(car => car.CurrentLocation.Location is InboundLane)
-				.GroupBy(car => (car.CurrentLocation.Location as InboundLane)!.WorldDirection)
-				.OrderBy(carPerDirection => carPerDirection.Key);
-
-			SimpleAiTrafficInput simpleAiTrafficInput = new SimpleAiTrafficInput();
-
-			simpleAiTrafficInput.CurrentPhaseDuration = CurrentPhaseTime;
-			simpleAiTrafficInput.CarPerDirection =
-				carsPerDirection.ToDictionary(c => c.Key, c => c.Count());
-			simpleAiTrafficInput.TimeCarsSpentWaitingPerDirection =
-				carsPerDirection.ToDictionary(c => c.Key,
-											  c => c.Sum(car => car.MovesWhenCarWaited));
+			SimpleAiTrafficInput simpleAiTrafficInput = await GetInputsForAiAgent();
 
 			// Run the model
 			IReadOnlyList<float> output = _aiAgent.Predict(simpleAiTrafficInput.ToAiInput());
@@ -80,6 +67,24 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 			ChangePhase(bestTrafficPhase.Name, timeElapsed);
 
 			return UnitResult.Success<Error>();
+		}
+
+		internal async Task<SimpleAiTrafficInput> GetInputsForAiAgent()
+		{
+			SimpleAiTrafficInput simpleAiTrafficInput = new SimpleAiTrafficInput();
+
+			IEnumerable<Car> cars = await _sender.Send(new GetCarsCommand());
+			IEnumerable<IGrouping<WorldDirection, Car>> carsPerDirection = cars.Where(car => car.CurrentLocation.Location is InboundLane)
+				.GroupBy(car => (car.CurrentLocation.Location as InboundLane)!.WorldDirection)
+				.OrderBy(carPerDirection => carPerDirection.Key);
+
+			simpleAiTrafficInput.CurrentPhaseDuration = CurrentPhaseTime;
+			simpleAiTrafficInput.CarPerDirection =
+				carsPerDirection.ToDictionary(c => c.Key, c => c.Count());
+			simpleAiTrafficInput.TimeCarsSpentWaitingPerDirection =
+				carsPerDirection.ToDictionary(c => c.Key,
+											  c => c.Sum(car => car.MovesWhenCarWaited));
+			return simpleAiTrafficInput;
 		}
 
 		public UnitResult<Error> SetLightsManually(string trafficPhaseName)
@@ -96,7 +101,7 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 			return UnitResult.Success<Error>();
 		}
 
-		private void ChangePhase(string nextTrafficPhaseName, TimeSpan timeElapsed)
+		internal void ChangePhase(string nextTrafficPhaseName, TimeSpan timeElapsed)
 		{
 			if (_trafficPhasesHandler.CurrentPhase is null)
 			{
