@@ -78,7 +78,6 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 				.GroupBy(car => (car.CurrentLocation.Location as InboundLane)!.WorldDirection)
 				.OrderBy(carPerDirection => carPerDirection.Key);
 
-			simpleAiTrafficInput.CurrentPhaseDuration = CurrentPhaseTime;
 			simpleAiTrafficInput.CarPerDirection =
 				carsPerDirection.ToDictionary(c => c.Key, c => c.Count());
 			simpleAiTrafficInput.TimeCarsSpentWaitingPerDirection =

@@ -1,9 +1,11 @@
-﻿namespace TrafficSimulator.Domain.AI
+﻿using Microsoft.ML.Data;
+
+namespace TrafficSimulator.Domain.AI
 {
 	public class TrafficState
 	{
-		[VectorType(?)] public float[] Inputs { get; set; }
-		[VectorType(?)] public float[] QValues { get; set; }
+		[VectorType(8)] public float[] Inputs { get; set; } = new float[8];
+		[VectorType(4)] public float[] QValues { get; set; } = new float[4];
 		public float Reward { get; set; }
 	}
 }

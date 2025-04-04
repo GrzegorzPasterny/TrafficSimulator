@@ -6,7 +6,6 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 	{
 		public Dictionary<WorldDirection, int> CarPerDirection { get; set; }
 		public Dictionary<WorldDirection, int> TimeCarsSpentWaitingPerDirection { get; set; }
-		public TimeSpan CurrentPhaseDuration { get; set; }
 
 		public IEnumerable<float> ToAiInput()
 		{
@@ -36,9 +35,7 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 				}
 			}
 
-			result.Add((float)CurrentPhaseDuration.TotalMilliseconds);
-
-			return result.ToArray();
+			return result;
 		}
 	}
 }
