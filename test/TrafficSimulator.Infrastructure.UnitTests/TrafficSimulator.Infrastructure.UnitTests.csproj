@@ -41,6 +41,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Assets\current.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Assets\ForkSimulation_641c2b72-da21-424e-8b43-3b339415013b.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

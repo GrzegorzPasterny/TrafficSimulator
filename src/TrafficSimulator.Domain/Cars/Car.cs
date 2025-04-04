@@ -41,6 +41,11 @@ namespace TrafficSimulator.Domain.Models.Agents
 				{
 					int currentLocationIndex = DistanceToCover.FindIndex(l => l == CurrentLocation.Location);
 
+					if (currentLocationIndex + 1 == DistanceToCover.Count)
+					{
+						throw new Exception($"NextLocation property failed [Car = {ToString()}]");
+					}
+
 					return DistanceToCover[currentLocationIndex + 1];
 				}
 			}
