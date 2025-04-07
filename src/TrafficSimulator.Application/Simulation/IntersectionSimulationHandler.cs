@@ -9,6 +9,7 @@ using TrafficSimulator.Application.Commons;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Simulation;
 using TrafficSimulator.Application.SimulationSetup.LoadSimulation;
+using TrafficSimulator.Application.SimulationSnapshots;
 using TrafficSimulator.Application.TrafficLights.Handlers.Factory;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
@@ -210,12 +211,19 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 			await MoveCars();
 
+			await SaveSimulationSnapshot();
+
 			// update metrics
 			IntersectionSimulation!.SimulationState.StepsCount++;
 			IntersectionSimulation!.SimulationState.ElapsedTime = IntersectionSimulation.Options.StepTimespan * IntersectionSimulation!.SimulationState.StepsCount;
+		}
 
-			// TODO: Add car collision check
-			// TODO: Cars need to wait in the queue when car is in front of them and also when Traffic light is orange, or red
+		private Task SaveSimulationSnapshot()
+		{
+			return _sender.Send(new SaveSimulationSnapshotCommand(
+				IntersectionSimulation.Id,
+				IntersectionSimulation.Name,
+				IntersectionSimulation.Intersection.CreateIntersectionSnapshot()));
 		}
 
 		private async Task GenerateNewCars()

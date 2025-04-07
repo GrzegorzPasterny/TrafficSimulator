@@ -1,5 +1,6 @@
 ﻿using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models.Lights;
+using TrafficSimulator.Domain.Simulation.Snapshots;
 
 namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
@@ -41,6 +42,28 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 			if (other == null) return false;
 
 			return base.Equals(other);
+		}
+
+		public IntersectionSnapshot CreateIntersectionSnapshot()
+		{
+			IntersectionSnapshot snapshot = new IntersectionSnapshot();
+
+			snapshot.TrafficLightsSnapshots = CreateTrafficLightsSnapshots();
+
+			return snapshot;
+		}
+
+		private List<TrafficLightsSnapshot> CreateTrafficLightsSnapshots()
+		{
+			return ObjectLookup
+				.OfType<TrafficLight>()
+				.Select(trafficLight => new TrafficLightsSnapshot()
+				{
+					Id = trafficLight.Id,
+					Name = trafficLight.Name,
+					TrafficLightState = trafficLight.TrafficLightState
+				})
+				.ToList();
 		}
 	}
 }
