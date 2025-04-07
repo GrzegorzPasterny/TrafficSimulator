@@ -3,6 +3,7 @@
 	public class SimulationResults
 	{
 		public long TotalCalculationTimeMs { get; set; }
+		public int TotalCars { get; set; }
 		public int CarsPassed { get; set; }
 		public double TotalCarsIdleTimeMs { get; set; }
 		public double AverageCarIdleTimeMs => TotalCarsIdleTimeMs / CarsPassed;
@@ -11,7 +12,7 @@
 		public override string ToString()
 		{
 			return $"[TotalCalculationTimeMs = {TotalCalculationTimeMs}, " +
-				$"CarsPassed = {CarsPassed}, " +
+				$"CarsPassed = {CarsPassed}/{TotalCars}, " +
 				$"SimulationStepsTaken = {SimulationStepsTaken}, " +
 				$"AverageCarIdleTimeMs = {AverageCarIdleTimeMs:F2}, " +
 				$"TotalCarsIdleTimeMs = {TotalCarsIdleTimeMs:F1}]";

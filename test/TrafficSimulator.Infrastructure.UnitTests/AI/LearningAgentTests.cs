@@ -11,7 +11,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.AI
 		{
 			IAiLearningAgent aiLearningAgent = new AiAgent("Assets/current.onnx");
 
-			Action predictAction = () => aiLearningAgent.Predict([0, 0, 0, 0, 0, 0, 0, 0]);
+			Action predictAction = () => aiLearningAgent.Predict([1, 0, 1000, 0, 0, 9, 0, 0]);
 
 			predictAction.Should().NotThrow();
 		}

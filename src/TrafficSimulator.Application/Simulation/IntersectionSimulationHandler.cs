@@ -19,7 +19,7 @@ using TrafficSimulator.Domain.Simulation;
 
 namespace TrafficSimulator.Application.Handlers.Simulation
 {
-    public abstract class IntersectionSimulationHandler : ISimulationHandler
+	public abstract class IntersectionSimulationHandler : ISimulationHandler
 	{
 		public IntersectionSimulation? IntersectionSimulation { get; internal set; }
 		private readonly ISender _sender;
@@ -251,7 +251,8 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 			List<Car> cars = (await _sender.Send(new GetCarsCommand())).ToList();
 
-			IntersectionSimulation.SimulationResults.CarsPassed = cars.Count();
+			IntersectionSimulation.SimulationResults.TotalCars = cars.Count();
+			IntersectionSimulation.SimulationResults.TotalCars = cars.Where(c => c.HasReachedDestination).Count();
 			IntersectionSimulation.SimulationResults.TotalCarsIdleTimeMs =
 				cars.Sum(c => c.MovesWhenCarWaited) * IntersectionSimulation.Options.StepTimespan.TotalMilliseconds;
 
