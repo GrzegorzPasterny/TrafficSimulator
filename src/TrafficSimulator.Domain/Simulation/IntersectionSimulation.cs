@@ -39,5 +39,11 @@ namespace TrafficSimulator.Domain.Simulation
 
 			SimulationState.CarGenerators = carGenerators;
 		}
+
+		public override string ToString()
+		{
+			return $"[SimulationName = {Name}, IntersectionName = {Intersection.Name}]\n" +
+				$"SimulationOptions = {Options}";
+		}
 	}
 }

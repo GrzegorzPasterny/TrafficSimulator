@@ -11,7 +11,7 @@ using TrafficSimulator.Domain.Models;
 
 namespace TrafficSimulator.Application.Simulation
 {
-    public class InMemoryIntersectionSimulationHandler : IntersectionSimulationHandler
+	public class InMemoryIntersectionSimulationHandler : IntersectionSimulationHandler
 	{
 		private new readonly ILogger<InMemoryIntersectionSimulationHandler> _logger;
 		private Stopwatch? _stopwatch;
@@ -86,7 +86,9 @@ namespace TrafficSimulator.Application.Simulation
 
 				if (_cancellationTokenSource.IsCancellationRequested)
 				{
-					_logger.LogInformation(" ", IntersectionSimulation.Options.Timeout);
+					_logger.LogWarning("The simulation was aborted, or reached timeout [Timeout = {Timeout}]",
+						IntersectionSimulation!.Options.Timeout);
+
 					IntersectionSimulation.SimulationState.SimulationPhase = SimulationPhase.Aborted;
 
 					await GatherResults(_stopwatch.ElapsedMilliseconds);

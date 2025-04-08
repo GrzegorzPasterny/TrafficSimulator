@@ -105,6 +105,8 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 			IntersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.InProgress;
 
+			LogSimulationSetup();
+
 			try
 			{
 				// What I thought, but it looks like it is all wrong:
@@ -120,6 +122,14 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 				_logger.LogError("Unhandled Exception occured while running the simulation [Error = {Error}]", ex);
 				return ApplicationErrors.UnhandledSimulationException(ex);
 			}
+		}
+
+		private void LogSimulationSetup()
+		{
+			_logger.LogInformation("Simulation started " +
+				"[SimulationHandlerType = {SimulationHandlerType}, TrafficLightsHandlerType = {TrafficLightsHandlerType}]\n" +
+				"IntersectionSimulation = {IntersectionSimulation}",
+				GetType().Name, _trafficLightsHandler?.GetType().Name, IntersectionSimulation);
 		}
 
 		internal void NotifyAboutSimulationState()

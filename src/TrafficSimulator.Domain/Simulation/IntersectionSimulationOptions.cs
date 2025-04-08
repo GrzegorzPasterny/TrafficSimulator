@@ -7,5 +7,10 @@
 		public int StepLimit { get; set; } = 2000;
 		public string? TrafficLightHandlerType { get; set; } = "Sequential";
 
+		public override string ToString()
+		{
+			return $"[StepTimespan = {StepTimespan}, Timeout = {Timeout}, " +
+				$"StepLimit = {StepLimit}, TrafficLightsHandlerType = {TrafficLightHandlerType}]";
+		}
 	}
 }
