@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System.Text.Json;
 
 namespace TrafficSimulator.Application.SimulationSnapshots
 {
@@ -11,7 +12,11 @@ namespace TrafficSimulator.Application.SimulationSnapshots
 
 		public Task Handle(SaveSimulationSnapshotCommand request, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			string simulationSnapshotFileName = $"{request.simulationName}_{DateTime.Now:dd.MM.yyyy}_{request.SimulationId}.txt";
+			string simulationSnapshotFileFullName = Path.Combine("Simulation_Snapshots", simulationSnapshotFileName);
+			string snapshotJson = JsonSerializer.Serialize(request);
+
+			return File.AppendAllTextAsync(simulationSnapshotFileFullName, snapshotJson);
 		}
 	}
 }
