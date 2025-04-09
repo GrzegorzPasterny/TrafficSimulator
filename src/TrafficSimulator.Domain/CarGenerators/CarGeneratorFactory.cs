@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Commons.Interfaces;
@@ -25,11 +26,22 @@ namespace TrafficSimulator.Domain.CarGenerators
 			{ nameof(RandomCarsGenerator), typeof(RandomCarsGeneratorOptions) },
 			{ nameof(WaveCarsGenerator), typeof(WaveCarsGeneratorOptions) },
 		};
-		private readonly ISender _mediator;
 
-		public CarGeneratorFactory(ISender mediator)
+		private readonly IServiceProvider? _serviceProvider;
+		private readonly ISender? _sender;
+
+		public CarGeneratorFactory(IServiceProvider serviceProvider)
 		{
-			_mediator = mediator;
+			_serviceProvider = serviceProvider;
+		}
+
+		public CarGeneratorFactory(ISender sender)
+		{
+			_sender = sender;
+		}
+
+		public CarGeneratorFactory()
+		{
 		}
 
 		public ErrorOr<ICarGenerator?> Create(string carGeneratorType, JsonElement carGeneratorOptions, Intersection root, IntersectionObject parent)
@@ -58,7 +70,18 @@ namespace TrafficSimulator.Domain.CarGenerators
 				throw new Exception($"Failed to deserialize options for {carGeneratorType}");
 			}
 
-			carGenerator = (ICarGenerator?)Activator.CreateInstance(generatorType, root, parent, _mediator, options);
+			if (_serviceProvider is not null)
+			{
+				carGenerator = (ICarGenerator?)ActivatorUtilities.CreateInstance(_serviceProvider, generatorType, root, parent, options);
+			}
+			else if (_sender is not null)
+			{
+				carGenerator = (ICarGenerator?)Activator.CreateInstance(generatorType, root, parent, _sender, options);
+			}
+			else
+			{
+				throw new Exception("Failed to craete Car Generator object");
+			}
 
 			return carGenerator.ToErrorOr();
 		}

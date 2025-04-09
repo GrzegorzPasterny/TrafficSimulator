@@ -27,7 +27,7 @@ using Xunit.Abstractions;
 
 namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 {
-    public class InMemorySimulationHandlerTests
+	public class InMemorySimulationHandlerTests
 	{
 		internal readonly ILogger<InMemorySimulationHandlerTests> _logger;
 		internal readonly ILoggerFactory _loggerFactory;

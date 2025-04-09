@@ -54,7 +54,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 		public void SaveIntersectionSimulationToJson_ShouldProduceFileOnTheDisc(IntersectionSimulation intersectionSimulation)
 		{
 			// Arrange
-			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
+			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory();
 
 			JsonSimulationSetupRepository jsonSimulationSetupRepository =
 				new JsonSimulationSetupRepository(new IntersectionSimulationDtoMapper(carGeneratorFactory));
@@ -74,7 +74,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 		{
 			// Arrange
 			var intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
-			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
+			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory();
 
 			JsonSimulationSetupRepository jsonSimulationSetupRepository =
 				new JsonSimulationSetupRepository(new IntersectionSimulationDtoMapper(carGeneratorFactory));

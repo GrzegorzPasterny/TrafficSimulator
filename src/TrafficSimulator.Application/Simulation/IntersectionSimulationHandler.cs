@@ -17,6 +17,7 @@ using TrafficSimulator.Domain.Models;
 using TrafficSimulator.Domain.Models.Agents;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Simulation;
+using TrafficSimulator.Domain.Simulation.Snapshots;
 
 namespace TrafficSimulator.Application.Handlers.Simulation
 {
@@ -228,12 +229,33 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			IntersectionSimulation!.SimulationState.ElapsedTime = IntersectionSimulation.Options.StepTimespan * IntersectionSimulation!.SimulationState.StepsCount;
 		}
 
-		private Task SaveSimulationSnapshot()
+		private async Task SaveSimulationSnapshot()
 		{
-			return _sender.Send(new SaveSimulationSnapshotCommand(
-				IntersectionSimulation.Id,
-				IntersectionSimulation.Name,
-				IntersectionSimulation.Intersection.CreateIntersectionSnapshot()));
+			IntersectionSnapshot intersectionSnapshot = await CreateIntersectionSnapshot();
+
+			await _sender.Send(
+				new SaveSimulationSnapshotCommand(
+					IntersectionSimulation.Id,
+					IntersectionSimulation.Name,
+					intersectionSnapshot
+				));
+		}
+
+		public async Task<IntersectionSnapshot> CreateIntersectionSnapshot()
+		{
+			IntersectionSnapshot snapshot = new IntersectionSnapshot();
+
+			snapshot.TrafficLightsSnapshots = IntersectionSimulation.Intersection.CreateTrafficLightsSnapshots();
+			snapshot.CarSnapshots = await CreateCarSnapshots();
+
+			return snapshot;
+		}
+
+		private async Task<List<CarSnapshot>> CreateCarSnapshots()
+		{
+			IEnumerable<Car> cars = await _sender.Send(new GetCarsCommand());
+
+			return cars.Select(car => car.GetCarSnapshot()).ToList();
 		}
 
 		private async Task GenerateNewCars()

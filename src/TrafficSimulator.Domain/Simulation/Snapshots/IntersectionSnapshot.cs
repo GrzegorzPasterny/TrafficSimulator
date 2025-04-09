@@ -3,7 +3,7 @@
 	public class IntersectionSnapshot
 	{
 		public List<TrafficLightsSnapshot> TrafficLightsSnapshots { get; set; } = [];
-
+		public List<CarSnapshot> CarSnapshots { get; set; } = [];
 
 	}
 }

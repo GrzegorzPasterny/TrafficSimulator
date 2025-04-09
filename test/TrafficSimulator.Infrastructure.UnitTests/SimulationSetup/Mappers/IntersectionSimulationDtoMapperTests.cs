@@ -17,7 +17,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 		public void MapFromDomainToDto_GivenZebraCrossing_ShouldProduceDtosAsExpected()
 		{
 			// Arrange
-			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
+			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory();
 
 			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper(carGeneratorFactory);
 
@@ -57,7 +57,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 			IntersectionSimulation intersectionSimulation)
 		{
 			// Arrange
-			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
+			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory();
 
 			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper(carGeneratorFactory);
 
@@ -91,7 +91,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 			IntersectionSimulation intersectionSimulationExpected, IntersectionSimulationDto intersectionSimulationDto)
 		{
 			// Arrange
-			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
+			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory();
 
 			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper(carGeneratorFactory);
 
@@ -108,7 +108,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 		public void MapFromDtoToDomainAndBackToDto_GivenZebraCrossingDto_DtosObjectsShouldBeTheSame()
 		{
 			// Arrange
-			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
+			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory();
 			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper(carGeneratorFactory);
 			IntersectionSimulationDto intersectionSimulationDto = IntersectionSimulationDtosRepository.ZebraCrossingOnOneLaneRoadEastWest;
 
@@ -131,7 +131,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Mappers
 		public void LoadAllIntersectionSimulations_ShouldReturnListOfSimulations_WhenFilesExist()
 		{
 			// Arrange
-			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory(null);
+			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory();
 			IntersectionSimulationDtoMapper mapper = new IntersectionSimulationDtoMapper(carGeneratorFactory);
 			JsonSimulationSetupRepository jsonSimulationSetupRepository =
 				new JsonSimulationSetupRepository(mapper);

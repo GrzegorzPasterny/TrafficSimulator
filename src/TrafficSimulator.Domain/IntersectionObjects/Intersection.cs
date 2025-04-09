@@ -44,24 +44,16 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 			return base.Equals(other);
 		}
 
-		public IntersectionSnapshot CreateIntersectionSnapshot()
-		{
-			IntersectionSnapshot snapshot = new IntersectionSnapshot();
-
-			snapshot.TrafficLightsSnapshots = CreateTrafficLightsSnapshots();
-
-			return snapshot;
-		}
-
-		private List<TrafficLightsSnapshot> CreateTrafficLightsSnapshots()
+		public List<TrafficLightsSnapshot> CreateTrafficLightsSnapshots()
 		{
 			return ObjectLookup
 				.OfType<TrafficLight>()
 				.Select(trafficLight => new TrafficLightsSnapshot()
 				{
 					Id = trafficLight.Id,
-					Name = trafficLight.Name,
-					TrafficLightState = trafficLight.TrafficLightState
+					Name = trafficLight.FullName,
+					TrafficLightState = trafficLight.TrafficLightState,
+					InboundLaneName = trafficLight.Parent.FullName
 				})
 				.ToList();
 		}

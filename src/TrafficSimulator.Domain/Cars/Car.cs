@@ -4,6 +4,7 @@ using TrafficSimulator.Domain.Cars;
 using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models.IntersectionObjects;
 using TrafficSimulator.Domain.Models.Lights;
+using TrafficSimulator.Domain.Simulation.Snapshots;
 
 namespace TrafficSimulator.Domain.Models.Agents
 {
@@ -202,8 +203,8 @@ namespace TrafficSimulator.Domain.Models.Agents
 					return;
 				}
 
-				CurrentLocation.Location = DistanceToCover[zeroBasedIndexOfCurrentLocation + 1];
 				CurrentLocation.CurrentDistance = Math.Round(distanceToGo - CurrentLocation.DistanceLeft, 5);
+				CurrentLocation.Location = DistanceToCover[zeroBasedIndexOfCurrentLocation + 1];
 			}
 			else
 			{
@@ -321,6 +322,16 @@ namespace TrafficSimulator.Domain.Models.Agents
 				$"Distance = {CurrentLocation.CurrentDistance}, " +
 				$"Velocity = {Options.MoveVelocity}, " +
 				$"IsCarWaiting = {IsCarWaiting}]";
+		}
+
+		public CarSnapshot GetCarSnapshot()
+		{
+			return new CarSnapshot()
+			{
+				CarId = Id,
+				LocationName = CurrentLocation.Location.FullName,
+				LocationDistance = CurrentLocation.CurrentDistance
+			};
 		}
 	}
 }

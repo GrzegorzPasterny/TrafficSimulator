@@ -7,5 +7,6 @@ namespace TrafficSimulator.Domain.Simulation.Snapshots
 		public Guid Id { get; set; }
 		public string Name { get; set; }
 		public TrafficLightState TrafficLightState { get; set; }
+		public string InboundLaneName { get; set; }
 	}
 }

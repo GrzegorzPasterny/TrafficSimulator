@@ -12,7 +12,7 @@ namespace TrafficSimulator.Domain
 				options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection));
 			});
 
-			services.AddSingleton<CarGeneratorFactory>();
+			services.AddSingleton(sp => new CarGeneratorFactory(sp));
 
 			return services;
 		}
