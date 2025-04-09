@@ -23,7 +23,7 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 
 		public TimeSpan CurrentPhaseTime { get; internal set; } = TimeSpan.Zero;
 		// Options
-		public TimeSpan MinimalTimeForOnePhase { get; set; } = TimeSpan.FromSeconds(1);
+		public TimeSpan MinimalTimeForOnePhase { get; set; } = TimeSpan.FromSeconds(3);
 
 		public SimpleAiTrafficLightsHandler(
 			ISender sender, TrafficPhasesHandler trafficPhasesHandler, IAiAgent aiAgent, ILogger<SimpleAiTrafficLightsHandler> logger)
@@ -115,6 +115,10 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 				_trafficPhasesHandler.SetPhase(nextTrafficPhaseName, timeElapsed);
 				CurrentPhaseTime = timeElapsed;
 				return;
+			}
+			else
+			{
+				_trafficPhasesHandler.SetPhase(timeElapsed);
 			}
 		}
 	}
