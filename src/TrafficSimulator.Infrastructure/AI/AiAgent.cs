@@ -13,6 +13,11 @@ namespace TrafficSimulator.Infrastructure.AI
 
 		public AiAgent(string modelPath)
 		{
+			if (!File.Exists(modelPath))
+			{
+				throw new Exception($"Onnx model file does not exist [FileName = {modelPath}]");
+			}
+
 			_modelPath = modelPath;
 			_mlContext = new MLContext();
 			var dataView = _mlContext.Data.LoadFromEnumerable(new List<TrafficState>());
