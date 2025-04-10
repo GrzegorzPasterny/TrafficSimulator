@@ -27,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficSimulator.Presentati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficSimulator.Infrastructure.DI", "src\TrafficSimulator.Infrastructure.DI\TrafficSimulator.Infrastructure.DI.csproj", "{9FDF71EF-F6C3-47F8-99D4-A29F91AF1573}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSimulator.RealTimeSimulationTests", "test\TrafficSimulator.RealTimeSimulationTests\TrafficSimulator.RealTimeSimulationTests.csproj", "{D6EE09D9-EB47-4386-9A46-4823BC31E8DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficSimulator.RealTimeSimulationTests", "test\TrafficSimulator.RealTimeSimulationTests\TrafficSimulator.RealTimeSimulationTests.csproj", "{D6EE09D9-EB47-4386-9A46-4823BC31E8DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSimulator.AiAgentsTraining", "test\TrafficSimulator.AiAgentsTraining\TrafficSimulator.AiAgentsTraining.csproj", "{634F3012-DC6B-44C0-929C-066D92766041}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +81,10 @@ Global
 		{D6EE09D9-EB47-4386-9A46-4823BC31E8DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6EE09D9-EB47-4386-9A46-4823BC31E8DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6EE09D9-EB47-4386-9A46-4823BC31E8DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{634F3012-DC6B-44C0-929C-066D92766041}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{634F3012-DC6B-44C0-929C-066D92766041}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{634F3012-DC6B-44C0-929C-066D92766041}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{634F3012-DC6B-44C0-929C-066D92766041}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{0E480D7C-451D-4375-B9FA-82B1C6FCC36D} = {E22C5F94-9CB3-4841-97C2-34E7BC528115}
 		{9FDF71EF-F6C3-47F8-99D4-A29F91AF1573} = {E22C5F94-9CB3-4841-97C2-34E7BC528115}
 		{D6EE09D9-EB47-4386-9A46-4823BC31E8DB} = {6B82577D-BA01-428B-B831-C4AFFA006073}
+		{634F3012-DC6B-44C0-929C-066D92766041} = {6B82577D-BA01-428B-B831-C4AFFA006073}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0745607E-FFE9-49E7-9CAF-011106FE6DBB}
