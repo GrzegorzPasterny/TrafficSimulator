@@ -15,7 +15,7 @@ using TrafficSimulator.Domain.Simulation;
 
 namespace TrafficSimulator.Tests.Commons.Assets
 {
-    public static class IntersectionsRepository
+	public static class IntersectionsRepository
 	{
 		public static IntersectionSimulation ZebraCrossingOnOneLaneRoadEastWest
 		{
@@ -399,6 +399,111 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			};
 
 			return new IntersectionSimulation(intersection, id, "4StreetsFull")
+			{
+				Options = intersectionSimulationOptions
+			};
+		}
+
+		public static IntersectionSimulation FourDirectional_Full_AiLearning(ISender mediator)
+		{
+			ErrorOr<Intersection> intersectionResult =
+			IntersectionBuilder.Create("4StreetsFullAiLearning")
+			.AddIntersectionCore(distance: 15)
+			.AddLanesCollection(WorldDirection.North)
+			.AddInboundLane(WorldDirection.North, LaneTypeHelper.StraightLeftAndRight(), distance: 120)
+			.AddOutboundLane(WorldDirection.North, distance: 120)
+			.AddLanesCollection(WorldDirection.East)
+			.AddInboundLane(WorldDirection.East, LaneTypeHelper.StraightLeftAndRight(), distance: 120)
+			.AddOutboundLane(WorldDirection.East, distance: 120)
+			.AddLanesCollection(WorldDirection.South)
+			.AddInboundLane(WorldDirection.South, LaneTypeHelper.StraightLeftAndRight(), distance: 120)
+			.AddOutboundLane(WorldDirection.South, distance: 120)
+			.AddLanesCollection(WorldDirection.West)
+			.AddInboundLane(WorldDirection.West, LaneTypeHelper.StraightLeftAndRight(), distance: 120)
+			.AddOutboundLane(WorldDirection.West, distance: 120)
+			.Build();
+
+			intersectionResult.IsError.Should().BeFalse();
+			Intersection intersection = intersectionResult.Value;
+
+			InboundLane northInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.North)!
+				.InboundLanes!
+				.First();
+
+			InboundLane eastInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.East)!
+				.InboundLanes!
+				.First();
+
+			InboundLane southInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.South)!
+				.InboundLanes!
+				.First();
+
+			InboundLane westInboundLane = intersection.LanesCollection!
+				.Find(l => l.WorldDirection == WorldDirection.West)!
+				.InboundLanes!
+				.First();
+
+			CarOptions carOptions = new CarOptions()
+			{
+				DistanceBetweenCars = 4,
+				Length = 2,
+				MoveVelocity = 30
+			};
+
+			MultipleCarsGeneratorOptions multipleCarsGeneratorOptions = new()
+			{
+				AmountOfCarsToGenerate = 100,
+				DelayBetweenCarGeneration = TimeSpan.FromMilliseconds(750),
+				CarOptions = carOptions
+			};
+
+			RandomCarsGeneratorOptions randomCarsGeneratorOptions = new()
+			{
+				AmountOfCarsToGenerate = 100,
+				BaseRate = 1,
+				CarOptions = carOptions
+			};
+
+			WaveCarsGeneratorOptions waveCarsGeneratorOptions = new()
+			{
+				BaseRate = 1,
+				AmountOfCarsToGenerate = 100,
+				WaveAmplitude = 40,
+				WavePeriodHz = 10,
+				CarOptions = carOptions
+			};
+
+			ICarGenerator northLaneCarGenerator = new MultipleCarsGenerator(intersection, northInboundLane, mediator, multipleCarsGeneratorOptions);
+			northInboundLane.CarGenerator = northLaneCarGenerator;
+
+			ICarGenerator eastLaneCarGenerator = new RandomCarsGenerator(intersection, eastInboundLane, mediator, randomCarsGeneratorOptions);
+			eastInboundLane.CarGenerator = eastLaneCarGenerator;
+
+			ICarGenerator southLaneCarGenerator = new WaveCarsGenerator(intersection, southInboundLane, mediator, waveCarsGeneratorOptions);
+			southInboundLane.CarGenerator = southLaneCarGenerator;
+
+			ICarGenerator westLaneCarGenerator = new MultipleCarsGenerator(intersection, westInboundLane, mediator, multipleCarsGeneratorOptions);
+
+			westInboundLane.CarGenerator = westLaneCarGenerator;
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.North));
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.South));
+			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
+
+			Guid id = Guid.Parse("1000ffff-1d37-4289-928d-dd9798bf3007");
+
+			IntersectionSimulationOptions intersectionSimulationOptions = new()
+			{
+				StepLimit = 2000,
+				StepTimespan = TimeSpan.FromMilliseconds(40),
+				Timeout = TimeSpan.FromSeconds(60),
+				TrafficLightHandlerType = TrafficLightHandlerTypes.LearningAI
+			};
+
+			return new IntersectionSimulation(intersection, id, "4StreetsFullAiLeanring")
 			{
 				Options = intersectionSimulationOptions
 			};

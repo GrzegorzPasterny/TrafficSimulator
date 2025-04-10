@@ -58,7 +58,16 @@ namespace TrafficSimulator.Infrastructure.AI
 			}
 			else
 			{
-				var dataView = _mlContext.Data.LoadFromEnumerable(new List<TrafficState>());
+				var dataView = _mlContext.Data.LoadFromEnumerable(
+					new[]
+					{
+						new TrafficState
+						{
+							Inputs = new float[8],
+							Reward = 0f
+						}
+					});
+
 				var pipeline = _mlContext.Transforms
 					.Concatenate("Features", nameof(TrafficState.Inputs))
 					.Append(_mlContext.Regression.Trainers.Sdca());

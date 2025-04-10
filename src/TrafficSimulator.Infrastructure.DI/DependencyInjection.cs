@@ -13,7 +13,7 @@ namespace TrafficSimulator.Infrastructure.DI
 		public static IServiceCollection AddInfrastructure(this IServiceCollection services)
 		{
 			services.AddSingleton<IAiAgent, AiAgent>((sp) => new AiAgent("ML/current.onnx"));
-			services.AddSingleton<IAiLearningAgent, AiLearningAgent>((sp) => new AiLearningAgent(""));
+			services.AddSingleton<IAiLearningAgent, AiLearningAgent>((sp) => new AiLearningAgent("ML/model.zip"));
 			services.AddSingleton<ICarRepository, CarsRepositoryInMemory>();
 			services.AddScoped<ISimulationSetupMapper, IntersectionSimulationDtoMapper>();
 			services.AddScoped<ISimulationSetupRepository, JsonSimulationSetupRepository>();
