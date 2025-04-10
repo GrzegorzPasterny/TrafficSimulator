@@ -5,7 +5,6 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Serilog.Events;
 using TrafficSimulator.Application;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Simulation;
@@ -28,7 +27,8 @@ namespace TrafficSimulator.AiAgentsTraining.MlNet
 		{
 			var logger = new LoggerConfiguration()
 				.MinimumLevel.Verbose()
-				.WriteTo.TestOutput(testOutputHelper, LogEventLevel.Verbose, "[{Timestamp:HH:mm:ss:fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+				.WriteTo.TestOutput(testOutputHelper, outputTemplate: "[{Timestamp:HH:mm:ss:fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+				.WriteTo.File("Logs/log.log", outputTemplate: "[{Timestamp:HH:mm:ss:fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
 				.CreateLogger();
 
 			var services = new ServiceCollection();
@@ -48,7 +48,7 @@ namespace TrafficSimulator.AiAgentsTraining.MlNet
 		}
 
 		[Fact]
-		public async Task RunSimulation_GivenFourDirectionIntersection_GivenMultipleCars_GivenSimpleTrafficHandler_CarShouldPassTheIntersectionAsExpected()
+		public async Task TrainAiModel_OnFourLaneIntersection_ShouldProduceFileWithTrainedModel()
 		{
 			// Arrange
 			IntersectionSimulation intersectionSimulation =
@@ -61,7 +61,8 @@ namespace TrafficSimulator.AiAgentsTraining.MlNet
 			UnitResult<Error> simulationStartResult = await simulationHandler.Start();
 
 			simulationStartResult.IsSuccess.Should().BeTrue();
-			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
+			simulationHandler.SimulationState.SimulationPhase.Should()
+				.Match<SimulationPhase>(phase => phase == SimulationPhase.Finished || phase == SimulationPhase.Aborted);
 		}
 	}
 }

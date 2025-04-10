@@ -10,6 +10,9 @@ namespace TrafficSimulator.Domain.AI
 		[VectorType(4)]
 		public float[] QValues { get; set; } = new float[4];
 
+		[ColumnName("Score")]
+		public float PredictedReward { get; set; }
+
 		[ColumnName("Label")]
 		public float Reward { get; set; }
 	}

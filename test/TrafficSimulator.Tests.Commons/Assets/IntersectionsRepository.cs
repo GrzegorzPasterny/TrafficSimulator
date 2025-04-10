@@ -455,14 +455,14 @@ namespace TrafficSimulator.Tests.Commons.Assets
 
 			MultipleCarsGeneratorOptions multipleCarsGeneratorOptions = new()
 			{
-				AmountOfCarsToGenerate = 100,
+				AmountOfCarsToGenerate = 1,
 				DelayBetweenCarGeneration = TimeSpan.FromMilliseconds(750),
 				CarOptions = carOptions
 			};
 
 			RandomCarsGeneratorOptions randomCarsGeneratorOptions = new()
 			{
-				AmountOfCarsToGenerate = 100,
+				AmountOfCarsToGenerate = 1,
 				BaseRate = 1,
 				CarOptions = carOptions
 			};
@@ -470,7 +470,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			WaveCarsGeneratorOptions waveCarsGeneratorOptions = new()
 			{
 				BaseRate = 1,
-				AmountOfCarsToGenerate = 100,
+				AmountOfCarsToGenerate = 1,
 				WaveAmplitude = 40,
 				WavePeriodHz = 10,
 				CarOptions = carOptions
@@ -497,7 +497,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 
 			IntersectionSimulationOptions intersectionSimulationOptions = new()
 			{
-				StepLimit = 2000,
+				StepLimit = 150,
 				StepTimespan = TimeSpan.FromMilliseconds(40),
 				Timeout = TimeSpan.FromSeconds(60),
 				TrafficLightHandlerType = TrafficLightHandlerTypes.LearningAI

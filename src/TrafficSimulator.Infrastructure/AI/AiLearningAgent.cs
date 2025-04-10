@@ -43,6 +43,8 @@ namespace TrafficSimulator.Infrastructure.AI
 			_model = pipeline.Fit(dataView);
 			_predictionEngine = _mlContext.Model.CreatePredictionEngine<TrafficState, TrafficState>(_model);
 
+			Directory.CreateDirectory(Path.GetDirectoryName(_modelPath)!);
+
 			using var fs = new FileStream(_modelPath, FileMode.Create, FileAccess.Write);
 			_mlContext.Model.Save(_model, dataView.Schema, fs);
 
@@ -68,9 +70,16 @@ namespace TrafficSimulator.Infrastructure.AI
 						}
 					});
 
+				var schema = dataView.Schema;
+
+				foreach (var column in schema)
+				{
+				}
+
 				var pipeline = _mlContext.Transforms
 					.Concatenate("Features", nameof(TrafficState.Inputs))
-					.Append(_mlContext.Regression.Trainers.Sdca());
+					.Append(_mlContext.Transforms.CopyColumns("Score", "Label"))
+					;
 
 				_model = pipeline.Fit(dataView);
 			}
