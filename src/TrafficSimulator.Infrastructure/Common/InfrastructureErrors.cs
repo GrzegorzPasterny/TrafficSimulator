@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using ErrorOr;
+﻿using ErrorOr;
 
 namespace TrafficSimulator.Infrastructure.Common
 {
@@ -8,12 +7,12 @@ namespace TrafficSimulator.Infrastructure.Common
 		internal static Error IntersectionNotSet()
 			=> Error.NotFound("TrafficSimulator.Intersection.NotSet", "Intersection has not been set");
 
-		internal static UnitResult<Error> CarGeneratorAlreadyStarted()
+		internal static Error CarGeneratorAlreadyStarted()
 		{
 			throw new NotImplementedException();
 		}
 
-		internal static UnitResult<Error> JsonSaveFailure(string errorMessage)
+		internal static Error JsonSaveFailure(string errorMessage)
 			=> Error.Failure("TrafficSimulator.Infrastructure.JsonSaveFailed", $"Failed to save simulation object: {errorMessage}");
 
 		internal static Error FileNotFound(string identifier)

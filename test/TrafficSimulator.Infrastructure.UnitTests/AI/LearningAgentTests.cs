@@ -9,7 +9,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.AI
 		[Fact]
 		public void ShouldLoadOnnxModel()
 		{
-			IAiLearningAgent aiLearningAgent = new AiAgent("Assets/current.onnx");
+			IAiLearningAgent aiLearningAgent = new AiLearningAgent("Assets/current.onnx");
 
 			Action predictAction = () => aiLearningAgent.Predict([1, 0, 1000, 0, 0, 9, 0, 0]);
 
