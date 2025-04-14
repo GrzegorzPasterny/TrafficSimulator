@@ -234,6 +234,36 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 
 		private async Task RunSimulation()
 		{
+			switch (SimulationModeName)
+			{
+				case SimulationMode.InMemory:
+					await RunInMemorySimulation();
+					break;
+				case SimulationMode.RealTime:
+					await RunRealTimeSimulation();
+					break;
+				default:
+					throw new ArgumentException($"Unrecognized simulation mode [SimulationMode = {SimulationModeName}");
+			}
+		}
+		private async Task RunInMemorySimulation()
+		{
+			CleanUpTheSimulationData();
+			_simulationStartTime = DateTime.Now;
+
+			UnitResult<Error> startResult = await _simulationHandler.Start();
+
+			if (startResult.IsFailure)
+			{
+				_logger.LogError("Simulation failed to start [ErrorMessage = {ErrorMessage}", startResult.Error);
+				return;
+			}
+
+			GetherSimulationResults();
+		}
+
+		private async Task RunRealTimeSimulation()
+		{
 			CleanUpTheSimulationData();
 			StartSimulationTimer();
 
@@ -253,6 +283,13 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				await Task.Delay(200);
 			}
 
+			GetherSimulationResults();
+
+			StopSimulationTimer();
+		}
+
+		private void GetherSimulationResults()
+		{
 			SimulationResults simulationResults = _simulationHandler.SimulationResults;
 			StepsTaken = simulationResults.SimulationStepsTaken;
 			CarsPassed = simulationResults.CarsPassed;
@@ -260,8 +297,6 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			CalculationTimeSeconds = Math.Round(
 				simulationResults.SimulationStepsTaken *
 				_simulationHandler.IntersectionSimulation!.Options.StepTimespan.TotalSeconds, 2);
-
-			StopSimulationTimer();
 		}
 
 		private void StopSimulationTimer()
