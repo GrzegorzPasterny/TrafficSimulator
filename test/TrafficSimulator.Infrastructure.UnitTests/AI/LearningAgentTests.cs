@@ -9,7 +9,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.AI
 		[Fact]
 		public void ShouldLoadOnnxModel()
 		{
-			IAiLearningAgent aiLearningAgent = new AiLearningAgent("ML/model.zip");
+			IAiLearningAgent aiLearningAgent = new AiRlAgent("ML/model.zip");
 
 			Action predictAction = () => aiLearningAgent.Predict([1, 0, 1000, 0, 0, 9, 0, 0]);
 

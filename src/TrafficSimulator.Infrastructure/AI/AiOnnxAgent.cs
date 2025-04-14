@@ -4,14 +4,17 @@ using TrafficSimulator.Domain.AI;
 
 namespace TrafficSimulator.Infrastructure.AI
 {
-	public class AiAgent : IAiAgent
+	/// <summary>
+	/// Uses external onnx file to load the trained AI agent
+	/// </summary>
+	public class AiOnnxAgent : IAiAgent
 	{
 		private readonly MLContext _mlContext;
 		private ITransformer _model;
 		private readonly string _modelPath;
 		private PredictionEngine<TrafficState, TrafficState> _predictionEngine;
 
-		public AiAgent(string modelPath)
+		public AiOnnxAgent(string modelPath)
 		{
 			if (!File.Exists(modelPath))
 			{

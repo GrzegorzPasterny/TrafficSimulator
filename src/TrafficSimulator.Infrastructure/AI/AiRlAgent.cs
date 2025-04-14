@@ -4,7 +4,10 @@ using TrafficSimulator.Domain.AI;
 
 namespace TrafficSimulator.Infrastructure.AI
 {
-	public class AiLearningAgent : IAiLearningAgent
+	/// <summary>
+	/// AI agent capable of using reinforcement learning to train to steer traffic lights
+	/// </summary>
+	public class AiRlAgent : IAiLearningAgent
 	{
 		private readonly MLContext _mlContext;
 		private ITransformer _model;
@@ -12,7 +15,7 @@ namespace TrafficSimulator.Infrastructure.AI
 		private readonly string _modelPath;
 		private PredictionEngine<TrafficState, TrafficState> _predictionEngine;
 
-		public AiLearningAgent(string modelPath)
+		public AiRlAgent(string modelPath)
 		{
 			_modelPath = modelPath;
 			_mlContext = new MLContext();
@@ -69,12 +72,6 @@ namespace TrafficSimulator.Infrastructure.AI
 							Reward = 0f
 						}
 					});
-
-				var schema = dataView.Schema;
-
-				foreach (var column in schema)
-				{
-				}
 
 				var pipeline = _mlContext.Transforms
 					.Concatenate("Features", nameof(TrafficState.Inputs))
