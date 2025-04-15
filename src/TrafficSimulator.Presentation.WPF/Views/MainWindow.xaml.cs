@@ -119,6 +119,7 @@ public partial class MainWindow : Window
 				{
 					if (location.DistanceLeft == 0)
 					{
+						// TODO: This method is invoked twice for every car that parks - check why
 						ParkCar(car, ((OutboundLane)location.Location).WorldDirection);
 						return;
 					}

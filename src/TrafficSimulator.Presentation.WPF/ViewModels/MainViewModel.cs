@@ -249,17 +249,19 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		private async Task RunInMemorySimulation()
 		{
 			CleanUpTheSimulationData();
-			_simulationStartTime = DateTime.Now;
+			StartSimulationTimer();
 
 			UnitResult<Error> startResult = await _simulationHandler.Start();
 
 			if (startResult.IsFailure)
 			{
-				_logger.LogError("Simulation failed to start [ErrorMessage = {ErrorMessage}", startResult.Error);
+				_logger.LogError("Simulation failed to complete [ErrorMessage = {ErrorMessage}", startResult.Error);
+				StopSimulationTimer();
 				return;
 			}
 
 			GetherSimulationResults();
+			StopSimulationTimer();
 		}
 
 		private async Task RunRealTimeSimulation()
@@ -284,7 +286,6 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 			}
 
 			GetherSimulationResults();
-
 			StopSimulationTimer();
 		}
 

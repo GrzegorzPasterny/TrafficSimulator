@@ -61,8 +61,6 @@ namespace TrafficSimulator.Application.Simulation
 
 					await DetermineState();
 
-					NotifyAboutSimulationState();
-
 					if (IntersectionSimulation.SimulationState.StepsCount >= IntersectionSimulation.Options.StepLimit)
 					{
 						IntersectionSimulation.SimulationState.SimulationPhase = SimulationPhase.Aborted;
@@ -70,6 +68,7 @@ namespace TrafficSimulator.Application.Simulation
 						_logger.LogInformation("Simulation aborted due to reaching the maximum step amount " +
 							"[StepLimit = {StepLimit}]", IntersectionSimulation.Options.StepLimit);
 
+						NotifyAboutSimulationState();
 						await GatherResults(_stopwatch.ElapsedMilliseconds);
 						return;
 					}
@@ -79,6 +78,7 @@ namespace TrafficSimulator.Application.Simulation
 					{
 						_logger.LogDebug("The simulation has finished");
 
+						NotifyAboutSimulationState();
 						await GatherResults(_stopwatch.ElapsedMilliseconds);
 						return;
 					}
@@ -91,6 +91,7 @@ namespace TrafficSimulator.Application.Simulation
 
 					IntersectionSimulation.SimulationState.SimulationPhase = SimulationPhase.Aborted;
 
+					NotifyAboutSimulationState();
 					await GatherResults(_stopwatch.ElapsedMilliseconds);
 				}
 			}

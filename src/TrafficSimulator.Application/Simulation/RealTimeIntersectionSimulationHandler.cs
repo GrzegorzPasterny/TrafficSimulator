@@ -10,7 +10,7 @@ using TrafficSimulator.Domain.Models;
 
 namespace TrafficSimulator.Application.Simulation
 {
-    public class RealTimeIntersectionSimulationHandler : IntersectionSimulationHandler
+	public class RealTimeIntersectionSimulationHandler : IntersectionSimulationHandler
 	{
 		private new readonly ILogger<RealTimeIntersectionSimulationHandler> _logger;
 		private Stopwatch? _stopwatch;
@@ -79,7 +79,7 @@ namespace TrafficSimulator.Application.Simulation
 						IntersectionSimulation!.Options.Timeout);
 
 					IntersectionSimulation!.SimulationState.SimulationPhase = SimulationPhase.Aborted;
-					_ = Task.Run(() => GatherResults(_stopwatch.ElapsedMilliseconds));
+					await GatherResults(_stopwatch.ElapsedMilliseconds);
 
 					CleanupTimer();
 					return;
@@ -98,7 +98,7 @@ namespace TrafficSimulator.Application.Simulation
 					_logger.LogInformation("Simulation aborted due to reaching the maximum step amount " +
 						"[StepLimit = {StepLimit}]", IntersectionSimulation.Options.StepLimit);
 
-					_ = Task.Run(() => GatherResults(_stopwatch!.ElapsedMilliseconds));
+					await GatherResults(_stopwatch!.ElapsedMilliseconds);
 
 					CleanupTimer();
 					return;
@@ -108,7 +108,7 @@ namespace TrafficSimulator.Application.Simulation
 				{
 					_logger.LogInformation("The simulation has finished");
 
-					_ = Task.Run(() => GatherResults(_stopwatch!.ElapsedMilliseconds));
+					await GatherResults(_stopwatch!.ElapsedMilliseconds);
 
 					CleanupTimer();
 					return;

@@ -231,14 +231,17 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 		private async Task SaveSimulationSnapshot()
 		{
-			IntersectionSnapshot intersectionSnapshot = await CreateIntersectionSnapshot();
+			if (IntersectionSimulation!.Options.SaveSimulationSnapshots)
+			{
+				IntersectionSnapshot intersectionSnapshot = await CreateIntersectionSnapshot();
 
-			await _sender.Send(
-				new SaveSimulationSnapshotCommand(
-					IntersectionSimulation.Id,
-					IntersectionSimulation.Name,
-					intersectionSnapshot
-				));
+				await _sender.Send(
+					new SaveSimulationSnapshotCommand(
+						IntersectionSimulation.Id,
+						IntersectionSimulation.Name,
+						intersectionSnapshot
+					));
+			}
 		}
 
 		public async Task<IntersectionSnapshot> CreateIntersectionSnapshot()
@@ -297,8 +300,6 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 				cars.Sum(c => c.MovesWhenCarWaited) * IntersectionSimulation.Options.StepTimespan.TotalMilliseconds;
 
 			_logger.LogInformation("SimulationResults = {SimulationResults}", SimulationResults);
-
-			NotifyAboutSimulationState();
 		}
 
 		public abstract UnitResult<Error> ChangeTrafficPhase(string trafficPhaseName);
