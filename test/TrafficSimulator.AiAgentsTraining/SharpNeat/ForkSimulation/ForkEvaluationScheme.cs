@@ -1,10 +1,21 @@
-﻿using SharpNeat.Evaluation;
-using System.Numerics;
+﻿using MediatR;
+using SharpNeat;
+using SharpNeat.Evaluation;
+using TrafficSimulator.Application.Simulation;
 
 namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 {
-	public class ForkEvaluationScheme<TScalar> : IBlackBoxEvaluationScheme<TScalar> where TScalar : unmanaged, IBinaryFloatingPointIeee754<TScalar>
+	public class ForkEvaluationScheme : IBlackBoxEvaluationScheme<double>
 	{
+		private IntersectionSimulationHandlerFactory _simulationHandlerFactory;
+		private readonly ISender _mediator;
+
+		public ForkEvaluationScheme(IntersectionSimulationHandlerFactory simulationHandlerFactory, ISender mediator)
+		{
+			_simulationHandlerFactory = simulationHandlerFactory;
+			_mediator = mediator;
+		}
+
 		public int InputCount => throw new NotImplementedException();
 
 		public int OutputCount => throw new NotImplementedException();
@@ -17,9 +28,9 @@ namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 
 		public bool EvaluatorsHaveState => throw new NotImplementedException();
 
-		public IPhenomeEvaluator<global::SharpNeat.IBlackBox<TScalar>> CreateEvaluator()
+		public IPhenomeEvaluator<IBlackBox<double>> CreateEvaluator()
 		{
-			throw new NotImplementedException();
+			return new ForkEvaluator(_simulationHandlerFactory, _mediator);
 		}
 
 		public bool TestForStopCondition(FitnessInfo fitnessInfo)

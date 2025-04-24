@@ -1,19 +1,50 @@
 ﻿using FluentAssertions;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 using SharpNeat.Experiments;
 using SharpNeat.Experiments.ConfigModels;
 using SharpNeat.Neat;
 using SharpNeat.Neat.EvolutionAlgorithm;
+using TrafficSimulator.Application;
+using TrafficSimulator.Application.Simulation;
+using TrafficSimulator.Domain;
+using TrafficSimulator.Infrastructure.DI;
 using Xunit.Abstractions;
 
 namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 {
 	public class ForkExperimentFactory
 	{
-		private readonly ITestOutputHelper _output;
+		internal readonly ILogger<ForkExperimentFactory> _logger;
+		internal readonly IMediator _mediator;
+		internal readonly IntersectionSimulationHandlerFactory _simulationHandlerFactory;
+		private readonly ISender _sender;
 
-		public ForkExperimentFactory(ITestOutputHelper output)
+		public ForkExperimentFactory(ITestOutputHelper testOutputHelper)
 		{
-			_output = output;
+			var logger = new LoggerConfiguration()
+				.MinimumLevel.Verbose()
+				.WriteTo.TestOutput(testOutputHelper, LogEventLevel.Verbose, "[{Timestamp:HH:mm:ss:fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+				.CreateLogger();
+
+			var services = new ServiceCollection();
+			services.AddDomain();
+			services.AddApplication();
+			services.AddInfrastructure();
+			services.AddLogging(loggingBuilder =>
+			{
+				loggingBuilder.ClearProviders();
+				loggingBuilder.AddSerilog(logger);
+			});
+
+			var provider = services.BuildServiceProvider();
+
+			_logger = provider.GetRequiredService<ILogger<ForkExperimentFactory>>();
+			_simulationHandlerFactory = provider.GetRequiredService<IntersectionSimulationHandlerFactory>();
+			_sender = provider.GetRequiredService<ISender>();
 		}
 
 		[Fact]
@@ -21,7 +52,7 @@ namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 		{
 			ExperimentConfig experimentConfig = ForkExperimentNeatConfig.GetConfig();
 
-			var evalScheme = new ForkEvaluationScheme<double>();
+			var evalScheme = new ForkEvaluationScheme(_simulationHandlerFactory, _sender);
 
 			var experiment = new NeatExperiment<double>(evalScheme, "FORK");
 			experiment.Configure(experimentConfig);
@@ -37,16 +68,16 @@ namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 				counter++;
 				ea.PerformOneGeneration();
 
-				if (ea.Population.Stats.BestFitness.PrimaryFitness >= 10)
+				if (ea.Population.Stats.BestFitness.PrimaryFitness >= ForkEvaluator.ExpectedBestFitnessLevel)
 				{
 					break;
 				}
 			}
 
-			_output.WriteLine($"Number of generations: {counter}");
-			_output.WriteLine($"Final score: {ea.Population.Stats.BestFitness.PrimaryFitness}");
+			_logger.LogInformation("Number of generations: {Counter}", counter);
+			_logger.LogInformation("Final score: {Fitness}", ea.Population.Stats.BestFitness.PrimaryFitness);
 
-			ea.Population.Stats.BestFitness.PrimaryFitness.Should().BeGreaterOrEqualTo(10);
+			ea.Population.Stats.BestFitness.PrimaryFitness.Should().BeGreaterOrEqualTo(ForkEvaluator.ExpectedBestFitnessLevel);
 		}
 	}
 }
