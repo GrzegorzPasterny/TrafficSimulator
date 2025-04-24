@@ -2,7 +2,7 @@
 using SharpNeat.Evaluation;
 using System.Numerics;
 
-namespace TrafficSimulator.AiAgentsTraining.SharpNeatDemo
+namespace TrafficSimulator.AiAgentsTraining.SharpNeat.XorDemo
 {
 	public class XorEvaluator<TScalar> : IPhenomeEvaluator<IBlackBox<TScalar>>
 	where TScalar : unmanaged, IBinaryFloatingPointIeee754<TScalar>

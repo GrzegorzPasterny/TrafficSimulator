@@ -2,7 +2,7 @@
 using SharpNeat.Evaluation;
 using System.Numerics;
 
-namespace TrafficSimulator.AiAgentsTraining.SharpNeatDemo
+namespace TrafficSimulator.AiAgentsTraining.SharpNeat.XorDemo
 {
 	public sealed class XorEvaluationScheme<TScalar> : IBlackBoxEvaluationScheme<TScalar> where TScalar : unmanaged, IBinaryFloatingPointIeee754<TScalar>
 	{
@@ -25,7 +25,7 @@ namespace TrafficSimulator.AiAgentsTraining.SharpNeatDemo
 
 		public bool TestForStopCondition(FitnessInfo fitnessInfo)
 		{
-			return (fitnessInfo.PrimaryFitness >= 10);
+			return fitnessInfo.PrimaryFitness >= 10;
 		}
 	}
 }

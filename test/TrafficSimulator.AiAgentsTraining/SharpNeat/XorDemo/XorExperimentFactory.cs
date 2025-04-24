@@ -6,13 +6,13 @@ using SharpNeat.Neat.EvolutionAlgorithm;
 using SharpNeat.NeuralNets.Double.ActivationFunctions;
 using Xunit.Abstractions;
 
-namespace TrafficSimulator.AiAgentsTraining.SharpNeatDemo;
+namespace TrafficSimulator.AiAgentsTraining.SharpNeat.XorDemo;
 
-public class XorFunctionApproximationTests
+public class XorExperimentFactory
 {
 	private readonly ITestOutputHelper _output;
 
-	public XorFunctionApproximationTests(ITestOutputHelper output)
+	public XorExperimentFactory(ITestOutputHelper output)
 	{
 		_output = output;
 	}
