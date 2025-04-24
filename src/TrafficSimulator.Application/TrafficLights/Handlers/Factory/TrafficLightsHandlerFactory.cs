@@ -3,6 +3,7 @@ using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.TrafficLights.Handlers.AI;
 using TrafficSimulator.Application.TrafficLights.Handlers.Dynamic;
 using TrafficSimulator.Application.TrafficLights.Handlers.Manual;
+using TrafficSimulator.Application.TrafficLights.Handlers.Nest;
 using TrafficSimulator.Application.TrafficLights.Handlers.Sequential;
 
 namespace TrafficSimulator.Application.TrafficLights.Handlers.Factory
@@ -25,6 +26,7 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.Factory
 				TrafficLightHandlerTypes.Dynamic => _serviceProvider.GetRequiredService<SimpleDynamicTrafficLightsHandler>(),
 				TrafficLightHandlerTypes.AI => _serviceProvider.GetRequiredService<SimpleAiTrafficLightsHandler>(),
 				TrafficLightHandlerTypes.LearningAI => _serviceProvider.GetRequiredService<SimpleAiLearningTrafficLightsHandler>(),
+				TrafficLightHandlerTypes.Nest => _serviceProvider.GetRequiredService<NestTrafficLightsHandler>(),
 				_ => throw new ArgumentException($"Invalid Traffic Lights Handler mode: {mode}", nameof(mode))
 			};
 		}

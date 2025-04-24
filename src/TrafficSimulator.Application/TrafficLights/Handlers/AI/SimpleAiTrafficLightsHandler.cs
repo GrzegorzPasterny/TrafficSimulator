@@ -22,7 +22,6 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 		internal SimpleAiTrafficOutput? _simpleAiTrafficOutput;
 
 		public TimeSpan CurrentPhaseTime { get; internal set; } = TimeSpan.Zero;
-		// Options
 		public TimeSpan MinimalTimeForOnePhase { get; set; } = TimeSpan.FromSeconds(3);
 
 		public SimpleAiTrafficLightsHandler(

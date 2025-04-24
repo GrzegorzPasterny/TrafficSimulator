@@ -26,7 +26,7 @@ namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 			ISimulationHandler simulationHandler = _simulationHandlerFactory.CreateHandler(SimulationMode.InMemory);
 
 			simulationHandler.LoadIntersection(
-				IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLaneWithTrafficLightsWithMultipleCarGenerators(_mediator));
+				IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLane_NestSimulation(_mediator));
 
 			simulationHandler.Start().GetAwaiter().GetResult();
 
