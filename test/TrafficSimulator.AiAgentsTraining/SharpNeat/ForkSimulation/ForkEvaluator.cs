@@ -35,9 +35,32 @@ namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 			return EvaluateFitness(simulationResults);
 		}
 
-		private FitnessInfo EvaluateFitness(SimulationResults simulationResults)
+		internal static FitnessInfo EvaluateFitness(SimulationResults simulationResults)
 		{
-			throw new NotImplementedException();
+			double reward = 0;
+
+			if (simulationResults.TotalCars == simulationResults.CarsPassed)
+			{
+				reward += simulationResults.TotalCars * 1_000; // bonus for competing the simulation
+			}
+
+			reward += simulationResults.CarsPassed * 1_000; // reward for each car that passed the intersection
+
+			reward -= simulationResults.TotalCarsIdleTimeMs; // punishment for each idle ms for each car
+
+			reward -= simulationResults.SimulationStepsTaken * 10; // punishment for each simulation step
+
+			Clamp(ref reward);
+
+			return new FitnessInfo(reward);
+		}
+
+		private static void Clamp(ref double reward)
+		{
+			if (reward < 0)
+			{
+				reward = 0;
+			}
 		}
 	}
 }

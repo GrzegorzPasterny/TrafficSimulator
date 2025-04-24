@@ -5,6 +5,7 @@ using TrafficSimulator.Application.TrafficLights.Handlers.AI;
 using TrafficSimulator.Application.TrafficLights.Handlers.Dynamic;
 using TrafficSimulator.Application.TrafficLights.Handlers.Factory;
 using TrafficSimulator.Application.TrafficLights.Handlers.Manual;
+using TrafficSimulator.Application.TrafficLights.Handlers.Nest;
 using TrafficSimulator.Application.TrafficLights.Handlers.Sequential;
 
 namespace TrafficSimulator.Application
@@ -24,6 +25,7 @@ namespace TrafficSimulator.Application
 			services.AddScoped<SimpleDynamicTrafficLightsHandler>();
 			services.AddScoped<SimpleAiTrafficLightsHandler>();
 			services.AddScoped<SimpleAiLearningTrafficLightsHandler>();
+			services.AddScoped<NestTrafficLightsHandler>();
 			services.AddSingleton<ITrafficLightsHandlerFactory, TrafficLightsHandlerFactory>();
 
 			services.AddScoped<RealTimeIntersectionSimulationHandler>();

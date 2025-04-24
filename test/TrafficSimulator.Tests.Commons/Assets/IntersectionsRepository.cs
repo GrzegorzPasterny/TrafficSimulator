@@ -155,7 +155,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 		public static IntersectionSimulation ForkFromWestAndEastThatMergesToNorthLane_NestSimulation(ISender mediator)
 		{
 			ErrorOr<Intersection> intersectionResult =
-			IntersectionBuilder.Create("Fork")
+			IntersectionBuilder.Create("Fork_NEST")
 			.AddIntersectionCore()
 			.AddLanesCollection(WorldDirection.East)
 			.AddInboundLane(WorldDirection.East, LaneTypeHelper.Right())
@@ -182,13 +182,21 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			MultipleCarsGeneratorOptions optionsWest = new MultipleCarsGeneratorOptions()
 			{
 				AmountOfCarsToGenerate = 10,
-				DelayBetweenCarGeneration = TimeSpan.FromMilliseconds(200)
+				DelayBetweenCarGeneration = TimeSpan.FromMilliseconds(166),
+				CarOptions = new CarOptions()
+				{
+					MoveVelocity = 50
+				}
 			};
 
 			MultipleCarsGeneratorOptions optionsEast = new MultipleCarsGeneratorOptions()
 			{
 				AmountOfCarsToGenerate = 8,
-				DelayBetweenCarGeneration = TimeSpan.FromMilliseconds(266)
+				DelayBetweenCarGeneration = TimeSpan.FromMilliseconds(200),
+				CarOptions = new CarOptions()
+				{
+					MoveVelocity = 50
+				}
 			};
 
 			ICarGenerator westLaneCarGenerator = new MultipleCarsGenerator(intersection, westInboundLane, mediator, optionsWest);
@@ -200,18 +208,17 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
 			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
 
-			Guid id = Guid.Parse("741c2b72-da21-424e-8b43-3b339415013b");
+			Guid id = Guid.Parse("12345678-1234-424e-8b43-3b339415013b");
 
 			IntersectionSimulationOptions intersectionSimulationOptions = new IntersectionSimulationOptions()
 			{
 				SaveSimulationSnapshots = false,
-				StepLimit = 200,
+				StepLimit = 1000,
 				StepTimespan = TimeSpan.FromMilliseconds(40),
-				Timeout = TimeSpan.FromMilliseconds(10_000),
 				TrafficLightHandlerType = TrafficLightHandlerTypes.Nest
 			};
 
-			return new IntersectionSimulation(intersection, id, "ForkSimulation")
+			return new IntersectionSimulation(intersection, id, "ForkSimulation_NEST")
 			{
 				Options = intersectionSimulationOptions,
 			};
