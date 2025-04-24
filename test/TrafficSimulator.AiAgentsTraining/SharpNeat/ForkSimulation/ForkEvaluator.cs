@@ -11,7 +11,7 @@ namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 {
 	public class ForkEvaluator : IPhenomeEvaluator<IBlackBox<double>>
 	{
-		public const double ExpectedBestFitnessLevel = 100;
+		public const double ExpectedBestFitnessLevel = 110_000;
 		private IntersectionSimulationHandlerFactory _simulationHandlerFactory;
 		private readonly ISender _mediator;
 
@@ -37,7 +37,7 @@ namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 
 		internal static FitnessInfo EvaluateFitness(SimulationResults simulationResults)
 		{
-			double reward = 0;
+			double reward = 100_000; // initial reward
 
 			if (simulationResults.TotalCars == simulationResults.CarsPassed)
 			{

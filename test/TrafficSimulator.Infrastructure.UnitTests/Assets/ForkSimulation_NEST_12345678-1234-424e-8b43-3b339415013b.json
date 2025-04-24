@@ -129,7 +129,7 @@
   "Options": {
     "StepTimespanMs": 40,
     "TimeoutMs": 60000,
-    "StepLimit": 1000,
+    "StepLimit": 250,
     "TrafficLightHandlerType": "Nest"
   }
 }

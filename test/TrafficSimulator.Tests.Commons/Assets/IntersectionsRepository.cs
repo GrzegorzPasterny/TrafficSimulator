@@ -213,7 +213,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			IntersectionSimulationOptions intersectionSimulationOptions = new IntersectionSimulationOptions()
 			{
 				SaveSimulationSnapshots = false,
-				StepLimit = 1000,
+				StepLimit = 250,
 				StepTimespan = TimeSpan.FromMilliseconds(40),
 				TrafficLightHandlerType = TrafficLightHandlerTypes.Nest
 			};
