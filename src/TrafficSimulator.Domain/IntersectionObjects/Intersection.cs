@@ -61,9 +61,16 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 				.ToList();
 		}
 
+		// TODO: I do not like this method being here.
+		// It should be somehow injected to the traffic lights handler that needs it.
 		public void LoadNestModel(IBlackBox<double> blackBox)
 		{
 			_blackBox = blackBox;
+		}
+
+		public IBlackBox<double>? GetNestModel()
+		{
+			return _blackBox;
 		}
 	}
 }
