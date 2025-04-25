@@ -55,7 +55,16 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.Nest
 
 		public UnitResult<Error> SetLightsManually(string trafficPhaseName)
 		{
-			throw new NotImplementedException();
+			if (_trafficPhasesHandler.TrafficPhases is null)
+			{
+				// TODO: Handle
+				throw new NotImplementedException();
+			}
+
+			ChangePhase(trafficPhaseName, TimeSpan.Zero);
+			CurrentPhaseTime = TimeSpan.Zero;
+
+			return UnitResult.Success<Error>();
 		}
 
 		internal void ChangePhase(string nextTrafficPhaseName, TimeSpan timeElapsed)

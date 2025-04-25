@@ -31,6 +31,11 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 		public event EventHandler<SimulationStateEventArgs>? SimulationUpdated;
 
+		// TODO: Add events that will allow to make actions during step execution.
+		// Use case for that is the external AI agent that could steer traffic lights using
+		// ManualTrafficLightsHandler calculating and applying the best traffic lights
+		// according to its internal logic
+
 		public SimulationState? SimulationState => IntersectionSimulation?.SimulationState;
 		public SimulationResults? SimulationResults => IntersectionSimulation?.SimulationResults!;
 
