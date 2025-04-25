@@ -11,7 +11,7 @@ namespace TrafficSimulator.Domain.CarGenerators
 	{
 		private bool _isGenerationCompleted = false;
 		private int _carsGeneratedSoFar = 0;
-		private readonly Random _randomNumberGenerator = new Random();
+		private readonly Random _randomNumberGenerator = new();
 
 		public RandomCarsGenerator(
 			Intersection root, IntersectionObject? parent,

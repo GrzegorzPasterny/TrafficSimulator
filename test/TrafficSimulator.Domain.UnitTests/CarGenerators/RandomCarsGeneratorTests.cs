@@ -11,9 +11,9 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 {
 	public class RandomCarsGeneratorTests
 	{
-		Mock<Intersection> _rootMock = new Mock<Intersection>("MockIntersection", null);
+		Mock<Intersection> _rootMock = new("MockIntersection", null);
 		Mock<IntersectionObject> _parentMock;
-		Mock<ISender> _mediatorMock = new Mock<ISender>();
+		Mock<ISender> _mediatorMock = new();
 		private Mock<RandomCarsGenerator>? _randomCarsGeneratorMock;
 
 		public RandomCarsGeneratorTests()
@@ -24,7 +24,7 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 		[Fact]
 		public async Task GenerateCars_WithMaximumProbability_WhenOneCarIsRequested_ShouldProduceCarImmediately()
 		{
-			RandomCarsGeneratorOptions options = new RandomCarsGeneratorOptions()
+			RandomCarsGeneratorOptions options = new()
 			{
 				CarOptions = new CarOptions(),
 				AmountOfCarsToGenerate = 1,
@@ -54,7 +54,7 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 		public async Task GenerateCars_WithThreeRequests_WithMaximumProbability_ShouldGenerateThreeCars()
 		{
 			// Arrange
-			RandomCarsGeneratorOptions options = new RandomCarsGeneratorOptions()
+			RandomCarsGeneratorOptions options = new()
 			{
 				CarOptions = new CarOptions(),
 				AmountOfCarsToGenerate = 3,
@@ -89,7 +89,7 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 		public async Task GenerateCars_WithMultipleRequests_ShouldGenerateCorrectNumberOfCars()
 		{
 			// Arrange
-			RandomCarsGeneratorOptions options = new RandomCarsGeneratorOptions()
+			RandomCarsGeneratorOptions options = new()
 			{
 				CarOptions = new CarOptions(),
 				AmountOfCarsToGenerate = 1_000,

@@ -11,12 +11,12 @@ namespace TrafficSimulator.Domain.UnitTests.CarGenerators
 {
 	public class WaveCarsGeneratorTests
 	{
-		Mock<Intersection> _rootMock = new Mock<Intersection>("MockIntersection", null);
+		Mock<Intersection> _rootMock = new("MockIntersection", null);
 		Mock<IntersectionObject> _parentMock;
-		Mock<ISender> _mediatorMock = new Mock<ISender>();
+		Mock<ISender> _mediatorMock = new();
 		private Mock<WaveCarsGenerator>? _waveCarsGeneratorMock;
 
-		WaveCarsGeneratorOptions _options = new WaveCarsGeneratorOptions()
+		WaveCarsGeneratorOptions _options = new()
 		{
 			CarOptions = new CarOptions(),
 			AmountOfCarsToGenerate = 1000,

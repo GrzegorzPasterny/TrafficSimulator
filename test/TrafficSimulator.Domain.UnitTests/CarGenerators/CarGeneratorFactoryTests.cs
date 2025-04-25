@@ -59,7 +59,7 @@ public class CarGeneratorFactoryTests
 	public void Create_ShouldReturnNullValue_WhenCarGeneratorTypeIsNullOrEmpty()
 	{
 		// Act
-		CarGeneratorOptions options = new CarGeneratorOptions();
+		CarGeneratorOptions options = new();
 		var optionsJson = JsonSerializer.Serialize(options);
 
 
@@ -78,7 +78,7 @@ public class CarGeneratorFactoryTests
 	public void Create_ShouldThrowException_WhenCarGeneratorTypeIsUnknown()
 	{
 		// Arrange
-		CarGeneratorOptions options = new CarGeneratorOptions();
+		CarGeneratorOptions options = new();
 		var optionsJson = JsonSerializer.Serialize(options);
 
 		// Act & Assert

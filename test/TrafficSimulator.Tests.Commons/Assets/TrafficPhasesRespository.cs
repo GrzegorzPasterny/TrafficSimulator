@@ -8,7 +8,7 @@ namespace TrafficSimulator.Application.UnitTests.Commons
 	{
 		public static TrafficPhase AllLightsGreen(Intersection intersection)
 		{
-			TrafficPhase allGreenTrafficPhase = new TrafficPhase("AllGreen", intersection);
+			TrafficPhase allGreenTrafficPhase = new("AllGreen", intersection);
 			allGreenTrafficPhase.TrafficLightsAssignments.ForEach(a => a.TrafficLightState = TrafficLightState.Green);
 
 			return allGreenTrafficPhase;
@@ -16,7 +16,7 @@ namespace TrafficSimulator.Application.UnitTests.Commons
 
 		public static TrafficPhase AllLightsRed(Intersection intersection)
 		{
-			TrafficPhase allRedTrafficPhase = new TrafficPhase("AllRed", intersection);
+			TrafficPhase allRedTrafficPhase = new("AllRed", intersection);
 			allRedTrafficPhase.TrafficLightsAssignments.ForEach(a => a.TrafficLightState = TrafficLightState.Red);
 
 			return allRedTrafficPhase;
@@ -24,7 +24,7 @@ namespace TrafficSimulator.Application.UnitTests.Commons
 
 		public static TrafficPhase GreenForOneDirection(Intersection intersection, WorldDirection worldDirection)
 		{
-			TrafficPhase greenForOneDirectionTrafficPhase = new TrafficPhase($"GreenFor{worldDirection}Only", intersection);
+			TrafficPhase greenForOneDirectionTrafficPhase = new($"GreenFor{worldDirection}Only", intersection);
 			greenForOneDirectionTrafficPhase.TrafficLightsAssignments.ForEach(a =>
 			{
 				if (a.InboundLane.WorldDirection == worldDirection)

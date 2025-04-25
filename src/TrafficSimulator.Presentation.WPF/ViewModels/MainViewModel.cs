@@ -63,11 +63,11 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 		[ObservableProperty]
 		private TrafficPhaseItem _currentTrafficPhaseItem;
 		[ObservableProperty]
-		private ObservableCollection<TrafficPhaseItem> _trafficPhaseItems = new ObservableCollection<TrafficPhaseItem>();
+		private ObservableCollection<TrafficPhaseItem> _trafficPhaseItems = new();
 		[ObservableProperty]
 		private TrafficLightsModeItem _currentTrafficLightsModeItem;
 		[ObservableProperty]
-		private ObservableCollection<TrafficLightsModeItem> _trafficLightsModeItems = new ObservableCollection<TrafficLightsModeItem>(
+		private ObservableCollection<TrafficLightsModeItem> _trafficLightsModeItems = new(
 			TrafficLightHandlerTypes.Modes.Select(m => m.ToTrafficPhaseModeItem()));
 
 		[ObservableProperty]
@@ -462,7 +462,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				double leftEdge = -intersectionCoreElement.Width / 2;
 				double currentLanePositionFromTheLeft = leftEdge + CanvasOptions.LaneWidth * northLanesProcessed;
 
-				LaneElement laneElement = new LaneElement()
+				LaneElement laneElement = new()
 				{
 					IsInbound = true,
 					ReferenceLaneId = lane.Id,
@@ -483,7 +483,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				double leftEdge = -intersectionCoreElement.Width / 2;
 				double currentLanePositionFromTheLeft = leftEdge + CanvasOptions.LaneWidth * northLanesProcessed;
 
-				LaneElement laneElement = new LaneElement()
+				LaneElement laneElement = new()
 				{
 					IsInbound = false,
 					ReferenceLaneId = lane.Id,
@@ -515,7 +515,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				double leftEdge = intersectionCoreElement.Width / 2;
 				double currentLanePositionFromTheLeft = leftEdge - CanvasOptions.LaneWidth * eastLanesProcessed;
 
-				LaneElement laneElement = new LaneElement()
+				LaneElement laneElement = new()
 				{
 					IsInbound = true,
 					ReferenceLaneId = lane.Id,
@@ -536,7 +536,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				double leftEdge = intersectionCoreElement.Width / 2;
 				double currentLanePositionFromTheLeft = leftEdge - CanvasOptions.LaneWidth * eastLanesProcessed;
 
-				LaneElement laneElement = new LaneElement()
+				LaneElement laneElement = new()
 				{
 					IsInbound = false,
 					ReferenceLaneId = lane.Id,
@@ -568,7 +568,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				double leftEdge = intersectionCoreElement.Width / 2;
 				double currentLanePositionFromTheLeft = leftEdge - CanvasOptions.LaneWidth * southLanesProcessed;
 
-				LaneElement laneElement = new LaneElement()
+				LaneElement laneElement = new()
 				{
 					IsInbound = true,
 					ReferenceLaneId = lane.Id,
@@ -589,7 +589,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				double leftEdge = intersectionCoreElement.Width / 2;
 				double currentLanePositionFromTheLeft = leftEdge - CanvasOptions.LaneWidth * southLanesProcessed;
 
-				LaneElement laneElement = new LaneElement()
+				LaneElement laneElement = new()
 				{
 					IsInbound = false,
 					ReferenceLaneId = lane.Id,
@@ -621,7 +621,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				double leftEdge = -intersectionCoreElement.Width / 2;
 				double currentLanePositionFromTheLeft = leftEdge + CanvasOptions.LaneWidth * westLanesProcessed;
 
-				LaneElement laneElement = new LaneElement()
+				LaneElement laneElement = new()
 				{
 					IsInbound = true,
 					ReferenceLaneId = lane.Id,
@@ -642,7 +642,7 @@ namespace TrafficSimulator.Presentation.WPF.ViewModels
 				double leftEdge = -intersectionCoreElement.Width / 2;
 				double currentLanePositionFromTheLeft = leftEdge + CanvasOptions.LaneWidth * westLanesProcessed;
 
-				LaneElement laneElement = new LaneElement()
+				LaneElement laneElement = new()
 				{
 					IsInbound = false,
 					ReferenceLaneId = lane.Id,

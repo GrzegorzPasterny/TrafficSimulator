@@ -16,7 +16,7 @@ namespace TrafficSimulator.Application.UnitTests.Traffic
 			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
 			Intersection intersection = intersectionSimulation.Intersection;
 
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler()
+			TrafficPhasesHandler trafficPhasesHandler = new()
 			{
 				LightsChangeDuration = TimeSpan.FromSeconds(0.5),
 			};
@@ -27,11 +27,11 @@ namespace TrafficSimulator.Application.UnitTests.Traffic
 				intersection.ObjectLookup.OfType<TrafficLight>();
 
 			// Take all Inbound lanes and all turn possibilities and add them as a default Traffic Phase
-			TrafficPhase allGreenTrafficPhase = new TrafficPhase("AllGreen", intersection);
+			TrafficPhase allGreenTrafficPhase = new("AllGreen", intersection);
 			allGreenTrafficPhase.TrafficLightsAssignments.ForEach(a => a.TrafficLightState = TrafficLightState.Green);
 
 			// All Inbound lanes and all turn possibilities have red light
-			TrafficPhase allRedTrafficPhase = new TrafficPhase("AllRed", intersection);
+			TrafficPhase allRedTrafficPhase = new("AllRed", intersection);
 			allRedTrafficPhase.TrafficLightsAssignments.ForEach(a => a.TrafficLightState = TrafficLightState.Red);
 
 			// Act

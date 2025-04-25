@@ -9,7 +9,7 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 
 		public IEnumerable<float> ToAiInput()
 		{
-			List<float> result = new List<float>();
+			List<float> result = new();
 
 			List<WorldDirection> directions =
 				[WorldDirection.North, WorldDirection.East, WorldDirection.South, WorldDirection.West];

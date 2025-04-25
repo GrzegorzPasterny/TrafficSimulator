@@ -69,7 +69,7 @@ namespace TrafficSimulator.Application.UnitTests.Traffic
 				.Single(l => l.WorldDirection == WorldDirection.West)
 				.InboundLanes[0];
 
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			TrafficPhasesHandler trafficPhasesHandler = new();
 			trafficPhasesHandler.LoadIntersection(intersection);
 
 			var isCarWaitingProperty = typeof(Car).GetProperty("IsCarWaiting",

@@ -70,7 +70,7 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 
 		internal async Task<SimpleAiTrafficInput> GetInputsForAiAgent()
 		{
-			SimpleAiTrafficInput simpleAiTrafficInput = new SimpleAiTrafficInput();
+			SimpleAiTrafficInput simpleAiTrafficInput = new();
 
 			IEnumerable<Car> cars = await _sender.Send(new GetCarsCommand());
 			IEnumerable<IGrouping<WorldDirection, Car>> carsPerDirection = cars.Where(car => car.CurrentLocation.Location is InboundLane)

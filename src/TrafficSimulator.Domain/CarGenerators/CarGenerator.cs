@@ -37,7 +37,7 @@ namespace TrafficSimulator.Domain.Handlers.CarGenerators
 
 		protected virtual async Task GenerateCar()
 		{
-			Car car = new Car((InboundLane)Parent!, Options.CarOptions);
+			Car car = new((InboundLane)Parent!, Options.CarOptions);
 
 			var command = new AddCarCommandDomainEvent(car);
 

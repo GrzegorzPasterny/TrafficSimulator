@@ -70,7 +70,7 @@ namespace TrafficSimulator.Domain.Models.Agents
 				// TODO: Handle
 			}
 
-			Random random = new Random();
+			Random random = new();
 			CarTurnType = StartLocation.LaneTypes[random.Next(StartLocation.LaneTypes.Count())];
 
 			WorldDirection outboundLaneWorldDirection = StartLocation.WorldDirection.Rotate(CarTurnType);

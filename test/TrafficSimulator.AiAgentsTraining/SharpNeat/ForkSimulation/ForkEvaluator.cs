@@ -26,7 +26,7 @@ namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 			ISimulationHandler simulationHandler = _simulationHandlerFactory.CreateHandler(SimulationMode.InMemory);
 
 			simulationHandler.LoadIntersection(
-				IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLane_NestSimulation(_mediator));
+				IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLane_NestSimulation(_mediator, phenome));
 
 			simulationHandler.Start().GetAwaiter().GetResult();
 
@@ -41,7 +41,7 @@ namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 
 			if (simulationResults.TotalCars == simulationResults.CarsPassed)
 			{
-				reward += simulationResults.TotalCars * 1_000; // bonus for competing the simulation
+				reward += simulationResults.TotalCars * 1_000; // bonus for completing the simulation
 			}
 
 			reward += simulationResults.CarsPassed * 1_000; // reward for each car that passed the intersection

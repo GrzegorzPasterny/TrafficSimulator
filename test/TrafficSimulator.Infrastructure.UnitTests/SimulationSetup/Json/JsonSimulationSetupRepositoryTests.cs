@@ -29,7 +29,7 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 			};
 			yield return new object[]
 			{
-				IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLane_NestSimulation(null)
+				IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLane_NestSimulation(null, null)
 			};
 			yield return new object[]
 			{
@@ -58,10 +58,10 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 		public void SaveIntersectionSimulationToJson_ShouldProduceFileOnTheDisc(IntersectionSimulation intersectionSimulation)
 		{
 			// Arrange
-			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory();
+			CarGeneratorFactory carGeneratorFactory = new();
 
 			JsonSimulationSetupRepository jsonSimulationSetupRepository =
-				new JsonSimulationSetupRepository(new IntersectionSimulationDtoMapper(carGeneratorFactory));
+				new(new IntersectionSimulationDtoMapper(carGeneratorFactory));
 
 			// Act
 			jsonSimulationSetupRepository.Save(intersectionSimulation).IsSuccess.Should().BeTrue();
@@ -78,10 +78,10 @@ namespace TrafficSimulator.Infrastructure.UnitTests.SimulationSetup.Json
 		{
 			// Arrange
 			var intersectionSimulation = IntersectionsRepository.ZebraCrossingOnOneLaneRoadEastWest;
-			CarGeneratorFactory carGeneratorFactory = new CarGeneratorFactory();
+			CarGeneratorFactory carGeneratorFactory = new();
 
 			JsonSimulationSetupRepository jsonSimulationSetupRepository =
-				new JsonSimulationSetupRepository(new IntersectionSimulationDtoMapper(carGeneratorFactory));
+				new(new IntersectionSimulationDtoMapper(carGeneratorFactory));
 
 			// Save a test simulation to the file system
 			jsonSimulationSetupRepository.Save(intersectionSimulation);

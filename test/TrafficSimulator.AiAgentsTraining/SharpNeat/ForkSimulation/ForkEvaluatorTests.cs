@@ -20,7 +20,7 @@ namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 		[InlineData(18, 8, 250, 72000, 33_500)]
 		public void EvaluateFitness(int totalCars, int carsPassed, int simulationStepsTaken, double totalCarsIdleTimeMs, double fitnessExpected)
 		{
-			SimulationResults simulationResults = new SimulationResults()
+			SimulationResults simulationResults = new()
 			{
 				TotalCars = totalCars,
 				CarsPassed = carsPassed,

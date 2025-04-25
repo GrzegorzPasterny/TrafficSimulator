@@ -5,7 +5,7 @@ namespace TrafficSimulator.Presentation.WPF.Helpers
 {
 	public static class BrushHelper
 	{
-		private static readonly Random _random = new Random();
+		private static readonly Random _random = new();
 		private static readonly Brush[] _namedBrushes = typeof(Colors)
 			.GetProperties(BindingFlags.Static | BindingFlags.Public)
 			.Select(p => new SolidColorBrush((Color)p.GetValue(null)!))

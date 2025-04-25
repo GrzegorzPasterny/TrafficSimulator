@@ -79,7 +79,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			inboundLane.CarGenerator = carGenerator;
 
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			TrafficPhasesHandler trafficPhasesHandler = new();
 			trafficPhasesHandler.LoadIntersection(intersection);
 
 			trafficPhasesHandler.SetPhase(trafficLightsPhaseName, TimeSpan.FromSeconds(1));
@@ -121,7 +121,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 
 			inboundLane.CarGenerator = carGenerator;
 
-			TrafficPhasesHandler trafficPhasesHandler = new TrafficPhasesHandler();
+			TrafficPhasesHandler trafficPhasesHandler = new();
 			trafficPhasesHandler.LoadIntersection(intersection);
 
 			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());

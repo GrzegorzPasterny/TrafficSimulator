@@ -410,7 +410,7 @@ public partial class MainWindow : Window
 			return;
 		}
 
-		Rectangle intersectionCore = new Rectangle()
+		Rectangle intersectionCore = new()
 		{
 			Height = intersectionCoreElement.Height,
 			Width = intersectionCoreElement.Width,
@@ -540,7 +540,7 @@ public partial class MainWindow : Window
 
 	private void AddTrafficLights(LaneElement laneElement)
 	{
-		Ellipse ellipse = new Ellipse()
+		Ellipse ellipse = new()
 		{
 			Height = laneElement.Width / 1.5,
 			Width = laneElement.Width / 1.5,

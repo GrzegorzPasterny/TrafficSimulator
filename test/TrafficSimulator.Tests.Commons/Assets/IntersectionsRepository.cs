@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using FluentAssertions;
 using MediatR;
+using SharpNeat;
 using TrafficSimulator.Application.TrafficLights.Handlers.Factory;
 using TrafficSimulator.Application.UnitTests.Commons;
 using TrafficSimulator.Domain.CarGenerators;
@@ -152,7 +153,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			return new IntersectionSimulation(intersection, id, "ForkSimulation");
 		}
 
-		public static IntersectionSimulation ForkFromWestAndEastThatMergesToNorthLane_NestSimulation(ISender mediator)
+		public static IntersectionSimulation ForkFromWestAndEastThatMergesToNorthLane_NestSimulation(ISender mediator, IBlackBox<double> phenome)
 		{
 			ErrorOr<Intersection> intersectionResult =
 			IntersectionBuilder.Create("Fork_NEST")
@@ -179,7 +180,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				.InboundLanes!
 				.First();
 
-			MultipleCarsGeneratorOptions optionsWest = new MultipleCarsGeneratorOptions()
+			MultipleCarsGeneratorOptions optionsWest = new()
 			{
 				AmountOfCarsToGenerate = 10,
 				DelayBetweenCarGeneration = TimeSpan.FromMilliseconds(166),
@@ -189,7 +190,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				}
 			};
 
-			MultipleCarsGeneratorOptions optionsEast = new MultipleCarsGeneratorOptions()
+			MultipleCarsGeneratorOptions optionsEast = new()
 			{
 				AmountOfCarsToGenerate = 8,
 				DelayBetweenCarGeneration = TimeSpan.FromMilliseconds(200),
@@ -208,9 +209,11 @@ namespace TrafficSimulator.Tests.Commons.Assets
 			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.East));
 			intersection.TrafficPhases.Add(TrafficPhasesRespository.GreenForOneDirection(intersection, WorldDirection.West));
 
+			intersection.LoadNestModel(phenome);
+
 			Guid id = Guid.Parse("12345678-1234-424e-8b43-3b339415013b");
 
-			IntersectionSimulationOptions intersectionSimulationOptions = new IntersectionSimulationOptions()
+			IntersectionSimulationOptions intersectionSimulationOptions = new()
 			{
 				SaveSimulationSnapshots = false,
 				StepLimit = 250,
@@ -218,10 +221,11 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				TrafficLightHandlerType = TrafficLightHandlerTypes.Nest
 			};
 
-			return new IntersectionSimulation(intersection, id, "ForkSimulation_NEST")
+			IntersectionSimulation intersectionSimulation = new(intersection, id, "ForkSimulation_NEST")
 			{
 				Options = intersectionSimulationOptions,
 			};
+			return intersectionSimulation;
 		}
 
 		public static IntersectionSimulation ThreeDirectionalEastSouthWestWithInboundAndOutboundLanesWithTrafficLights
@@ -413,7 +417,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				.InboundLanes!
 				.First();
 
-			CarOptions carOptions = new CarOptions()
+			CarOptions carOptions = new()
 			{
 				DistanceBetweenCars = 4,
 				Length = 2,
@@ -518,7 +522,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				.InboundLanes!
 				.First();
 
-			CarOptions carOptions = new CarOptions()
+			CarOptions carOptions = new()
 			{
 				DistanceBetweenCars = 4,
 				Length = 2,
@@ -627,7 +631,7 @@ namespace TrafficSimulator.Tests.Commons.Assets
 				.Find(l => l.WorldDirection == WorldDirection.West)!
 				.InboundLanes!.ToArray();
 
-			CarOptions carOptions = new CarOptions()
+			CarOptions carOptions = new()
 			{
 				DistanceBetweenCars = 4,
 				Length = 2,

@@ -56,8 +56,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 			else
 			{
 				// Create the default one
-				_trafficLightsHandler =
-					_trafficLightsHandlerFactory.CreateHandler();
+				_trafficLightsHandler = _trafficLightsHandlerFactory.CreateHandler();
 			}
 
 			_trafficLightsHandler.LoadIntersection(intersectionSimulation.Intersection);
@@ -246,7 +245,7 @@ namespace TrafficSimulator.Application.Handlers.Simulation
 
 		public async Task<IntersectionSnapshot> CreateIntersectionSnapshot()
 		{
-			IntersectionSnapshot snapshot = new IntersectionSnapshot();
+			IntersectionSnapshot snapshot = new();
 
 			snapshot.TrafficLightsSnapshots = IntersectionSimulation.Intersection.CreateTrafficLightsSnapshots();
 			snapshot.CarSnapshots = await CreateCarSnapshots();

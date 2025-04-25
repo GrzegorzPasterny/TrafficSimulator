@@ -16,7 +16,7 @@ namespace TrafficSimulator.Domain.Models
 
 		public override string ToString()
 		{
-			StringBuilder stringBuilder = new StringBuilder();
+			StringBuilder stringBuilder = new();
 
 			stringBuilder.AppendLine($"Simulation State: ({SimulationPhase})");
 			stringBuilder.AppendLine($"[Step = {StepsCount}, TimeElapsed = {ElapsedTime}]");

@@ -20,7 +20,7 @@ public class XorExperimentFactory
 	[Fact]
 	public void Evolve_XOR_And_SaveLoadBestGenome()
 	{
-		ExperimentConfig experimentConfig = new ExperimentConfig()
+		ExperimentConfig experimentConfig = new()
 		{
 			Name = "XOR",
 			IsAcyclic = true,

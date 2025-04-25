@@ -1,4 +1,5 @@
-﻿using TrafficSimulator.Domain.Commons;
+﻿using SharpNeat;
+using TrafficSimulator.Domain.Commons;
 using TrafficSimulator.Domain.Models.Lights;
 using TrafficSimulator.Domain.Simulation.Snapshots;
 
@@ -6,6 +7,8 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 {
 	public class Intersection : IntersectionObject, IEquatable<Intersection>
 	{
+		private IBlackBox<double>? _blackBox;
+
 		public List<IntersectionObject> ObjectLookup { get; } = new();
 		public List<Lanes> LanesCollection { get; set; } = new List<Lanes>();
 
@@ -56,6 +59,11 @@ namespace TrafficSimulator.Domain.Models.IntersectionObjects
 					InboundLaneName = trafficLight.Parent.FullName
 				})
 				.ToList();
+		}
+
+		public void LoadNestModel(IBlackBox<double> blackBox)
+		{
+			_blackBox = blackBox;
 		}
 	}
 }

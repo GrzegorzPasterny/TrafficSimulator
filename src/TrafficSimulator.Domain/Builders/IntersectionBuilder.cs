@@ -16,9 +16,9 @@ namespace TrafficSimulator.Domain.Commons.Builders
 
 		public static IntersectionBuilder Create(string name = "")
 		{
-			Intersection intersection = new Intersection(name);
+			Intersection intersection = new(name);
 
-			IntersectionBuilder builder = new IntersectionBuilder(intersection);
+			IntersectionBuilder builder = new(intersection);
 
 			return builder;
 		}
@@ -32,7 +32,7 @@ namespace TrafficSimulator.Domain.Commons.Builders
 
 		public IntersectionBuilder AddLanesCollection(WorldDirection worldDirection, string name = "")
 		{
-			Lanes lanes = new Lanes(_intersection, _intersection, worldDirection, name);
+			Lanes lanes = new(_intersection, _intersection, worldDirection, name);
 
 			// TODO: Check if there is already lanes object with the same world direction
 			// TODO: Shuold throw an exception?
