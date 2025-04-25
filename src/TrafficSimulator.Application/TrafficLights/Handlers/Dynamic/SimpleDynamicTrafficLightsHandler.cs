@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using ErrorOr;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using TrafficSimulator.Application.Cars.GetCars;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
@@ -17,16 +18,19 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.Dynamic
 	{
 		private readonly ISender _sender;
 		private readonly TrafficPhasesHandler _trafficPhasesHandler;
+		private readonly ILogger<SimpleDynamicTrafficLightsHandler> _logger;
 
 		public TimeSpan CurrentPhaseTime { get; private set; } = TimeSpan.Zero;
 
 		// Options
 		public TimeSpan MinimalTimeForOnePhase { get; set; } = TimeSpan.FromSeconds(1);
 
-		public SimpleDynamicTrafficLightsHandler(ISender sender, TrafficPhasesHandler trafficPhasesHandler)
+		public SimpleDynamicTrafficLightsHandler(
+			ISender sender, TrafficPhasesHandler trafficPhasesHandler, ILogger<SimpleDynamicTrafficLightsHandler> logger)
 		{
 			_sender = sender;
 			_trafficPhasesHandler = trafficPhasesHandler;
+			_logger = logger;
 		}
 
 		public async Task<UnitResult<Error>> SetLights(TimeSpan timeElapsed)
@@ -82,6 +86,9 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.Dynamic
 			{
 				_trafficPhasesHandler.SetPhase(desiredTrafficPhaseName, timeElapsed);
 				CurrentPhaseTime = timeElapsed;
+
+				_logger.LogTrace("Traffic Lights phase changed [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
+
 				return;
 			}
 		}
@@ -90,6 +97,7 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.Dynamic
 		{
 			_trafficPhasesHandler.LoadIntersection(intersection);
 			ChangePhase(intersection.TrafficPhases.First().Name, TimeSpan.Zero);
+			_logger.LogTrace("Traffic Lights initial phase set [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
 		}
 
 		public TrafficPhase? GetCurrentTrafficPhase()

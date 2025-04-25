@@ -43,7 +43,9 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.Nest
 		{
 			_trafficPhasesHandler.LoadIntersection(intersection);
 			_simpleAiTrafficOutput = new SimpleAiTrafficOutput(_trafficPhasesHandler.TrafficPhases!);
+
 			ChangePhase(intersection.TrafficPhases.First().Name, TimeSpan.Zero);
+			_logger.LogTrace("Traffic Lights initial phase set [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
 
 			IBlackBox<double>? blackBox = intersection.GetNestModel();
 
@@ -85,7 +87,7 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.Nest
 		private async Task GetInputsForAiAgent(double[] inputs)
 		{
 			const int numDirections = 4;
-			if (inputs.Length < numDirections * 2)
+			if (inputs.Length < numDirections * 2 + 1)
 			{
 				throw new ArgumentException("Input span is too small.");
 			}
@@ -107,18 +109,21 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.Nest
 				WorldDirection.West
 			};
 
+			// Static first node always set to 1
+			inputs[0] = 1;
+
 			// Fill in car counts
 			for (int i = 0; i < orderedDirections.Length; i++)
 			{
 				var dir = orderedDirections[i];
-				inputs[i] = carsPerDirection.TryGetValue(dir, out var list) ? list.Count : 0;
+				inputs[i + 1] = carsPerDirection.TryGetValue(dir, out var list) ? list.Count : 0;
 			}
 
 			// Fill in total waiting time
 			for (int i = 0; i < orderedDirections.Length; i++)
 			{
 				var dir = orderedDirections[i];
-				inputs[numDirections + i] = carsPerDirection.TryGetValue(dir, out var list)
+				inputs[numDirections + i + 1] = carsPerDirection.TryGetValue(dir, out var list)
 					? list.Sum(c => c.MovesWhenCarWaited)
 					: 0;
 			}
@@ -152,6 +157,8 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.Nest
 			{
 				_trafficPhasesHandler.SetPhase(nextTrafficPhaseName, timeElapsed);
 				CurrentPhaseTime = timeElapsed;
+
+				_logger.LogTrace("Traffic Lights phase changed [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
 				return;
 			}
 			else

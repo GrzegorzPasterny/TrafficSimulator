@@ -43,6 +43,8 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 			_trafficPhasesHandler.LoadIntersection(intersection);
 			_simpleAiTrafficOutput = new SimpleAiTrafficOutput(_trafficPhasesHandler.TrafficPhases!);
 			ChangePhase(intersection.TrafficPhases.First().Name, TimeSpan.Zero);
+
+			_logger.LogTrace("Traffic Lights initial phase set [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
 		}
 
 		public virtual async Task<UnitResult<Error>> SetLights(TimeSpan timeElapsed)
@@ -113,6 +115,8 @@ namespace TrafficSimulator.Application.TrafficLights.Handlers.AI
 			{
 				_trafficPhasesHandler.SetPhase(nextTrafficPhaseName, timeElapsed);
 				CurrentPhaseTime = timeElapsed;
+
+				_logger.LogTrace("Traffic Lights phase changed [TrafficLightsPhase = {TrafficLightsPhase}]", _trafficPhasesHandler.CurrentPhase);
 				return;
 			}
 			else

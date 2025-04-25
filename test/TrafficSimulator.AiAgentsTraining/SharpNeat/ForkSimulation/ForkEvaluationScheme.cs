@@ -16,17 +16,17 @@ namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 			_mediator = mediator;
 		}
 
-		public int InputCount => throw new NotImplementedException();
+		public int InputCount => 9;
 
-		public int OutputCount => throw new NotImplementedException();
+		public int OutputCount => 2;
 
-		public bool IsDeterministic => throw new NotImplementedException();
+		public bool IsDeterministic => true;
 
-		public IComparer<FitnessInfo> FitnessComparer => throw new NotImplementedException();
+		public IComparer<FitnessInfo> FitnessComparer => PrimaryFitnessInfoComparer.Singleton;
 
-		public FitnessInfo NullFitness => throw new NotImplementedException();
+		public FitnessInfo NullFitness => FitnessInfo.DefaultFitnessInfo;
 
-		public bool EvaluatorsHaveState => throw new NotImplementedException();
+		public bool EvaluatorsHaveState => false;
 
 		public IPhenomeEvaluator<IBlackBox<double>> CreateEvaluator()
 		{
@@ -35,7 +35,7 @@ namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 
 		public bool TestForStopCondition(FitnessInfo fitnessInfo)
 		{
-			throw new NotImplementedException();
+			return fitnessInfo.PrimaryFitness >= ForkEvaluator.ExpectedBestFitnessLevel;
 		}
 	}
 }

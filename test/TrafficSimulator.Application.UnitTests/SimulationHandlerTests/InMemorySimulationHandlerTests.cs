@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Serilog;
 using Serilog.Events;
+using SharpNeat;
 using TrafficSimulator.Application.Commons.Interfaces;
 using TrafficSimulator.Application.Handlers.Lights;
 using TrafficSimulator.Application.Handlers.TrafficPhases;
@@ -30,31 +31,33 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 	public class InMemorySimulationHandlerTests
 	{
 		internal readonly ILogger<InMemorySimulationHandlerTests> _logger;
-		internal readonly ILoggerFactory _loggerFactory;
 		internal readonly IMediator _mediator;
+		internal readonly IServiceProvider _provider;
 		internal Mock<ITrafficLightsHandlerFactory> _trafficLightsHandlerFactoryMock;
+		internal Mock<IBlackBox<double>> _blackBoxMock = new Mock<IBlackBox<double>>();
 
 		public InMemorySimulationHandlerTests(ITestOutputHelper testOutputHelper)
 		{
-			var services = new ServiceCollection();
-			services.AddDomain();
-			services.AddApplication();
-			services.AddInfrastructure();
-			var provider = services.BuildServiceProvider();
-			_mediator = provider.GetRequiredService<IMediator>();
-
 			var logger = new LoggerConfiguration()
 				.MinimumLevel.Verbose()
 				.WriteTo.TestOutput(testOutputHelper, LogEventLevel.Verbose, "[{Timestamp:HH:mm:ss:fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
 				.CreateLogger();
 
-			// Create ILoggerFactory using Serilog
-			_loggerFactory = LoggerFactory.Create(builder =>
+			var services = new ServiceCollection();
+			services.AddDomain();
+			services.AddApplication();
+			services.AddInfrastructure();
+
+			services.AddLogging(loggerBuilder =>
 			{
-				builder.AddSerilog(logger, dispose: true);
+				loggerBuilder.ClearProviders();
+				loggerBuilder.AddSerilog(logger);
 			});
 
-			_logger = _loggerFactory.CreateLogger<InMemorySimulationHandlerTests>();
+			_provider = services.BuildServiceProvider();
+
+			_mediator = _provider.GetRequiredService<IMediator>();
+			_logger = _provider.GetRequiredService<ILogger<InMemorySimulationHandlerTests>>();
 
 			_trafficLightsHandlerFactoryMock = new Mock<ITrafficLightsHandlerFactory>();
 		}
@@ -89,7 +92,7 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 				.Returns(() => trafficLightsHandler);
 
 			using ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_mediator, _trafficLightsHandlerFactoryMock.Object, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+				new InMemoryIntersectionSimulationHandler(_mediator, _trafficLightsHandlerFactoryMock.Object, _provider.GetRequiredService<ILogger<InMemoryIntersectionSimulationHandler>>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
@@ -118,13 +121,13 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			TrafficPhasesHandler trafficPhasesHandler = new();
 			trafficPhasesHandler.LoadIntersection(intersection);
 
-			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
+			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _provider.GetRequiredService<ILogger<SimpleSequentialTrafficLightsHandler>>());
 
 			_trafficLightsHandlerFactoryMock.Setup(factory => factory.CreateHandler(It.IsAny<string>()))
 				.Returns(() => trafficLightsHandler);
 
 			using ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_mediator, _trafficLightsHandlerFactoryMock.Object, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+				new InMemoryIntersectionSimulationHandler(_mediator, _trafficLightsHandlerFactoryMock.Object, _provider.GetRequiredService<ILogger<InMemoryIntersectionSimulationHandler>>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
@@ -145,13 +148,13 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			TrafficPhasesHandler trafficPhasesHandler = new();
 			trafficPhasesHandler.LoadIntersection(intersection);
 
-			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
+			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _provider.GetRequiredService<ILogger<SimpleSequentialTrafficLightsHandler>>());
 
 			_trafficLightsHandlerFactoryMock.Setup(factory => factory.CreateHandler(It.IsAny<string>()))
 				.Returns(() => trafficLightsHandler);
 
 			using ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_mediator, _trafficLightsHandlerFactoryMock.Object, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+				new InMemoryIntersectionSimulationHandler(_mediator, _trafficLightsHandlerFactoryMock.Object, _provider.GetRequiredService<ILogger<InMemoryIntersectionSimulationHandler>>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
@@ -172,13 +175,13 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			TrafficPhasesHandler trafficPhasesHandler = new();
 			trafficPhasesHandler.LoadIntersection(intersection);
 
-			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
+			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _provider.GetRequiredService<ILogger<SimpleSequentialTrafficLightsHandler>>());
 
 			_trafficLightsHandlerFactoryMock.Setup(factory => factory.CreateHandler(It.IsAny<string>()))
 				.Returns(() => trafficLightsHandler);
 
 			using ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_mediator, _trafficLightsHandlerFactoryMock.Object, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+				new InMemoryIntersectionSimulationHandler(_mediator, _trafficLightsHandlerFactoryMock.Object, _provider.GetRequiredService<ILogger<InMemoryIntersectionSimulationHandler>>());
 
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
@@ -199,14 +202,38 @@ namespace TrafficSimulator.Application.UnitTests.SimulationHandlerTests
 			TrafficPhasesHandler trafficPhasesHandler = new();
 			trafficPhasesHandler.LoadIntersection(intersection);
 
-			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _loggerFactory.CreateLogger<SimpleSequentialTrafficLightsHandler>());
+			ITrafficLightsHandler trafficLightsHandler = new SimpleSequentialTrafficLightsHandler(trafficPhasesHandler, _provider.GetRequiredService<ILogger<SimpleSequentialTrafficLightsHandler>>());
 
 			_trafficLightsHandlerFactoryMock.Setup(factory => factory.CreateHandler(It.IsAny<string>()))
 				.Returns(() => trafficLightsHandler);
 
 			using ISimulationHandler simulationHandler =
-				new InMemoryIntersectionSimulationHandler(_mediator, _trafficLightsHandlerFactoryMock.Object, _loggerFactory.CreateLogger<InMemoryIntersectionSimulationHandler>());
+				new InMemoryIntersectionSimulationHandler(_mediator, _trafficLightsHandlerFactoryMock.Object, _provider.GetRequiredService<ILogger<InMemoryIntersectionSimulationHandler>>());
 
+			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
+
+			UnitResult<Error> simulationStartResult = await simulationHandler.Start();
+
+			simulationStartResult.IsSuccess.Should().BeTrue();
+
+			simulationHandler.SimulationState.SimulationPhase.Should().Be(SimulationPhase.Finished);
+		}
+
+		[Fact]
+		public async Task RunForkSimulation_GivenNestTrafficHandler_ShouldFinishTheSimulationSuccessfully()
+		{
+			// Arrange
+			_blackBoxMock
+				.Setup(box => box.Inputs)
+				.Returns(new double[9]);
+
+			_blackBoxMock
+				.Setup(box => box.Outputs)
+				.Returns(() => new Memory<double>([Random.Shared.NextDouble(), Random.Shared.NextDouble()]));
+
+			IntersectionSimulation intersectionSimulation = IntersectionsRepository.ForkFromWestAndEastThatMergesToNorthLane_NestSimulation(_mediator, _blackBoxMock.Object);
+			IntersectionSimulationHandlerFactory intersectionSimulationHandlerFactory = _provider.GetRequiredService<IntersectionSimulationHandlerFactory>();
+			ISimulationHandler simulationHandler = intersectionSimulationHandlerFactory.CreateHandler(SimulationMode.InMemory);
 			simulationHandler.LoadIntersection(intersectionSimulation).IsSuccess.Should().BeTrue();
 
 			UnitResult<Error> simulationStartResult = await simulationHandler.Start();
