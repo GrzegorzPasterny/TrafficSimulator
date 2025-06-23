@@ -1,12 +1,13 @@
 # TrafficSimulator
 
-**TrafficSimulator** is a hobby project designed to explore how much more effective AI-based traffic control can be—compared to traditional sequential systems—at managing a single intersection.
+**TrafficSimulator** is a hobby project designed to explore how much more effective AI-based traffic control can be compared to traditional sequential systems at managing a single intersection.
 
 ## Project Assumptions (Ubiquitous Language)
 
 - The geometry of an intersection is parameterized and fully configurable.
 - Each inbound lane can have a car generator assigned to it.
 - Multiple types of car generators are supported, producing cars at varying intensities over time.
+- A car starts from an inbound lane, passes through the traffic light and intersection core, and exits via an outbound lane.
 - A car stops at a red traffic light.
 - A car proceeds at a green traffic light.
 - Cars have inertia, causing them to accelerate and decelerate gradually.
@@ -16,7 +17,7 @@
 - The simulation ends when one of the following conditions is met:
   - A timeout is reached.
   - The maximum number of simulation steps is reached.
-  - All generators have finished producing cars and all cars have reached parking.
+  - All car generators have finished producing cars and all cars have reached parking.
 
 - Simulation results include:
   - Total simulation duration.
@@ -49,6 +50,7 @@ Provides a basic graphical representation of the intersection simulation.
    - Unit tests (preferred):  
      [`JsonSimulationSetupRepositoryTests.cs`](test/TrafficSimulator.Infrastructure.UnitTests/SimulationSetup/Json/JsonSimulationSetupRepositoryTests.cs)
    - Or manually editing a text file.
+2. The intersection core has fixed distance for all cars and car's travel through the intersection is not rendered in WPF application. When a car is on the intersection core it is moved to the center of the intersection core for as long as it is determined to be on an outbound lane. 
 
 ## To Do
 
