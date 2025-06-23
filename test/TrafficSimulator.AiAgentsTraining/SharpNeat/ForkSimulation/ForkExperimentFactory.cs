@@ -26,7 +26,7 @@ namespace TrafficSimulator.AiAgentsTraining.SharpNeat.ForkSimulation
 		public ForkExperimentFactory(ITestOutputHelper testOutputHelper)
 		{
 			var logger = new LoggerConfiguration()
-				.MinimumLevel.Verbose()
+				.MinimumLevel.Information()
 				.WriteTo.TestOutput(testOutputHelper, LogEventLevel.Verbose, "[{Timestamp:HH:mm:ss:fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
 				.CreateLogger();
 
